@@ -13,6 +13,8 @@
 #include "brave/components/brave_sync/buildflags/buildflags.h"
 #include "brave/components/ipfs/buildflags/buildflags.h"
 #include "brave/components/ntp_background_images/browser/features.h"
+#include "brave/components/playlist/features.h"
+#include "brave/components/playlist/buildflags/buildflags.h"
 #include "brave/components/speedreader/buildflags.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_manager.h"
@@ -27,6 +29,17 @@ using ntp_background_images::features::kBraveNTPSuperReferralWallpaper;
 // clang-format seems to have a lot of issues with the macros in this
 // file so we turn it off for the macro sections.
 // clang-format off
+
+#if BUILDFLAG(ENABLE_PLAYLIST)
+#define PLAYLIST_FEATURE_ENTRIES                                           \
+     {"playlist",                                                          \
+     flag_descriptions::kPlaylistName,                                     \
+     flag_descriptions::kPlaylistDescription,                              \
+     flags_ui::kOsMac | flags_ui::kOsWin | flags_ui::kOsLinux,             \
+     FEATURE_VALUE_TYPE(playlist::features::kPlaylist)},
+#else
+#define PLAYLIST_FEATURE_ENTRIES
+#endif
 
 #if BUILDFLAG(ENABLE_SPEEDREADER)
 #include "brave/components/speedreader/features.h"
@@ -83,6 +96,7 @@ using ntp_background_images::features::kBraveNTPSuperReferralWallpaper;
      FEATURE_VALUE_TYPE(kBraveAdblockCosmeticFiltering)},                  \
     SPEEDREADER_FEATURE_ENTRIES                                            \
     BRAVE_SYNC_FEATURE_ENTRIES                                             \
+    PLAYLIST_FEATURE_ENTRIES                                               \
     BRAVE_IPFS_FEATURE_ENTRIES                                             \
     {"brave-super-referral",                                               \
      flag_descriptions::kBraveSuperReferralName,                           \

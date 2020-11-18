@@ -21,6 +21,7 @@
 #include "brave/components/brave_wallet/buildflags/buildflags.h"
 #include "brave/components/content_settings/core/browser/brave_content_settings_pref_provider.h"
 #include "brave/components/ipfs/buildflags/buildflags.h"
+#include "brave/components/playlist/buildflags/buildflags.h"
 #include "brave/components/tor/tor_constants.h"
 #include "brave/content/browser/webui/brave_shared_resources_data_source.h"
 #include "chrome/browser/browser_process.h"
@@ -51,6 +52,10 @@
 
 #if BUILDFLAG(IPFS_ENABLED)
 #include "brave/browser/ipfs/ipfs_service_factory.h"
+#endif
+
+#if BUILDFLAG(ENABLE_PLAYLIST)
+#include "brave/browser/extensions/api/playlist/playlist_event_router_factory.h"
 #endif
 
 using content::BrowserThread;
@@ -116,6 +121,10 @@ void BraveProfileManager::DoFinalInitForServices(Profile* profile,
       gcm::BraveGCMChannelStatus::GetForProfile(profile);
   DCHECK(status);
   status->UpdateGCMDriverStatus();
+#endif
+#if BUILDFLAG(ENABLE_PLAYLIST)
+  playlist::PlaylistEventRouterFactory::GetInstance()->GetForBrowserContext(
+      profile);
 #endif
 }
 

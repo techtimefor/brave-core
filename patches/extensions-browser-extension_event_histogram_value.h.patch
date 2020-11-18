@@ -1,25 +1,12 @@
 diff --git a/extensions/browser/extension_event_histogram_value.h b/extensions/browser/extension_event_histogram_value.h
-index 695b0464b4f840a241b04205ecc9ce4059f11f7a..cd1edfeef21e25e77a9f8765cca7a1da22614fb2 100644
+index 695b0464b4f840a241b04205ecc9ce4059f11f7a..713c873d1dbb42fe4cf46bd7410ac2759cf341a6 100644
 --- a/extensions/browser/extension_event_histogram_value.h
 +++ b/extensions/browser/extension_event_histogram_value.h
-@@ -486,6 +486,20 @@ enum HistogramValue {
+@@ -486,6 +486,7 @@ enum HistogramValue {
    ACCESSIBILITY_PRIVATE_ON_MAGNIFIER_BOUNDS_CHANGED = 464,
    FILE_MANAGER_PRIVATE_ON_PIN_TRANSFERS_UPDATED = 465,
    ACCESSIBILITY_PRIVATE_ON_POINT_SCAN_SET = 466,
-+
-+  BRAVE_START = 600,
-+  BRAVE_AD_BLOCKED,
-+  BRAVE_WALLET_CREATED,
-+  BRAVE_ON_WALLET_PROPERTIES,
-+  BRAVE_ON_PUBLISHER_DATA,
-+  BRAVE_ON_CURRENT_REPORT,
-+  BRAVE_ON_BRAVE_THEME_TYPE_CHANGED,
-+  BRAVE_REWARDS_NOTIFICATION_ADDED,
-+  BRAVE_REWARDS_NOTIFICATION_DELETED,
-+  BRAVE_REWARDS_ALL_NOTIFICATIONS_DELETED,
-+  BRAVE_REWARDS_GET_NOTIFICATION,
-+  BRAVE_REWARDS_GET_ALL_NOTIFICATIONS,
-+  BRAVE_WALLET_FAILED,
++  BRAVE_HISTOGRAM_VALUES
    // Last entry: Add new entries above, then run:
    // python tools/metrics/histograms/update_extension_histograms.py
    ENUM_BOUNDARY
