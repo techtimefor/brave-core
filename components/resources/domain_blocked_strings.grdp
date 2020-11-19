@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grit-part>
+  <message name="IDS_DOMAIN_BLOCKED_TITLE" desc="Title of domain blocked interstitial page.">
+    Domain Blocked
+  </message>
+  <message name="IDS_DOMAIN_BLOCKED_HEADING" desc="Heading of domain blocked interstitial page.">
+    Suspicious site ahead
+  </message>
+  <message name="IDS_DOMAIN_BLOCKED_PRIMARY_PARAGRAPH" desc="Main paragraph of domain blocked interstitial page.">
+    Brave has prevented the following page from loading:
+  </message>
+  <message name="IDS_DOMAIN_BLOCKED_EXPLANATION" desc="Second paragraph of domain blocked interstitial page.">
+    This site may be fraudulent, bounce you between various sites to set tracking cookies, or perform other privacy invasive actions.
+  </message>
+  <message name="IDS_DOMAIN_BLOCKED_DONT_WARN_AGAIN_BUTTON" desc="The text for the domain blocked interstitial don't warn again checkbox.">
+    Don't warn me about this site again
+  </message>
+  <message name="IDS_DOMAIN_BLOCKED_PROCEED_ANYWAY_BUTTON" desc="The text for the proceed button on the domain blocked interstitial page.">
+    Proceed
+  </message>
+  <message name="IDS_DOMAIN_BLOCKED_GO_BACK_BUTTON" desc="The text for the go back button on the domain blocked interstitial page.">
+    Go back
+  </message>
+</grit-part>

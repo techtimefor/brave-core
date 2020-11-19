@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grit-part>
+  <include name="IDR_DOMAIN_BLOCKED_INTERSTITIAL_HTML" file="../brave_shields/resources/domain_blocked_interstitial.html" flattenhtml="true" type="BINDATA" />
+  <include name="IDR_DOMAIN_BLOCKED_INTERSTITIAL_JS" file="../brave_shields/resources/domain_blocked_interstitial.js" type="BINDATA" />
+  <include name="IDR_DOMAIN_BLOCKED_INTERSTITIAL_CSS" file="../brave_shields/resources/domain_blocked_interstitial.css" type="BINDATA" />
+</grit-part>
