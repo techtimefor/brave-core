@@ -95,7 +95,7 @@ pipeline {
                                                 credentials('brave-builds-github-token-for-pr-builder')
                                                 github('brave/devops', 'https')
                                             }
-                                            branch('mplesa-jenkins-ci-pipeline-fixes')
+                                            branch('mplesa-jenkins-ci-pipeline-post-init')
                                         }
                                     }
                                     scriptPath("jenkins/jobs/browser/pr-brave-browser-${PLATFORM}.Jenkinsfile")
