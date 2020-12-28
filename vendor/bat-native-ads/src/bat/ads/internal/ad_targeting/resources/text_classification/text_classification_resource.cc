@@ -11,14 +11,14 @@
 #include "bat/ads/internal/logging.h"
 #include "bat/ads/internal/ad_targeting/data_types/text_classification/text_classification_language_codes.h"
 #include "bat/ads/result.h"
-#include "bat/usermodel/user_model.h"
+#include "bat/ads/internal/user_model/user_model.h"
 
 namespace ads {
 namespace ad_targeting {
 namespace resource {
 
 TextClassification::TextClassification() {
-  user_model_.reset(usermodel::UserModel::CreateInstance());
+  user_model_.reset(UserModel::CreateInstance());
 }
 
 TextClassification::~TextClassification() = default;
@@ -34,7 +34,7 @@ void TextClassification::LoadForLocale(
   const auto iter = kTextClassificationLanguageCodes.find(language_code);
   if (iter == kTextClassificationLanguageCodes.end()) {
     BLOG(1, locale << " locale does not support text classification");
-    user_model_.reset(usermodel::UserModel::CreateInstance());
+    user_model_.reset(UserModel::CreateInstance());
     return;
   }
 
@@ -46,7 +46,7 @@ void TextClassification::LoadForId(
   AdsClientHelper::Get()->LoadUserModelForId(id, [=](
       const Result result,
       const std::string& json) {
-    user_model_.reset(usermodel::UserModel::CreateInstance());
+    user_model_.reset(UserModel::CreateInstance());
 
     if (result != SUCCESS) {
       BLOG(1, "Failed to load " << id << " text classification resource");
@@ -65,7 +65,7 @@ void TextClassification::LoadForId(
   });
 }
 
-usermodel::UserModel* TextClassification::get() const {
+UserModel* TextClassification::get() const {
   return user_model_.get();
 }
 

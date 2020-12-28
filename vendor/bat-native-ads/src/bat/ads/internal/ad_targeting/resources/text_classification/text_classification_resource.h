@@ -9,17 +9,17 @@
 #include <memory>
 #include <string>
 
+#include "bat/ads/internal/user_model/user_model.h"
 #include "bat/ads/internal/ad_targeting/resources/resource.h"
 
-namespace usermodel {
-class UserModel;
-}  // namespace usermodel
-
 namespace ads {
+
+using user_model::UserModel;
+
 namespace ad_targeting {
 namespace resource {
 
-class TextClassification : public Resource<usermodel::UserModel*> {
+class TextClassification : public Resource<UserModel*> {
  public:
   TextClassification();
 
@@ -33,10 +33,10 @@ class TextClassification : public Resource<usermodel::UserModel*> {
   void LoadForId(
       const std::string& locale);
 
-  usermodel::UserModel* get() const override;
+  UserModel* get() const override;
 
  private:
-  std::unique_ptr<usermodel::UserModel> user_model_;
+  std::unique_ptr<UserModel> user_model_;
 };
 
 }  // namespace resource

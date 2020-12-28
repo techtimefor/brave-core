@@ -10,12 +10,12 @@
 
 #include "bat/ads/internal/ad_targeting/processors/processor.h"
 #include "bat/ads/internal/ad_targeting/resources/text_classification/text_classification_resource.h"
-
-namespace usermodel {
-class UserModel;
-}  // namespace usermodel
+#include "bat/ads/internal/user_model/user_model.h"
 
 namespace ads {
+
+using user_model::UserModel;
+
 namespace ad_targeting {
 namespace processor {
 

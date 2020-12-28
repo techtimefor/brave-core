@@ -7,7 +7,6 @@
 
 #include "bat/ads/internal/client/client.h"
 #include "bat/ads/internal/logging.h"
-#include "bat/usermodel/user_model.h"
 
 namespace ads {
 namespace ad_targeting {
@@ -48,7 +47,7 @@ void TextClassification::Process(
     return;
   }
 
-  usermodel::UserModel* user_model = resource_->get();
+  UserModel* user_model = resource_->get();
 
   const TextClassificationProbabilitiesMap probabilities =
       user_model->ClassifyPage(text);
