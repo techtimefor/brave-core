@@ -29,19 +29,58 @@ namespace pipeline {
 class Pipeline {
  public:
   Pipeline();
-  Pipeline(const Pipeline &pipeline);
+
+  Pipeline(
+      const Pipeline& pipeline);
+
   Pipeline(
       std::vector<Transformation> transformations,
       LinearSVM classifier);
+
   ~Pipeline();
 
-  bool FromJson(const std::string& json);
-  std::map<std::string, double> Apply(const DataPoint& inp);
-  std::map<std::string, double> GetTopPredictions(const std::string& content);
-  std::vector<double> GetAdvertisingPredictions(const std::string& html);
-  std::string GetCategory(int c);
+  bool FromJson(
+      const std::string& json);
+
+  std::map<std::string, double> Apply(
+      const DataPoint& inp);
+
+  std::map<std::string, double> GetTopPredictions(
+      const std::string& content);
+
+  std::vector<double> GetAdvertisingPredictions(
+      const std::string& html);
+
+  std::string GetCategory(
+      int c);
 
  private:
+  void GetReverseCategories();
+
+  bool ParseClassifier(
+      base::Value* classifier);
+
+  bool ParseTransformations(
+      base::Value* transformations);
+
+  bool GetVersionFromJSON(
+      base::DictionaryValue* dictionary);
+
+  bool GetTimestampFromJSON(
+      base::DictionaryValue* dictionary);
+
+  bool GetLocaleFromJSON(
+      base::DictionaryValue* dictionary);
+
+  bool GetTransformationsFromJSON(
+      base::DictionaryValue* dictionary);
+
+  bool GetClassifierFromJSON(
+      base::DictionaryValue* dictionary);
+
+  bool GetTransformationsFromList(
+      base::ListValue List);
+
   uint16_t version_;
   std::string timestamp_;
   std::string locale_;
@@ -49,16 +88,6 @@ class Pipeline {
   std::map<std::string,int> advertising_categories_;
   std::map<int, std::string> reverse_categories_;
   LinearSVM classifier_;
-
-  void GetReverseCategories();
-  bool ParseClassifier(base::Value* classifier);
-  bool ParseTransformations(base::Value* transformations);
-  bool GetVersionFromJSON(base::DictionaryValue* dictionary);
-  bool GetTimestampFromJSON(base::DictionaryValue* dictionary);
-  bool GetLocaleFromJSON(base::DictionaryValue* dictionary);
-  bool GetTransformationsFromJSON(base::DictionaryValue* dictionary);
-  bool GetClassifierFromJSON(base::DictionaryValue* dictionary);
-  bool GetTransformationsFromList(base::ListValue List);
 };
 
 }  // namespace pipeline

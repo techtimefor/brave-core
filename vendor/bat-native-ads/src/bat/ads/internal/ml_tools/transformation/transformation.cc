@@ -14,7 +14,8 @@ namespace transformation {
 
 Transformation::Transformation() {}
 
-Transformation::Transformation(TransformationType t) {
+Transformation::Transformation(
+    TransformationType t) {
   type = t;
 }
 
@@ -24,7 +25,8 @@ TransformationType Transformation::GetType() {
   return type;
 }
 
-DataPoint Transformation::Get(DataPoint inp){
+DataPoint Transformation::Get(
+    DataPoint inp) {
   switch(type){
     case TransformationType::TO_LOWER:
       return GetLower(inp);
@@ -37,19 +39,22 @@ DataPoint Transformation::Get(DataPoint inp){
   }
 }
 
-DataPoint Transformation::GetLower(DataPoint datapoint){
+DataPoint Transformation::GetLower(
+    DataPoint datapoint) {
   std::string rtn_str;
   rtn_str.assign(datapoint.data_text);
   std::transform(rtn_str.begin(), rtn_str.end(), rtn_str.begin(), ::tolower);
   return DataPoint(rtn_str);
 }
 
-DataPoint Transformation::GetNGrams(DataPoint datapoint){
+DataPoint Transformation::GetNGrams(
+    DataPoint datapoint) {
   auto hashed_vector = hash_vectorizer.GetFrequencies(datapoint.data_text);
   return DataPoint(hashed_vector, hash_vectorizer.GetBucketCount());
 }
 
-DataPoint Transformation::GetNormalized(DataPoint datapoint){
+DataPoint Transformation::GetNormalized(
+    DataPoint datapoint) {
   auto s = 0.0;
   std::map<unsigned, double> normalized_vector;
 
@@ -78,12 +83,15 @@ HashedNGrams::HashedNGrams() {
   hash_vectorizer = HashVectorizer();
 }
 
-HashedNGrams::HashedNGrams(int n_b, std::vector<int> subgrams) {
+HashedNGrams::HashedNGrams(
+    int n_b,
+    std::vector<int> subgrams) {
   type = TransformationType::HASHED_NGRAMS;
   hash_vectorizer = HashVectorizer(n_b, subgrams);
 }
 
-HashedNGrams::HashedNGrams(std::string config) {}
+HashedNGrams::HashedNGrams(
+    std::string config) {}
 
 }  // namespace transformation
 }  // namespace ml_tools

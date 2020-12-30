@@ -22,14 +22,16 @@ Pipeline::Pipeline() {
     // classifier_ = nullptr;
 }
 
-Pipeline::Pipeline(const Pipeline &pipeline) {
+Pipeline::Pipeline(
+    const Pipeline& pipeline) {
   transformations_ = pipeline.transformations_;
   classifier_ = pipeline.classifier_;
   advertising_categories_ = get_advertising_categories();
   GetReverseCategories();
 }
 
-Pipeline::Pipeline(std::vector<Transformation> transformations,
+Pipeline::Pipeline(
+    std::vector<Transformation> transformations,
     LinearSVM classifier) {
   transformations_ = transformations;
   classifier_ = classifier;
@@ -45,7 +47,8 @@ void Pipeline::GetReverseCategories() {
 
 Pipeline::~Pipeline() = default;
 
-bool Pipeline::FromJson(const std::string& json) {
+bool Pipeline::FromJson(
+    const std::string& json) {
   base::Optional<base::Value> root = base::JSONReader::Read(json);
   if (!root) {
     return false;
@@ -94,7 +97,8 @@ bool Pipeline::FromJson(const std::string& json) {
   return true;
 }
 
-bool Pipeline::ParseTransformations(base::Value* transformations) {
+bool Pipeline::ParseTransformations(
+    base::Value* transformations) {
   if (!transformations->is_list()) {
     return false;
   }
@@ -148,7 +152,8 @@ bool Pipeline::ParseTransformations(base::Value* transformations) {
   return true;
 }
 
-bool Pipeline::ParseClassifier(base::Value* classifier){
+bool Pipeline::ParseClassifier(
+    base::Value* classifier) {
   std::vector<std::string> classes;
   base::Value* classifier_type = classifier->FindKey("classifier_type");
 
@@ -195,7 +200,7 @@ bool Pipeline::ParseClassifier(base::Value* classifier){
     auto dubs = data_point::DataPoint(tmp_weights);
     weights.insert({classes[i], dubs});
   }
-  //finally do the biases: 
+
   std::map<std::string, double> specified_biases = {};
   base::Value* biases = classifier->FindKey("biases");
   if (!biases->is_list()){
@@ -212,7 +217,8 @@ bool Pipeline::ParseClassifier(base::Value* classifier){
   return true;
 }
 
-bool Pipeline::GetVersionFromJSON(base::DictionaryValue* dictionary) {
+bool Pipeline::GetVersionFromJSON(
+    base::DictionaryValue* dictionary) {
   auto* version_value = dictionary->FindKey("version");
   if (!version_value) {
     return false;
@@ -221,7 +227,8 @@ bool Pipeline::GetVersionFromJSON(base::DictionaryValue* dictionary) {
   return true;
 }
 
-bool Pipeline::GetTimestampFromJSON(base::DictionaryValue* dictionary) {
+bool Pipeline::GetTimestampFromJSON(
+    base::DictionaryValue* dictionary) {
   auto* timestamp_value = dictionary->FindKey("timestamp");
   if (!timestamp_value) {
     return false;
@@ -231,7 +238,8 @@ bool Pipeline::GetTimestampFromJSON(base::DictionaryValue* dictionary) {
   return true;
 }
 
-bool Pipeline::GetLocaleFromJSON(base::DictionaryValue* dictionary) {
+bool Pipeline::GetLocaleFromJSON(
+    base::DictionaryValue* dictionary) {
   auto* locale_value = dictionary->FindKey("locale");
   if (!locale_value) {
     return false;
@@ -241,7 +249,8 @@ bool Pipeline::GetLocaleFromJSON(base::DictionaryValue* dictionary) {
   return true;
 }
 
-std::map<std::string, double> Pipeline::Apply(const DataPoint& inp) {
+std::map<std::string, double> Pipeline::Apply(
+    const DataPoint& inp) {
   DataPoint last_point = DataPoint(inp);
   for (auto& transformation : transformations_) {
     last_point = transformation.Get(last_point);
@@ -249,7 +258,8 @@ std::map<std::string, double> Pipeline::Apply(const DataPoint& inp) {
   return classifier_.TopPredictions(last_point);
 }
 
-std::map<std::string, double> Pipeline::GetTopPredictions(const std::string& html) {
+std::map<std::string, double> Pipeline::GetTopPredictions(
+    const std::string& html) {
   std::map<std::string, double> rtn;
   DataPoint data = DataPoint(html);
   auto predictions = Apply(data);
@@ -262,7 +272,8 @@ std::map<std::string, double> Pipeline::GetTopPredictions(const std::string& htm
   return rtn;
 }
 
-std::vector<double> Pipeline::GetAdvertisingPredictions(const std::string &html) {
+std::vector<double> Pipeline::GetAdvertisingPredictions(
+    const std::string &html) {
   DataPoint data = DataPoint(html);
   auto predictions = Apply(data);
   std::vector<double> rtn(advertising_categories_.size(), 0.0);
@@ -276,7 +287,8 @@ std::vector<double> Pipeline::GetAdvertisingPredictions(const std::string &html)
   return rtn;
 }
 
-std::string Pipeline::GetCategory(int c){
+std::string Pipeline::GetCategory(
+    int c){
   return reverse_categories_[c];
 }
 

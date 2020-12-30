@@ -29,7 +29,8 @@ HashVectorizer::HashVectorizer() {
   num_buckets_ = kNumBuckets;
 }
 
-HashVectorizer::HashVectorizer(int n_buckets,
+HashVectorizer::HashVectorizer(
+    int n_buckets,
     std::vector<int> subgrams) {
   for (size_t i = 0; i < subgrams.size(); i++) {
     substring_sizes_.push_back(subgrams[i]);
@@ -37,7 +38,8 @@ HashVectorizer::HashVectorizer(int n_buckets,
   num_buckets_ = n_buckets;
 }
 
-HashVectorizer::HashVectorizer(const HashVectorizer& other) {
+HashVectorizer::HashVectorizer(
+    const HashVectorizer& other) {
   substring_sizes_ = other.substring_sizes_;
   num_buckets_ = other.num_buckets_;
 }
@@ -46,7 +48,8 @@ int HashVectorizer::GetBucketCount() {
   return num_buckets_;
 }
 
-int HashVectorizer::GetHash(std::string& substring) {    
+int HashVectorizer::GetHash(
+    std::string& substring) {
   auto* u8str = substring.c_str();
   auto rtn = CRC::Calculate(u8str,
       strlen(u8str),
@@ -54,7 +57,8 @@ int HashVectorizer::GetHash(std::string& substring) {
   return rtn;
 }
 
-std::map<unsigned, double> HashVectorizer::GetFrequencies(const std::string& html) {
+std::map<unsigned, double> HashVectorizer::GetFrequencies(
+    const std::string& html) {
   std::string data = html;
   std::map<unsigned, double> frequencies;
   if (data.length() > kMaximumHtmlLengthToClassify) {

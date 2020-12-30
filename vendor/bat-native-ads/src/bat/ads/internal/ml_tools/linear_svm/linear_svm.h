@@ -21,17 +21,29 @@ namespace linear_svm {
 class LinearSVM {
  public:
   LinearSVM();
-  LinearSVM(LinearSVM& other);
-  LinearSVM(const std::string& model);
-  LinearSVM(const std::map<std::string, DataPoint>& weights,
+
+  LinearSVM(
+      LinearSVM& other);
+
+  LinearSVM(
+      const std::string& model);
+
+  LinearSVM(
+      const std::map<std::string, DataPoint>& weights,
       const std::map<std::string, double> &biases);
+
   ~LinearSVM();
-  std::map<std::string, double> Predict(DataPoint x);
-  std::map<std::string, double> TopPredictions(DataPoint x,
+
+  std::map<std::string, double> Predict(
+      DataPoint x);
+
+  std::map<std::string, double> TopPredictions(
+      DataPoint x,
       int top_count = -1);
 
  private:
-  std::map<std::string, double> Softmax(const std::map<std::string, double>& y);
+  std::map<std::string, double> Softmax(
+      const std::map<std::string, double>& y);
 
   std::map<std::string, DataPoint> weights_;
   std::map<std::string, double> biases_;

@@ -26,10 +26,18 @@ enum class TransformationType {
 class Transformation {
  public:
   Transformation();
-  Transformation(TransformationType t);
-  Transformation(std::string parameters);
+
+  Transformation(
+      TransformationType t);
+
+  Transformation(
+      std::string parameters);
+
   ~Transformation();
-  DataPoint Get(DataPoint inp);
+
+  DataPoint Get(
+      DataPoint inp);
+
   TransformationType GetType();
 
  protected:
@@ -37,9 +45,14 @@ class Transformation {
   TransformationType type;
 
  private:
-  DataPoint GetLower(DataPoint inp);
-  DataPoint GetNGrams(DataPoint inp);
-  DataPoint GetNormalized(DataPoint inp);
+  DataPoint GetLower(
+      DataPoint inp);
+
+  DataPoint GetNGrams(
+      DataPoint inp);
+
+  DataPoint GetNormalized(
+      DataPoint inp);
 };
 
 class ToLower: public Transformation {
@@ -50,9 +63,13 @@ class ToLower: public Transformation {
 class HashedNGrams: public Transformation {
  public:
   HashedNGrams();
-  HashedNGrams(int n_b,
+
+  HashedNGrams(
+      int n_b,
       std::vector<int> subgrams);
-  HashedNGrams(std::string parameters);
+
+  HashedNGrams(
+      std::string parameters);
 };
 
 class Normalize: public Transformation {

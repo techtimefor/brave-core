@@ -26,11 +26,14 @@ class UserModel {
 
   UserModel();
 
-  UserModel(const UserModel&) = delete;
+  UserModel(
+      const UserModel&) = delete;
 
-  UserModel& operator=(const UserModel&) = delete;
+  UserModel& operator=(
+      const UserModel&) = delete;
 
-  bool InitializePageClassifier(const std::string& model);
+  bool InitializePageClassifier(
+      const std::string& model);
 
   bool IsInitialized() const;
 

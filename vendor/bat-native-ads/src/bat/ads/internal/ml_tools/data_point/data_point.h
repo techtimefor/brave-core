@@ -22,15 +22,27 @@ enum class DataType {
 
 class DataPoint {
  public:
-  DataPoint(const DataPoint &other_point);
-  DataPoint(const std::string &data);
-  DataPoint(const std::vector<double>& data);
-  DataPoint(const std::map<unsigned, double>& data,
+  DataPoint(
+      const DataPoint& other_point);
+
+  DataPoint(
+      const std::string& data);
+
+  DataPoint(
+      const std::vector<double>& data);
+
+  DataPoint(
+      const std::map<unsigned, double>& data,
       int ndims);
+
   ~DataPoint();
-  friend double operator * (const DataPoint a,
+
+  friend double operator * (
+      const DataPoint a,
       const DataPoint b);
+
   DataType GetType();
+
   int GetDims();
 
   DataType type;

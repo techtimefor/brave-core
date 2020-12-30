@@ -13,30 +13,35 @@ namespace ads {
 namespace ml_tools {
 namespace data_point {
 
-DataPoint::DataPoint(const DataPoint &other_point) = default;
+DataPoint::DataPoint(
+    const DataPoint &other_point) = default;
 
 DataPoint::~DataPoint() = default;    
 
-DataPoint::DataPoint(const std::string& data) {
+DataPoint::DataPoint(
+    const std::string& data) {
   type = DataType::TextData;
   data_text = data;
   n_dims = 0;
 }
 
-DataPoint::DataPoint(const std::vector<double>& data) {
+DataPoint::DataPoint(
+    const std::vector<double>& data) {
   type = DataType::VectorData;
   data_vector = data;
   n_dims = data.size();
 }
 
-DataPoint::DataPoint(const std::map<unsigned, double>& data,
+DataPoint::DataPoint(
+    const std::map<unsigned, double>& data,
     int dims) {
   type = DataType::SparseVector;
   n_dims = dims;
   data_sparse = data;
 }
 
-double operator * (const DataPoint a,
+double operator * (
+    const DataPoint a,
     const DataPoint b) {
   if (!a.n_dims || !b.n_dims) {
     return std::numeric_limits<double>::quiet_NaN();
