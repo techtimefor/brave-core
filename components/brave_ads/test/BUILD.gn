@@ -111,15 +111,6 @@ source_set("brave_ads_unit_tests") {
       "//brave/vendor/bat-native-ads/src/bat/ads/internal/user_activity/user_activity_unittest.cc",
     ]
 
-    if (!is_android) {
-      sources += [
-        # TODO(https://github.com/brave-intl/bat-native-usermodel/issues/26):
-        # Fix bat-native-user-model unittests fail to load data files from
-        # 'brave/vendor/bat-native-usermodel/test/data'
-        "//brave/vendor/bat-native-usermodel/test/usermodel_unittest.cc",
-      ]
-    }
-
     deps = [
       "//base/test:test_support",
       "//brave/browser:browser_process",
@@ -133,7 +124,6 @@ source_set("brave_ads_unit_tests") {
       "//brave/vendor/bat-native-ads",
       "//brave/vendor/bat-native-ledger",
       "//brave/vendor/bat-native-rapidjson",
-      "//brave/vendor/bat-native-usermodel",
       "//chrome/browser:browser",
       "//components/prefs:prefs",
       "//content/test:test_support",
