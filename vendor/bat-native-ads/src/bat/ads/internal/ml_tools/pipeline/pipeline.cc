@@ -14,7 +14,7 @@ namespace pipeline {
 
 Pipeline::Pipeline() {
     version_ = 0;
-    timestamp_ ="";
+    timestamp_ = "";
     locale_ = "en";
     transformations_ = {};
     advertising_categories_ = get_advertising_categories();
@@ -211,7 +211,7 @@ bool Pipeline::ParseClassifier(
   }
   for (size_t i = 0 ; i < biases->GetList().size();i++) {
     const base::Value& this_bias = biases->GetList()[i];
-    specified_biases.insert({classes.at(i), static_cast<double> (this_bias.GetDouble())}) ;
+    specified_biases.insert({classes.at(i), static_cast<double>(this_bias.GetDouble())}) ;
   }
   classifier_ = LinearSVM(weights, specified_biases);
   return true;
@@ -260,12 +260,12 @@ std::map<std::string, double> Pipeline::Apply(
 
 std::map<std::string, double> Pipeline::GetTopPredictions(
     const std::string& html) {
-  std::map<std::string, double> rtn;
   DataPoint data = DataPoint(html);
   auto predictions = Apply(data);
-  double expected_prob = 1.0 / predictions.size();
-  for (auto const &prediction: predictions){
-    if (prediction.second>expected_prob) {
+  double expected_prob = 1.0 / static_cast<double>(predictions.size());
+  std::map<std::string, double> rtn;
+  for (auto const &prediction: predictions) {
+    if (prediction.second > expected_prob) {
       rtn[prediction.first] = prediction.second;
     }
   }
@@ -288,7 +288,7 @@ std::vector<double> Pipeline::GetAdvertisingPredictions(
 }
 
 std::string Pipeline::GetCategory(
-    int c){
+    int c) {
   return reverse_categories_[c];
 }
 

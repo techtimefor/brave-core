@@ -52,12 +52,12 @@ std::map<std::string, double> LinearSVM::Softmax(
   std::map<std::string, double> rtn;
   double sum_exp = 0.0;
   for (auto const& x : y) {
-    auto tmp = x.second - maximum;
-    rtn[x.first] = std::exp(tmp);
-    sum_exp += rtn[x.first];           
+    double val = std::exp(x.second - maximum);
+    rtn[x.first] = val;
+    sum_exp += val;
   }
   for (auto const& x : rtn) {
-    rtn[x.first] = rtn[x.first] / sum_exp;       
+    rtn[x.first] /= sum_exp;
   }
   return rtn;
 }
