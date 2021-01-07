@@ -52,8 +52,9 @@ double operator * (
   }
 
   double rtn = 0.0;
-  if (a.type == DataType::VectorData && b.type == DataType::VectorData) {
-    for (unsigned i = 0; i < a.data_vector.size(); i++) {
+  if (a.type == DataType::VectorData
+      && b.type == DataType::VectorData) {
+    for (size_t i = 0; i < a.data_vector.size(); i++) {
       rtn += a.data_vector[i] * b.data_vector[i];
     }
   } else if (a.type == DataType::VectorData
@@ -61,15 +62,16 @@ double operator * (
     for (auto kv : b.data_sparse) {
       rtn += a.data_vector[kv.first] * kv.second;
     }
-  } else if (a.type == DataType::SparseVector && b.type == DataType::VectorData) {
+  } else if (a.type == DataType::SparseVector
+      && b.type == DataType::VectorData) {
     for (auto kv : a.data_sparse) {
       rtn += b.data_vector[kv.first] * kv.second;
     }
   } else {
     for (auto kv : a.data_sparse) {
-      if ( b.data_sparse.count(kv.first)>0 ){
+      if (b.data_sparse.count(kv.first) > 0) {
         auto tmp = b.data_sparse.at(kv.first);
-        rtn+=kv.second*tmp; 
+        rtn += kv.second * tmp;
       }
     }
   }
