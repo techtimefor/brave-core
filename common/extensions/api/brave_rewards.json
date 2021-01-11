@@ -1216,6 +1216,8 @@
           {
             "type": "string",
             "name": "result"
+          }
+        ]
      },
      {   
      "name": "showCheckoutDialog",
