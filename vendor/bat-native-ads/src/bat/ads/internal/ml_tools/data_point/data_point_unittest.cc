@@ -12,17 +12,19 @@
 #include "bat/ads/internal/unittest_base.h"
 #include "bat/ads/internal/unittest_util.h"
 
+// npm run test -- brave_unit_tests --filter=BatAds*
+
 namespace ads {
 namespace ml_tools {
 
-class DataPointTest : public UnitTestBase {
+class BatAdsDataPointTest : public UnitTestBase {
  protected:
-  DataPointTest() = default;
+  BatAdsDataPointTest() = default;
 
-  ~DataPointTest() override = default;
+  ~BatAdsDataPointTest() override = default;
 };
 
-TEST_F(DataPointTest, DataPointTypeAssertions) {
+TEST_F(BatAdsDataPointTest, DataPointTypeAssertions) {
   // String
   std::string a = "trololol";
   auto string_data_point = data_point::DataPoint(a);
@@ -66,7 +68,7 @@ TEST_F(DataPointTest, DataPointTypeAssertions) {
   EXPECT_EQ(5, sparse_data_point_5.n_dims);
 }
 
-TEST_F(DataPointTest, DenseDenseProduct) {
+TEST_F(BatAdsDataPointTest, DenseDenseProduct) {
   const double kEps = 1e-6;
 
   std::vector<double> v_5{1.0, 2.0, 3.0, 4.0, 5.0};
@@ -88,7 +90,7 @@ TEST_F(DataPointTest, DenseDenseProduct) {
   EXPECT_TRUE(std::fabs(6.0 - res_3x1) < kEps);
 }
 
-TEST_F(DataPointTest, SparseSparseProduct) {
+TEST_F(BatAdsDataPointTest, SparseSparseProduct) {
   const double kEps = 1e-6;
 
   // Dense equivalent is [1, 0, 2]
@@ -112,7 +114,7 @@ TEST_F(DataPointTest, SparseSparseProduct) {
   EXPECT_TRUE(std::fabs(14.0 - res_5x5) < kEps);
 }
 
-TEST_F(DataPointTest, SparseDenseProduct) {
+TEST_F(BatAdsDataPointTest, SparseDenseProduct) {
   const double kEps = 1e-6;
 
   std::vector<double> v_5{1.0, 2.0, 3.0, 4.0, 5.0};
@@ -147,7 +149,7 @@ TEST_F(DataPointTest, SparseDenseProduct) {
   EXPECT_TRUE(std::fabs(2.0 - mixed_res_5x5_2) < kEps);
 }
 
-TEST_F(DataPointTest, NonsenseProduct) {
+TEST_F(BatAdsDataPointTest, NonsenseProduct) {
   std::string a = "trololol";
   auto string_data_point = data_point::DataPoint(a);
 

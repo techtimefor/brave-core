@@ -6,7 +6,6 @@
 #include "base/json/json_reader.h"
 #include "base/values.h"
 #include "bat/ads/internal/ml_tools/pipeline/pipeline.h"
-#include "bat/ads/internal/ml_tools/pipeline/advertising_categories.h"
 
 namespace ads {
 namespace ml_tools {
@@ -17,17 +16,12 @@ Pipeline::Pipeline() {
     timestamp_ = "";
     locale_ = "en";
     transformations_ = {};
-    advertising_categories_ = get_advertising_categories();
-    GetReverseCategories();
-    // classifier_ = nullptr;
 }
 
 Pipeline::Pipeline(
     const Pipeline& pipeline) {
   transformations_ = pipeline.transformations_;
   classifier_ = pipeline.classifier_;
-  advertising_categories_ = get_advertising_categories();
-  GetReverseCategories();
 }
 
 Pipeline::Pipeline(
@@ -35,14 +29,6 @@ Pipeline::Pipeline(
     LinearSVM classifier) {
   transformations_ = transformations;
   classifier_ = classifier;
-  advertising_categories_ = get_advertising_categories();
-  GetReverseCategories();
-}
-
-void Pipeline::GetReverseCategories() {
-  for (auto const& category : advertising_categories_) {
-    reverse_categories_[category.second] = category.first;
-  }
 }
 
 Pipeline::~Pipeline() = default;
@@ -270,26 +256,6 @@ std::map<std::string, double> Pipeline::GetTopPredictions(
     }
   }
   return rtn;
-}
-
-std::vector<double> Pipeline::GetAdvertisingPredictions(
-    const std::string &html) {
-  DataPoint data = DataPoint(html);
-  auto predictions = Apply(data);
-  std::vector<double> rtn(advertising_categories_.size(), 0.0);
-  for (auto const& prediction: predictions) {
-    auto class_name = prediction.first;
-    auto value = prediction.second;
-    if (advertising_categories_.count(class_name)) {
-      rtn[advertising_categories_[class_name]] = value;
-    }
-  }
-  return rtn;
-}
-
-std::string Pipeline::GetCategory(
-    int c) {
-  return reverse_categories_[c];
 }
 
 }  // namespace pipeline

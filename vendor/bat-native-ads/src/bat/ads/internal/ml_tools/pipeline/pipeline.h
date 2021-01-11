@@ -48,12 +48,6 @@ class Pipeline {
   std::map<std::string, double> GetTopPredictions(
       const std::string& content);
 
-  std::vector<double> GetAdvertisingPredictions(
-      const std::string& html);
-
-  std::string GetCategory(
-      int c);
-
  private:
   void GetReverseCategories();
 
@@ -85,8 +79,6 @@ class Pipeline {
   std::string timestamp_;
   std::string locale_;
   std::vector<Transformation> transformations_;
-  std::map<std::string,int> advertising_categories_;
-  std::map<int, std::string> reverse_categories_;
   LinearSVM classifier_;
 };
 

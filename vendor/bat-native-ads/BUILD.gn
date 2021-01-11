@@ -435,7 +435,6 @@ source_set("ads") {
     "src/bat/ads/internal/ml_tools/data_point/data_point.h",
     "src/bat/ads/internal/ml_tools/linear_svm/linear_svm.cc",
     "src/bat/ads/internal/ml_tools/linear_svm/linear_svm.h",
-    "src/bat/ads/internal/ml_tools/pipeline/advertising_categories.h",
     "src/bat/ads/internal/ml_tools/pipeline/pipeline.cc",
     "src/bat/ads/internal/ml_tools/pipeline/pipeline.h",
     "src/bat/ads/internal/ml_tools/static_values.h",
