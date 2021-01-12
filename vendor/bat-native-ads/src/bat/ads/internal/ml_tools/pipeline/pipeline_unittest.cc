@@ -3,36 +3,29 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "bat/ads/internal/ml_tools/data_point/data_point.h"
-#include "bat/ads/internal/ml_tools/linear_svm/linear_svm.h"
-#include "bat/ads/internal/ml_tools/pipeline/pipeline.h"
-#include "bat/ads/internal/ml_tools/transformation/transformation.h"
-
 #include <fstream>
 #include <iostream>
 #include <cmath>
 #include <vector>
 
-#include "base/base_paths.h"
-#include "base/files/file_util.h"
-#include "base/logging.h"
-#include "base/path_service.h"
-#include "base/stl_util.h"
+#include "bat/ads/internal/ml_tools/data_point/data_point.h"
+#include "bat/ads/internal/ml_tools/linear_svm/linear_svm.h"
+#include "bat/ads/internal/ml_tools/pipeline/pipeline.h"
+#include "bat/ads/internal/ml_tools/transformation/transformation.h"
 
-#include "bat/ads/internal/json_helper.h"
 #include "bat/ads/internal/unittest_base.h"
 #include "bat/ads/internal/unittest_util.h"
+
+// npm run test -- brave_unit_tests --filter=BatAds*
+
+namespace ads {
+namespace ml_tools {
 
 namespace {
 
 const char kPipelineSpam[] = "pipeline_spam.json";
 
 }  // namespace
-
-// npm run test -- brave_unit_tests --filter=BatAds*
-
-namespace ads {
-namespace ml_tools {
 
 class BatAdsPipelineTest : public UnitTestBase {
  protected:
