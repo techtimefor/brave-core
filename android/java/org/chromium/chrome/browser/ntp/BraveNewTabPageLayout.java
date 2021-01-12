@@ -171,10 +171,6 @@ public class BraveNewTabPageLayout extends NewTabPageLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
-        // mBraveStatsViewFallBackLayout = (ViewGroup)
-        // findViewById(R.id.brave_stats_fallback_layout);
-
         ntpWidgetLayout = findViewById(R.id.ntp_widget_layout);
         indicatorLayout = findViewById(R.id.indicator_layout);
         ntpWidgetViewPager = findViewById(R.id.ntp_widget_view_pager);
@@ -442,7 +438,8 @@ public class BraveNewTabPageLayout extends NewTabPageLayout {
         checkAndShowNTPImage(false);
         mNTPBackgroundImagesBridge.addObserver(mNTPBackgroundImageServiceObserver);
         if (PackageUtils.isFirstInstall(mActivity)
-                && !OnboardingPrefManager.getInstance().isNewOnboardingShown()) {
+                && !OnboardingPrefManager.getInstance().isNewOnboardingShown()
+                && OnboardingPrefManager.getInstance().isP3aOnboardingShown()) {
             ((BraveActivity)mActivity).showOnboardingV2(false);
         }
         if (OnboardingPrefManager.getInstance().isFromNotification() ) {

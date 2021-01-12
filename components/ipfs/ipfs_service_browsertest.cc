@@ -41,7 +41,7 @@ class IpfsServiceBrowserTest : public InProcessBrowserTest {
     ipfs_service_ =
         IpfsServiceFactory::GetInstance()->GetForContext(browser()->profile());
     ASSERT_TRUE(ipfs_service_);
-    ipfs_service_->SetIpfsLaunchedForTest(true);
+    ipfs_service_->SetAllowIpfsLaunchForTest(true);
     host_resolver()->AddRule("*", "127.0.0.1");
     InProcessBrowserTest::SetUpOnMainThread();
   }
@@ -403,7 +403,8 @@ IN_PROC_BROWSER_TEST_F(IpfsServiceBrowserTest, CanLoadIFrameFromIPFS) {
       "const timer = setInterval(function () {"
       "  const iframeDoc = iframe.contentDocument || "
       "      iframe.contentWindow.document;"
-      "  if (iframeDoc.readyState == 'complete') {"
+      "  if (iframeDoc.readyState === 'complete' && "
+      "      iframeDoc.location.href !== 'about:blank') {"
       "    clearInterval(timer);"
       "    window.domAutomationController.send(window.location.href);"
       "  }"

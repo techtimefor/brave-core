@@ -83,7 +83,8 @@
 }
 
 -keep class org.chromium.chrome.browser.toolbar.ToolbarManager {
-    *** mBottomControlsCoordinator;
+    *** mBottomControlsCoordinatorSupplier;
+    *** mCallbackController;
     *** mBrowserControlsSizer;
     *** mFullscreenManager;
     *** mActivityTabProvider;
@@ -162,4 +163,13 @@
 
 -keep class org.chromium.chrome.browser.tabmodel.BraveTabCreator {
     public <init>(...);
+}
+
+-keep class org.chromium.chrome.browser.bookmarks.BraveBookmarkUtils {
+    *** addOrEditBookmark(...);
+}
+
+-keep class org.chromium.chrome.browser.bookmarks.BookmarkUtils {
+    *** addBookmarkInternal(...);
+    *** createSnackbarControllerForEditButton(...);
 }

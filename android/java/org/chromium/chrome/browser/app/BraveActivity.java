@@ -54,12 +54,12 @@ import org.chromium.chrome.browser.bookmarks.BookmarkModel;
 import org.chromium.chrome.browser.brave_stats.BraveStatsUtil;
 import org.chromium.chrome.browser.dependency_injection.ChromeActivityComponent;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
-import org.chromium.chrome.browser.informers.BraveP3AInformers;
 import org.chromium.chrome.browser.notifications.BraveSetDefaultBrowserNotificationService;
 import org.chromium.chrome.browser.notifications.retention.RetentionNotificationUtil;
 import org.chromium.chrome.browser.ntp.NewTabPage;
 import org.chromium.chrome.browser.onboarding.OnboardingActivity;
 import org.chromium.chrome.browser.onboarding.OnboardingPrefManager;
+import org.chromium.chrome.browser.onboarding.P3aOnboardingActivity;
 import org.chromium.chrome.browser.onboarding.v2.HighlightDialogFragment;
 import org.chromium.chrome.browser.preferences.BravePrefServiceBridge;
 import org.chromium.chrome.browser.preferences.BravePreferenceKeys;
@@ -71,6 +71,7 @@ import org.chromium.chrome.browser.rate.RateUtils;
 import org.chromium.chrome.browser.settings.BraveRewardsPreferences;
 import org.chromium.chrome.browser.settings.BraveSearchEngineUtils;
 import org.chromium.chrome.browser.share.ShareDelegate;
+import org.chromium.chrome.browser.share.ShareDelegateImpl.ShareOrigin;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabImpl;
 import org.chromium.chrome.browser.tab.TabLaunchType;
@@ -112,6 +113,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     public static final String REWARDS_LEARN_MORE_URL = "https://brave.com/faq-rewards/#unclaimed-funds";
     public static final String BRAVE_TERMS_PAGE =
             "https://basicattentiontoken.org/user-terms-of-service/";
+    public static final String P3A_URL = "https://brave.com/p3a";
     public static final String BRAVE_PRIVACY_POLICY = "https://brave.com/privacy/#rewards";
     private static final String PREF_CLOSE_TABS_ON_EXIT = "close_tabs_on_exit";
     public static final String OPEN_URL = "open_url";
@@ -151,7 +153,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         // Handle items replaced by Brave.
         if (id == R.id.info_menu_id && currentTab != null) {
             ShareDelegate shareDelegate = (ShareDelegate) getShareDelegateSupplier().get();
-            shareDelegate.share(currentTab, false);
+            shareDelegate.share(currentTab, false, ShareOrigin.OVERFLOW_MENU);
             return true;
         }
 
@@ -308,20 +310,14 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         BraveSyncReflectionUtils.showInformers();
 
         if (BraveConfig.P3A_ENABLED) {
-            // // P3A informer should be shown not for the updated users only
-            // if (!PackageUtils.isFirstInstall(this)) {
-            //     BraveP3AInformers.show();
-            // } else {
-            //     // On the first run P3A is must be set from the onboarding wizard
-            // }
-            // Uncomment ^ when onboarding UI step will be ready for P3A
-
-            // Until we don't have P3A onboarding, P3A will be disabled,
-            // but available for activating through settings
             if (!BravePrefServiceBridge.getInstance().hasPathP3AEnabled()) {
                 BravePrefServiceBridge.getInstance().setP3AEnabled(false);
             }
-            // Remove lines above ^ when onboarding UI step will be ready for P3A
+            if (!OnboardingPrefManager.getInstance().isP3aOnboardingShown()) {
+                Intent p3aOnboardingIntent = new Intent(this, P3aOnboardingActivity.class);
+                p3aOnboardingIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(p3aOnboardingIntent);
+            }
         }
 
         if (!OnboardingPrefManager.getInstance().isOneTimeNotificationStarted()
@@ -506,9 +502,8 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
                 View layout = inflater.inflate(R.layout.brave_set_default_browser_dialog,
                                                (ViewGroup) findViewById(R.id.brave_set_default_browser_toast_container));
 
-                Toast toast = new Toast(context);
+                Toast toast = new Toast(context, layout);
                 toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
                 toast.setGravity(Gravity.TOP, 0, 40);
                 toast.show();
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(BRAVE_BLOG_URL));
