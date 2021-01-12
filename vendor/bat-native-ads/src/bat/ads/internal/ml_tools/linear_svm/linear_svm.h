@@ -41,10 +41,10 @@ class LinearSVM {
       DataPoint x,
       int top_count = -1);
 
- private:
   std::map<std::string, double> Softmax(
       const std::map<std::string, double>& y);
 
+ private:
   std::map<std::string, DataPoint> weights_;
   std::map<std::string, double> biases_;
 };
