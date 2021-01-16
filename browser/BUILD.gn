@@ -70,6 +70,8 @@ source_set("browser_process") {
     "geolocation/brave_geolocation_permission_context_delegate.h",
     "metrics/metrics_reporting_util.cc",
     "metrics/metrics_reporting_util.h",
+    "payments/brave_payment_request_delegate.cc",
+    "payments/brave_payment_request_delegate.h",
     "search_engines/guest_window_search_engine_provider_service.cc",
     "search_engines/guest_window_search_engine_provider_service.h",
     "search_engines/private_window_search_engine_provider_service.cc",
