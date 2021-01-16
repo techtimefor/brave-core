@@ -1216,6 +1216,15 @@
           {
             "type": "string",
             "name": "result"
+     },
+     {   
+     "name": "showCheckoutDialog",
+        "type": "function",
+        "description": "Displays the rewards checkout dialog",
+        "parameters": [
+          {
+            "name": "tabID",
+            "type": "integer"
           }
         ]
       },
