@@ -14,9 +14,6 @@
 
 namespace ads {
 namespace ml_tools {
-
-using data_point::DataPoint;
-
 namespace transformation {
 
 class HashVectorizer {
@@ -41,7 +38,7 @@ class HashVectorizer {
   int GetHash(
       std::string& substring);
 
-  std::vector<unsigned int> substring_sizes_; // not ints for type comparison issues
+  std::vector<unsigned> substring_sizes_; // not ints for type comparison issues
   int num_buckets_; // number of buckets to use for hashing
 };
 

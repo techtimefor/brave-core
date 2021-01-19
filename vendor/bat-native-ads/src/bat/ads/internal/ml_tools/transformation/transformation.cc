@@ -25,8 +25,8 @@ TransformationType Transformation::GetType() {
   return type;
 }
 
-DataPoint Transformation::Get(
-    DataPoint inp) {
+data_point::DataPoint Transformation::Get(
+    data_point::DataPoint inp) {
   switch(type){
     case TransformationType::TO_LOWER:
       return GetLower(inp);
@@ -35,26 +35,27 @@ DataPoint Transformation::Get(
     case TransformationType::NORMALIZE:
       return GetNormalized(inp);
     case TransformationType::NONE:
-      return DataPoint("");
+      return data_point::DataPoint("");
   }
 }
 
-DataPoint Transformation::GetLower(
-    DataPoint datapoint) {
+data_point::DataPoint Transformation::GetLower(
+    data_point::DataPoint datapoint) {
   std::string rtn_str;
   rtn_str.assign(datapoint.data_text);
   std::transform(rtn_str.begin(), rtn_str.end(), rtn_str.begin(), ::tolower);
-  return DataPoint(rtn_str);
+  return data_point::DataPoint(rtn_str);
 }
 
-DataPoint Transformation::GetNGrams(
-    DataPoint datapoint) {
+data_point::DataPoint Transformation::GetNGrams(
+    data_point::DataPoint datapoint) {
   auto hashed_vector = hash_vectorizer.GetFrequencies(datapoint.data_text);
-  return DataPoint(hashed_vector, hash_vectorizer.GetBucketCount());
+  return data_point::DataPoint(
+      hashed_vector, hash_vectorizer.GetBucketCount());
 }
 
-DataPoint Transformation::GetNormalized(
-    DataPoint datapoint) {
+data_point::DataPoint Transformation::GetNormalized(
+    data_point::DataPoint datapoint) {
   auto s = 0.0;
   std::map<unsigned, double> normalized_vector;
 
@@ -67,7 +68,8 @@ DataPoint Transformation::GetNormalized(
     normalized_vector[x.first] = x.second / norm;
   }
 
-  return DataPoint(normalized_vector, hash_vectorizer.GetBucketCount());
+  return data_point::DataPoint(
+      normalized_vector, hash_vectorizer.GetBucketCount());
 }
 
 ToLower::ToLower() {

@@ -88,7 +88,7 @@ TEST_F(BatAdsTransformationTest, ChainingTest) {
   chain.push_back(hashed_ngrams);
 
   std::string test_string = "TINY";
-  auto last_point = DataPoint(test_string);
+  auto last_point = data_point::DataPoint(test_string);
 
   for (size_t i = 0; i < chain.size(); ++i) {
     auto transform = chain[i];

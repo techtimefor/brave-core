@@ -19,11 +19,6 @@
 
 namespace ads {
 namespace ml_tools {
-
-using data_point::DataPoint;
-using transformation::Transformation;
-using linear_svm::LinearSVM;
-
 namespace pipeline {
 
 class Pipeline {
@@ -34,8 +29,8 @@ class Pipeline {
       const Pipeline& pipeline);
 
   Pipeline(
-      std::vector<Transformation> transformations,
-      LinearSVM classifier);
+      std::vector<transformation::Transformation> transformations,
+      linear_svm::LinearSVM classifier);
 
   ~Pipeline();
 
@@ -43,7 +38,7 @@ class Pipeline {
       const std::string& json);
 
   std::map<std::string, double> Apply(
-      const DataPoint& inp);
+      const data_point::DataPoint& inp);
 
   std::map<std::string, double> GetTopPredictions(
       const std::string& content);
@@ -78,8 +73,8 @@ class Pipeline {
   uint16_t version_;
   std::string timestamp_;
   std::string locale_;
-  std::vector<Transformation> transformations_;
-  LinearSVM classifier_;
+  std::vector<transformation::Transformation> transformations_;
+  linear_svm::LinearSVM classifier_;
 };
 
 }  // namespace pipeline

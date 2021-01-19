@@ -25,8 +25,8 @@ Pipeline::Pipeline(
 }
 
 Pipeline::Pipeline(
-    std::vector<Transformation> transformations,
-    LinearSVM classifier) {
+    std::vector<transformation::Transformation> transformations,
+    linear_svm::LinearSVM classifier) {
   transformations_ = transformations;
   classifier_ = classifier;
 }
@@ -39,7 +39,11 @@ bool Pipeline::FromJson(
   if (!root) {
     return false;
   }
-  base::Value* version = root->FindKeyOfType("version", base::Value::Type::INTEGER);
+  base::Value* version = root->FindKeyOfType(
+      "version", base::Value::Type::INTEGER);
+  if (!version) {
+    return false;
+  }
   int version_number;
   bool parsed_version_number = version->GetAsInteger(&version_number);
   if (!parsed_version_number) {
@@ -88,7 +92,7 @@ bool Pipeline::ParseTransformations(
   if (!transformations->is_list()) {
     return false;
   }
-  std::vector<Transformation> transformation_sequence;
+  std::vector<transformation::Transformation> transformation_sequence;
   for (size_t i = 0; i < transformations->GetList().size(); i++) {
     const base::Value& transformation = transformations->GetList()[i];
     const base::Value* transformation_type =
@@ -148,7 +152,8 @@ bool Pipeline::ParseClassifier(
   }
 
   std::string parsed_classifier_type;
-  bool parsed_classifier_type_success = classifier_type->GetAsString(&parsed_classifier_type);
+  bool parsed_classifier_type_success = classifier_type->GetAsString(
+      &parsed_classifier_type);
   if (!parsed_classifier_type_success) {
     return false;
   }
@@ -172,7 +177,7 @@ bool Pipeline::ParseClassifier(
     return false;
   }
 
-  std::map<std::string,DataPoint> weights;
+  std::map<std::string, data_point::DataPoint> weights;
   for (size_t i = 0; i < classes.size(); i++){
     base::Value* this_class = class_weights->FindKey(classes[i]);
     if (!this_class->is_list()) {
@@ -197,9 +202,10 @@ bool Pipeline::ParseClassifier(
   }
   for (size_t i = 0 ; i < biases->GetList().size();i++) {
     const base::Value& this_bias = biases->GetList()[i];
-    specified_biases.insert({classes.at(i), static_cast<double>(this_bias.GetDouble())}) ;
+    specified_biases.insert(
+        {classes.at(i), static_cast<double>(this_bias.GetDouble())}) ;
   }
-  classifier_ = LinearSVM(weights, specified_biases);
+  classifier_ = linear_svm::LinearSVM(weights, specified_biases);
   return true;
 }
 
@@ -236,8 +242,8 @@ bool Pipeline::GetLocaleFromJSON(
 }
 
 std::map<std::string, double> Pipeline::Apply(
-    const DataPoint& inp) {
-  DataPoint last_point = DataPoint(inp);
+    const data_point::DataPoint& inp) {
+  data_point::DataPoint last_point = data_point::DataPoint(inp);
   for (auto& transformation : transformations_) {
     last_point = transformation.Get(last_point);
   }
@@ -246,7 +252,7 @@ std::map<std::string, double> Pipeline::Apply(
 
 std::map<std::string, double> Pipeline::GetTopPredictions(
     const std::string& html) {
-  DataPoint data = DataPoint(html);
+  data_point::DataPoint data = data_point::DataPoint(html);
   auto predictions = Apply(data);
   double expected_prob = 1.0 / static_cast<double>(predictions.size());
   std::map<std::string, double> rtn;

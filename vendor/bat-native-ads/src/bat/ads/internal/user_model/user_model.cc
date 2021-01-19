@@ -24,7 +24,7 @@ bool UserModel::InitializePageClassifier(
     return false;
   }
 
-  page_classifier_pipeline_ = Pipeline();
+  page_classifier_pipeline_ = ml_tools::pipeline::Pipeline();
   is_initialized_ = page_classifier_pipeline_.FromJson(model);
   return is_initialized_;
 }

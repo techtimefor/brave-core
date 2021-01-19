@@ -35,8 +35,8 @@ class Transformation {
 
   ~Transformation();
 
-  DataPoint Get(
-      DataPoint inp);
+  data_point::DataPoint Get(
+      data_point::DataPoint inp);
 
   TransformationType GetType();
 
@@ -45,14 +45,14 @@ class Transformation {
   TransformationType type;
 
  private:
-  DataPoint GetLower(
-      DataPoint inp);
+  data_point::DataPoint GetLower(
+      data_point::DataPoint inp);
 
-  DataPoint GetNGrams(
-      DataPoint inp);
+  data_point::DataPoint GetNGrams(
+      data_point::DataPoint inp);
 
-  DataPoint GetNormalized(
-      DataPoint inp);
+  data_point::DataPoint GetNormalized(
+      data_point::DataPoint inp);
 };
 
 class ToLower: public Transformation {

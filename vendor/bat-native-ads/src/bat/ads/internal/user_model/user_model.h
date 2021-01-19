@@ -13,9 +13,6 @@
 #include "bat/ads/internal/user_model/user_model.h"
 
 namespace ads {
-
-using ml_tools::pipeline::Pipeline;
-
 namespace user_model {
 
 class UserModel {
@@ -43,7 +40,7 @@ class UserModel {
  private:
   bool is_initialized_;
 
-  Pipeline page_classifier_pipeline_;
+  ml_tools::pipeline::Pipeline page_classifier_pipeline_;
 };
 
 }  // namespace user_model

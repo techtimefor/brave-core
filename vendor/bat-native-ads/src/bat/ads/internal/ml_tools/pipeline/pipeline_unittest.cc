@@ -43,10 +43,10 @@ TEST_F(BatAdsPipelineTest, BuildSimplePipeline) {
   auto hashed_ngrams = transformation::HashedNGrams(3, std::vector<int>{1, 2, 3});
   transformations.push_back(hashed_ngrams);
 
-  std::map<std::string, DataPoint> weights = {
-      {"class_1", DataPoint(std::vector<double>{1.0, 2.0, 3.0})},
-      {"class_2", DataPoint(std::vector<double>{3.0, 2.0, 1.0})}, 
-      {"class_3", DataPoint(std::vector<double>{2.0, 2.0, 2.0})}
+  std::map<std::string, data_point::DataPoint> weights = {
+      {"class_1", data_point::DataPoint(std::vector<double>{1.0, 2.0, 3.0})},
+      {"class_2", data_point::DataPoint(std::vector<double>{3.0, 2.0, 1.0})},
+      {"class_3", data_point::DataPoint(std::vector<double>{2.0, 2.0, 2.0})}
   };
 
   std::map<std::string, double> biases = {
@@ -56,10 +56,10 @@ TEST_F(BatAdsPipelineTest, BuildSimplePipeline) {
   };
 
   unsigned expected_len = 3;
-  LinearSVM linear_svm(weights, biases);
+  linear_svm::LinearSVM linear_svm(weights, biases);
   pipeline::Pipeline pipeline = pipeline::Pipeline(transformations, linear_svm);
 
-  auto data_point_3 = DataPoint(std::vector<double>{1.0, 0.0, 0.0});
+  auto data_point_3 = data_point::DataPoint(std::vector<double>{1.0, 0.0, 0.0});
   auto data_point_3_res = pipeline.Apply(data_point_3);
   EXPECT_EQ(expected_len, data_point_3_res.size());
 
@@ -84,14 +84,14 @@ TEST_F(BatAdsPipelineTest, TestLoadFromJson) {
   std::vector<std::string> train_texts = {
     "This is a spam email.", 
     "Another spam trying to sell you viagra",
-    "Message from mom with no real subject", 
+    "Message from mom with no real subject",
     "Another messase from mom with no real subject",
     "Yadayada"
   };
   std::vector<std::string> train_labels = {"spam", "spam", "ham", "ham", "junk"};
 
   for (size_t i = 0; i < train_texts.size(); i++){
-    auto preds = pipeline.Apply(DataPoint(train_texts[i]));
+    auto preds = pipeline.Apply(data_point::DataPoint(train_texts[i]));
     for (auto const& pred : preds){
       auto other_prediction = pred.second;
       EXPECT_TRUE(preds[train_labels[i]] >= other_prediction);

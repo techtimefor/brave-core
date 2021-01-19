@@ -13,9 +13,6 @@
 
 namespace ads {
 namespace ml_tools {
-
-using data_point::DataPoint;
-
 namespace linear_svm {
 
 class LinearSVM {
@@ -29,23 +26,23 @@ class LinearSVM {
       const std::string& model);
 
   LinearSVM(
-      const std::map<std::string, DataPoint>& weights,
+      const std::map<std::string, data_point::DataPoint>& weights,
       const std::map<std::string, double> &biases);
 
   ~LinearSVM();
 
   std::map<std::string, double> Predict(
-      DataPoint x);
+      data_point::DataPoint x);
 
   std::map<std::string, double> TopPredictions(
-      DataPoint x,
+      data_point::DataPoint x,
       int top_count = -1);
 
   std::map<std::string, double> Softmax(
       const std::map<std::string, double>& y);
 
  private:
-  std::map<std::string, DataPoint> weights_;
+  std::map<std::string, data_point::DataPoint> weights_;
   std::map<std::string, double> biases_;
 };
 

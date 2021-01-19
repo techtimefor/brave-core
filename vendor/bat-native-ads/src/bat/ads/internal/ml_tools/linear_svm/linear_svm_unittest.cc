@@ -24,13 +24,13 @@ class BatAdsLinearSVMTest : public UnitTestBase {
 };
 
 TEST_F(BatAdsLinearSVMTest, ThreeClassesPredictionTest) {
-  std::map<std::string, DataPoint> weights = {
+  std::map<std::string, data_point::DataPoint> weights = {
     {"class_1", std::vector<double>{1.0, 0.0, 0.0}},
     {"class_2", std::vector<double>{0.0, 1.0, 0.0}},
     {"class_3", std::vector<double>{0.0, 0.0, 1.0}}
   };
 
-  std::map<std::string,double> biases = {
+  std::map<std::string, double> biases = {
     {"class_1", 0.0},
     {"class_2", 0.0},
     {"class_3", 0.0}
@@ -38,42 +38,105 @@ TEST_F(BatAdsLinearSVMTest, ThreeClassesPredictionTest) {
 
   linear_svm::LinearSVM linear_svm(weights, biases);
   
-  auto class1_data_point = DataPoint(std::vector<double>{1.0, 0.0, 0.0});
+  auto class1_data_point = data_point::DataPoint(
+      std::vector<double>{1.0, 0.0, 0.0});
   auto res1 = linear_svm.Predict(class1_data_point);
   EXPECT_TRUE(res1["class_1"] > res1["class_2"]);
   EXPECT_TRUE(res1["class_1"] > res1["class_3"]);
 
-  auto class2_data_point = DataPoint(std::vector<double>{0.0, 1.0, 0.0});
+  auto class2_data_point = data_point::DataPoint(
+      std::vector<double>{0.0, 1.0, 0.0});
   auto res2 = linear_svm.Predict(class2_data_point);
   EXPECT_TRUE(res2["class_2"] > res2["class_1"]);
   EXPECT_TRUE(res2["class_2"] > res2["class_3"]);
 
-  auto class3_data_point = DataPoint(std::vector<double>{0.0, 1.0, 2.0});
+  auto class3_data_point = data_point::DataPoint(
+      std::vector<double>{0.0, 1.0, 2.0});
   auto res3 = linear_svm.Predict(class3_data_point);
   EXPECT_TRUE(res3["class_3"] > res3["class_1"]);
   EXPECT_TRUE(res3["class_3"] > res3["class_2"]);
 }
 
 TEST_F(BatAdsLinearSVMTest, BiasesPredictionTest) {
-  std::map<std::string, DataPoint> weights = {
+  std::map<std::string, data_point::DataPoint> weights = {
     {"class_1", std::vector<double>{1.0, 0.0, 0.0}},
     {"class_2", std::vector<double>{0.0, 1.0, 0.0}},
     {"class_3", std::vector<double>{0.0, 0.0, 1.0}}
   };
 
-  std::map<std::string,double> biases = {
+  std::map<std::string, double> biases = {
     {"class_1", 0.5},
     {"class_2", 0.25},
     {"class_3", 1.0}
   };
 
-  linear_svm::LinearSVM biased_svm(weights,biases);
+  linear_svm::LinearSVM biased_svm(weights, biases);
 
-  auto avg_point = DataPoint(std::vector<double>{1.0, 1.0, 1.0});
+  auto avg_point = data_point::DataPoint(
+      std::vector<double>{1.0, 1.0, 1.0});
   auto res = biased_svm.Predict(avg_point);
   EXPECT_TRUE(res["class_3"] > res["class_1"]);
   EXPECT_TRUE(res["class_3"] > res["class_2"]);
   EXPECT_TRUE(res["class_1"] > res["class_2"]);
+}
+
+TEST_F(BatAdsLinearSVMTest, BinaryClassifierPredictionTest) {
+  std::map<std::string, data_point::DataPoint> weights = {
+    {"the_only_class", std::vector<double>{0.3, 0.2, 0.25}},
+  };
+
+  std::map<std::string, double> biases = {
+    {"the_only_class", -0.45},
+  };
+
+  linear_svm::LinearSVM linear_svm(weights, biases);
+
+  auto data_point_0 = data_point::DataPoint(
+      std::vector<double>{1.07, 1.52, 0.91});
+  auto res_0 = linear_svm.Predict(data_point_0);
+  EXPECT_TRUE(res_0.size() == 1);
+  EXPECT_TRUE(res_0["the_only_class"] < 0.5);
+
+  auto data_point_1 = data_point::DataPoint(
+      std::vector<double>{1.11, 1.63, 1.21});
+  auto res_1 = linear_svm.Predict(data_point_1);
+  EXPECT_TRUE(res_1.size() == 1);
+  EXPECT_TRUE(res_1["the_only_class"] > 0.5);
+}
+
+TEST_F(BatAdsLinearSVMTest, TopPredictionsTest) {
+  std::map<std::string, data_point::DataPoint> weights = {
+    {"class_1", std::vector<double>{1.0, 0.5, 0.8}},
+    {"class_2", std::vector<double>{0.3, 1.0, 0.7}},
+    {"class_3", std::vector<double>{0.6, 0.9, 1.0}},
+    {"class_4", std::vector<double>{0.7, 1.0, 0.8}},
+    {"class_5", std::vector<double>{1.0, 0.2, 1.0}}
+  };
+
+  std::map<std::string, double> biases = {
+    {"class_1", 0.21},
+    {"class_2", 0.22},
+    {"class_3", 0.23},
+    {"class_4", 0.22},
+    {"class_5", 0.21}
+  };
+
+  linear_svm::LinearSVM biased_svm(weights, biases);
+
+  auto point_1 = data_point::DataPoint(
+      std::vector<double>{1.0, 0.99, 0.98, 0.97, 0.96});
+  auto res_1 = biased_svm.TopPredictions(point_1);
+  EXPECT_TRUE(res_1.size() == 5);
+
+  auto point_2 = data_point::DataPoint(
+      std::vector<double>{0.83, 0.79, 0.91, 0.87, 0.82});
+  auto res_2 = biased_svm.TopPredictions(point_2, 2);
+  EXPECT_TRUE(res_2.size() == 2);
+
+  auto point_3 = data_point::DataPoint(
+      std::vector<double>{0.92, 0.95, 0.85, 0.91, 0.73});
+  auto res_3 = biased_svm.TopPredictions(point_3, 1);
+  EXPECT_TRUE(res_3.size() == 1);
 }
 
 TEST_F(BatAdsLinearSVMTest, SoftmaxTest) {
@@ -105,13 +168,13 @@ TEST_F(BatAdsLinearSVMTest, SoftmaxTest) {
 TEST_F(BatAdsLinearSVMTest, ExtendedSoftmaxTest) {
   const double kEps = 1e-8;
 
-  std::map<std::string,double> group_1 = {
+  std::map<std::string, double> group_1 = {
     {"c1", 0.0},
     {"c2", 1.0},
     {"c3", 2.0}
   };
 
-  std::map<std::string,double> group_2 = {
+  std::map<std::string, double> group_2 = {
     {"c1", 3.0},
     {"c2", 4.0},
     {"c3", 5.0}
