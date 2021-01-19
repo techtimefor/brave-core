@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <utility>
+#include <vector>
 
 #include "base/strings/stringprintf.h"
 #include "bat/ledger/internal/database/database_activity_info.h"
@@ -140,7 +141,7 @@ DatabaseActivityInfo::DatabaseActivityInfo(
 DatabaseActivityInfo::~DatabaseActivityInfo() = default;
 
 void DatabaseActivityInfo::NormalizeList(
-    type::PublisherInfoList list,
+    std::vector<type::PublisherInfoPtr> list,
     ledger::ResultCallback callback) {
   if (list.empty()) {
     callback(type::Result::LEDGER_OK);
@@ -168,8 +169,8 @@ void DatabaseActivityInfo::NormalizeList(
 
   transaction->commands.push_back(std::move(command));
 
-  auto shared_list = std::make_shared<type::PublisherInfoList>(
-      std::move(list));
+  auto shared_list =
+      std::make_shared<std::vector<type::PublisherInfoPtr>>(std::move(list));
 
   ledger_->ledger_client()->RunDBTransaction(
       std::move(transaction),
@@ -297,7 +298,7 @@ void DatabaseActivityInfo::OnGetRecordsList(
     return;
   }
 
-  type::PublisherInfoList list;
+  std::vector<type::PublisherInfoPtr> list;
   for (auto const& record : response->result->get_records()) {
     auto info = type::PublisherInfo::New();
     auto* record_pointer = record.get();

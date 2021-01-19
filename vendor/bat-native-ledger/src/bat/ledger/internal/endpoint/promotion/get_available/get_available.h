@@ -48,10 +48,10 @@ class LedgerImpl;
 namespace endpoint {
 namespace promotion {
 
-using GetAvailableCallback = std::function<void(
-    const type::Result result,
-    type::PromotionList list,
-    const std::vector<std::string>& corrupted_promotions)>;
+using GetAvailableCallback =
+    std::function<void(const type::Result result,
+                       std::vector<type::PromotionPtr> list,
+                       const std::vector<std::string>& corrupted_promotions)>;
 
 class GetAvailable {
  public:
@@ -67,10 +67,9 @@ class GetAvailable {
 
   type::Result CheckStatusCode(const int status_code);
 
-  type::Result ParseBody(
-      const std::string& body,
-      type::PromotionList* list,
-      std::vector<std::string>* corrupted_promotions);
+  type::Result ParseBody(const std::string& body,
+                         std::vector<type::PromotionPtr>* list,
+                         std::vector<std::string>* corrupted_promotions);
 
   void OnRequest(
       const type::UrlResponse& response,

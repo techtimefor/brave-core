@@ -30,7 +30,7 @@ class ExtensionRewardsServiceObserver : public RewardsServiceObserver,
   // RewardsServiceObserver implementation
   void OnPublisherListNormalized(
       RewardsService* rewards_service,
-      ledger::type::PublisherInfoList list) override;
+      std::vector<ledger::type::PublisherInfoPtr> list) override;
   void OnExcludedSitesChanged(RewardsService* rewards_service,
                               std::string publisher_key,
                               bool excluded) override;
@@ -70,7 +70,7 @@ class ExtensionRewardsServiceObserver : public RewardsServiceObserver,
   void OnFetchPromotions(
       RewardsService* rewards_service,
       const ledger::type::Result result,
-      const ledger::type::PromotionList& list) override;
+      const std::vector<ledger::type::PromotionPtr>& list) override;
 
   void OnPromotionFinished(
       RewardsService* rewards_service,

@@ -219,7 +219,7 @@ IN_PROC_BROWSER_TEST_F(
   context_helper_->LoadURL(rewards_browsertest_util::GetRewardsUrl());
   contribution_->SetUpUpholdWallet(rewards_service_, 50.0);
 
-  ledger::type::SKUOrderItemList items;
+  std::vector<ledger::type::SKUOrderItemPtr> items;
   auto item = ledger::type::SKUOrderItem::New();
   item->order_item_id = "ed193339-e58c-483c-8d61-7decd3c24827";
   item->order_id = "a38b211b-bf78-42c8-9479-b11e92e3a76c";
@@ -771,7 +771,7 @@ IN_PROC_BROWSER_TEST_F(
   // 30 form unblinded and 20 from uphold
   rewards_service_->SetAutoContributionAmount(50.0);
 
-  ledger::type::SKUOrderItemList items;
+  std::vector<ledger::type::SKUOrderItemPtr> items;
   auto item = ledger::type::SKUOrderItem::New();
   item->order_item_id = "ed193339-e58c-483c-8d61-7decd3c24827";
   item->order_id = "a38b211b-bf78-42c8-9479-b11e92e3a76c";

@@ -48,7 +48,7 @@ class Unverified {
 
   void OnContributeUnverifiedPublishers(
       double balance,
-      const type::PendingContributionInfoList& list);
+      const std::vector<type::PendingContributionInfoPtr>& list);
 
   void QueueSaved(
       const type::Result result,

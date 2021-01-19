@@ -6,6 +6,8 @@
 #ifndef BRAVELEDGER_PUBLISHER_PUBLISHER_STATUS_HELPER_H_
 #define BRAVELEDGER_PUBLISHER_PUBLISHER_STATUS_HELPER_H_
 
+#include <vector>
+
 #include "bat/ledger/ledger.h"
 
 namespace ledger {
@@ -14,17 +16,15 @@ class LedgerImpl;
 namespace publisher {
 
 // Refreshes the publisher status for each entry in the specified list
-void RefreshPublisherStatus(
-    LedgerImpl* ledger,
-    type::PublisherInfoList&& info_list,
-    ledger::PublisherInfoListCallback callback);
+void RefreshPublisherStatus(LedgerImpl* ledger,
+                            std::vector<type::PublisherInfoPtr>&& info_list,
+                            ledger::PublisherInfoListCallback callback);
 
 // Refreshes the publisher status for each entry in the specified list
 void RefreshPublisherStatus(
     LedgerImpl* ledger,
-    type::PendingContributionInfoList&& list,
+    std::vector<type::PendingContributionInfoPtr>&& list,
     ledger::PendingContributionInfoListCallback callback);
-
 
 }  // namespace publisher
 }  // namespace ledger

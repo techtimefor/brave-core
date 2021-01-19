@@ -22,7 +22,8 @@ private:
   void Log(const char * file, const int line, const int verbose_level, const std::string & message) override;
   void OnPanelPublisherInfo(ledger::type::Result result, ledger::type::PublisherInfoPtr publisher_info, uint64_t windowId) override;
   void OnReconcileComplete(ledger::type::Result result, ledger::type::ContributionInfoPtr contribution) override;
-  void PublisherListNormalized(ledger::type::PublisherInfoList list) override;
+  void PublisherListNormalized(
+      std::vector<ledger::type::PublisherInfoPtr> list) override;
   std::string URIEncode(const std::string & value) override;
   void OnContributeUnverifiedPublishers(ledger::type::Result result, const std::string& publisher_key, const std::string& publisher_name) override;
   void SetBooleanState(const std::string& name, bool value) override;

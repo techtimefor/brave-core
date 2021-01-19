@@ -49,7 +49,7 @@ class Unblinded {
       GetContributionInfoAndUnblindedTokensCallback callback);
 
   void OnUnblindedTokens(
-      type::UnblindedTokenList list,
+      std::vector<type::UnblindedTokenPtr> list,
       const std::string& contribution_id,
       GetContributionInfoAndUnblindedTokensCallback callback);
 
@@ -58,7 +58,7 @@ class Unblinded {
       GetContributionInfoAndUnblindedTokensCallback callback);
 
   void OnReservedUnblindedTokens(
-      type::UnblindedTokenList list,
+      std::vector<type::UnblindedTokenPtr> list,
       const std::string& contribution_id,
       GetContributionInfoAndUnblindedTokensCallback callback);
 
@@ -79,7 +79,7 @@ class Unblinded {
       const std::vector<type::CredsBatchType>& types,
       ledger::ResultCallback callback);
 
-  type::ContributionPublisherList PrepareAutoContribution(
+  std::vector<type::ContributionPublisherPtr> PrepareAutoContribution(
       const std::vector<type::UnblindedToken>& list,
       type::ContributionInfoPtr contribution);
 
@@ -126,7 +126,7 @@ class Unblinded {
       ledger::ResultCallback callback);
 
   void OnReservedUnblindedTokensForRetryAttempt(
-      const type::UnblindedTokenList& list,
+      const std::vector<type::UnblindedTokenPtr>& list,
       const std::vector<type::CredsBatchType>& types,
       std::shared_ptr<type::ContributionInfoPtr> shared_contribution,
       ledger::ResultCallback callback);

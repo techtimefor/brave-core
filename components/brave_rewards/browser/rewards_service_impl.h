@@ -136,9 +136,8 @@ class RewardsServiceImpl : public RewardsService,
 
   void GetExcludedList(const GetPublisherInfoListCallback& callback) override;
 
-  void OnGetPublisherInfoList(
-      const GetPublisherInfoListCallback& callback,
-      ledger::type::PublisherInfoList list);
+  void OnGetPublisherInfoList(const GetPublisherInfoListCallback& callback,
+                              std::vector<ledger::type::PublisherInfoPtr> list);
   void OnLoad(SessionID tab_id, const GURL& url) override;
   void OnUnload(SessionID tab_id) override;
   void OnShow(SessionID tab_id) override;
@@ -183,9 +182,8 @@ class RewardsServiceImpl : public RewardsService,
   void OnPublisherBanner(GetPublisherBannerCallback callback,
                          ledger::type::PublisherBannerPtr banner);
   void RemoveRecurringTip(const std::string& publisher_key) override;
-  void OnGetRecurringTips(
-      GetRecurringTipsCallback callback,
-      ledger::type::PublisherInfoList list);
+  void OnGetRecurringTips(GetRecurringTipsCallback callback,
+                          std::vector<ledger::type::PublisherInfoPtr> list);
   void GetRecurringTips(GetRecurringTipsCallback callback) override;
   void SetPublisherExclude(
       const std::string& publisher_key,
@@ -393,9 +391,8 @@ class RewardsServiceImpl : public RewardsService,
   void OnGetRewardsParameters(
       GetRewardsParametersCallback callback,
       ledger::type::RewardsParametersPtr parameters);
-  void OnFetchPromotions(
-    const ledger::type::Result result,
-    ledger::type::PromotionList promotions);
+  void OnFetchPromotions(const ledger::type::Result result,
+                         std::vector<ledger::type::PromotionPtr> promotions);
   void TriggerOnPromotion(
       const ledger::type::Result result,
       ledger::type::PromotionPtr promotion);
@@ -425,9 +422,8 @@ class RewardsServiceImpl : public RewardsService,
 
   void MaybeShowAddFundsNotification(uint64_t reconcile_stamp);
 
-  void OnGetOneTimeTips(
-      GetRecurringTipsCallback callback,
-      ledger::type::PublisherInfoList list);
+  void OnGetOneTimeTips(GetRecurringTipsCallback callback,
+                        std::vector<ledger::type::PublisherInfoPtr> list);
 
   void OnInlineTipSetting(
       GetInlineTippingPlatformEnabledCallback callback,
@@ -436,8 +432,8 @@ class RewardsServiceImpl : public RewardsService,
   void OnShareURL(GetShareURLCallback callback, const std::string& url);
 
   void OnGetPendingContributions(
-    GetPendingContributionsCallback callback,
-    ledger::type::PendingContributionInfoList list);
+      GetPendingContributionsCallback callback,
+      std::vector<ledger::type::PendingContributionInfoPtr> list);
 
   void OnURLLoaderComplete(network::SimpleURLLoader* loader,
                            ledger::client::LoadURLCallback callback,
@@ -646,7 +642,8 @@ class RewardsServiceImpl : public RewardsService,
   int64_t GetInt64Option(const std::string& name) const override;
   uint64_t GetUint64Option(const std::string& name) const override;
 
-  void PublisherListNormalized(ledger::type::PublisherInfoList list) override;
+  void PublisherListNormalized(
+      std::vector<ledger::type::PublisherInfoPtr> list) override;
 
   void ShowNotification(
       const std::string& type,
@@ -710,11 +707,12 @@ class RewardsServiceImpl : public RewardsService,
 
   void RecordBackendP3AStats();
 
-  void OnRecordBackendP3AStatsRecurring(ledger::type::PublisherInfoList list);
+  void OnRecordBackendP3AStatsRecurring(
+      std::vector<ledger::type::PublisherInfoPtr> list);
 
   void OnRecordBackendP3AStatsContributions(
       const uint32_t recurring_donation_size,
-      ledger::type::ContributionInfoList list);
+      std::vector<ledger::type::ContributionInfoPtr> list);
 
   void OnRecordBackendP3AStatsAC(
       const int auto_contributions,
@@ -740,7 +738,7 @@ class RewardsServiceImpl : public RewardsService,
 
   void OnGetAllContributions(
       GetAllContributionsCallback callback,
-      ledger::type::ContributionInfoList contributions);
+      std::vector<ledger::type::ContributionInfoPtr> contributions);
 
   void OnGetAllPromotions(
       GetAllPromotionsCallback callback,
@@ -756,9 +754,8 @@ class RewardsServiceImpl : public RewardsService,
 
   void OnDeleteLog(ledger::ResultCallback callback, const bool success);
 
-  void OnGetEventLogs(
-      GetEventLogsCallback callback,
-      ledger::type::EventLogs logs);
+  void OnGetEventLogs(GetEventLogsCallback callback,
+                      std::vector<ledger::type::EventLogPtr> logs);
 
   void OnGetBraveWallet(
       GetBraveWalletCallback callback,

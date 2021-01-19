@@ -293,7 +293,7 @@ void ContributionSKU::Merchant(
 }
 
 void ContributionSKU::GetUnblindedTokens(
-    type::UnblindedTokenList list,
+    std::vector<type::UnblindedTokenPtr> list,
     const type::SKUTransaction& transaction,
     client::TransactionCallback callback) {
   if (list.empty()) {

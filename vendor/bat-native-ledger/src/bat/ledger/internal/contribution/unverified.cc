@@ -47,7 +47,7 @@ void Unverified::OnContributeUnverifiedBalance(
 
 void Unverified::OnContributeUnverifiedPublishers(
     double balance,
-    const type::PendingContributionInfoList& list) {
+    const std::vector<type::PendingContributionInfoPtr>& list) {
   if (list.empty()) {
     BLOG(1, "List is empty");
     return;
@@ -111,7 +111,7 @@ void Unverified::OnContributeUnverifiedPublishers(
     return;
   }
 
-  type::ContributionQueuePublisherList queue_list;
+  std::vector<type::ContributionQueuePublisherPtr> queue_list;
   auto publisher = type::ContributionQueuePublisher::New();
   publisher->publisher_key = current->publisher_key;
   publisher->amount_percent = 100.0;

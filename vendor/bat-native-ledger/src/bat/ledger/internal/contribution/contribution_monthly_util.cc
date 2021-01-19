@@ -5,11 +5,13 @@
 
 #include "bat/ledger/internal/contribution/contribution_monthly_util.h"
 
+#include <vector>
+
 namespace ledger {
 namespace contribution {
 
 double GetTotalFromVerifiedTips(
-    const type::PublisherInfoList& publisher_list) {
+    const std::vector<type::PublisherInfoPtr>& publisher_list) {
   double total_amount = 0.0;
   for (const auto& publisher : publisher_list) {
     if (!publisher || publisher->id.empty()) {

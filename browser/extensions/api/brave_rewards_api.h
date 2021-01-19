@@ -9,6 +9,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "base/memory/weak_ptr.h"
 #include "brave/vendor/bat-native-ledger/include/bat/ledger/mojom_structs.h"
@@ -288,7 +289,7 @@ class BraveRewardsGetRecurringTipsFunction : public ExtensionFunction {
   ResponseAction Run() override;
 
  private:
-    void OnGetRecurringTips(ledger::type::PublisherInfoList list);
+  void OnGetRecurringTips(std::vector<ledger::type::PublisherInfoPtr> list);
 };
 
 class BraveRewardsGetPublisherBannerFunction : public ExtensionFunction {

@@ -625,7 +625,7 @@ void RewardsServiceImpl::GetExcludedList(
 
 void RewardsServiceImpl::OnGetPublisherInfoList(
     const GetPublisherInfoListCallback& callback,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   callback.Run(std::move(list));
 }
 
@@ -1081,9 +1081,9 @@ void RewardsServiceImpl::GetRewardsParameters(
 
 void RewardsServiceImpl::OnFetchPromotions(
     const ledger::type::Result result,
-    ledger::type::PromotionList promotions) {
+    std::vector<ledger::type::PromotionPtr> promotions) {
   for (auto& observer : observers_) {
-    ledger::type::PromotionList promotions_clone;
+    std::vector<ledger::type::PromotionPtr> promotions_clone;
     for (auto& promotion : promotions) {
       promotions_clone.push_back(promotion->Clone());
     }
@@ -2023,7 +2023,7 @@ void RewardsServiceImpl::OnSavePublisherInfo(
 
 void RewardsServiceImpl::OnGetRecurringTips(
     GetRecurringTipsCallback callback,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   std::move(callback).Run(std::move(list));
 }
 
@@ -2041,7 +2041,7 @@ void RewardsServiceImpl::GetRecurringTips(
 
 void RewardsServiceImpl::OnGetOneTimeTips(
     GetRecurringTipsCallback callback,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   std::move(callback).Run(std::move(list));
 }
 
@@ -2637,9 +2637,9 @@ void RewardsServiceImpl::GetPendingContributionsTotal(
 }
 
 void RewardsServiceImpl::PublisherListNormalized(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   for (auto& observer : observers_) {
-    ledger::type::PublisherInfoList new_list;
+    std::vector<ledger::type::PublisherInfoPtr> new_list;
     for (const auto& publisher : list) {
       if (publisher->percent >= 1) {
         new_list.push_back(publisher->Clone());
@@ -2730,7 +2730,7 @@ void RewardsServiceImpl::OnShareURL(
 
 void RewardsServiceImpl::OnGetPendingContributions(
     GetPendingContributionsCallback callback,
-    ledger::type::PendingContributionInfoList list) {
+    std::vector<ledger::type::PendingContributionInfoPtr> list) {
   std::move(callback).Run(std::move(list));
 }
 
@@ -3036,7 +3036,7 @@ void RewardsServiceImpl::RecordBackendP3AStats() {
 }
 
 void RewardsServiceImpl::OnRecordBackendP3AStatsRecurring(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   if (!Connected()) {
     return;
   }
@@ -3049,7 +3049,7 @@ void RewardsServiceImpl::OnRecordBackendP3AStatsRecurring(
 
 void RewardsServiceImpl::OnRecordBackendP3AStatsContributions(
     const uint32_t recurring_donation_size,
-    ledger::type::ContributionInfoList list) {
+    std::vector<ledger::type::ContributionInfoPtr> list) {
   int auto_contributions = 0;
   int tips = 0;
   int queued_recurring = 0;
@@ -3271,7 +3271,7 @@ void RewardsServiceImpl::GetAllContributions(
 
 void RewardsServiceImpl::OnGetAllContributions(
     GetAllContributionsCallback callback,
-    ledger::type::ContributionInfoList contributions) {
+    std::vector<ledger::type::ContributionInfoPtr> contributions) {
   std::move(callback).Run(std::move(contributions));
 }
 
@@ -3289,7 +3289,7 @@ void RewardsServiceImpl::GetAllPromotions(GetAllPromotionsCallback callback) {
 void RewardsServiceImpl::OnGetAllPromotions(
     GetAllPromotionsCallback callback,
     base::flat_map<std::string, ledger::type::PromotionPtr> promotions) {
-  ledger::type::PromotionList list;
+  std::vector<ledger::type::PromotionPtr> list;
   for (const auto& promotion : promotions) {
     if (!promotion.second) {
       continue;
@@ -3390,7 +3390,7 @@ void RewardsServiceImpl::GetEventLogs(GetEventLogsCallback callback) {
 
 void RewardsServiceImpl::OnGetEventLogs(
     GetEventLogsCallback callback,
-    ledger::type::EventLogs logs) {
+    std::vector<ledger::type::EventLogPtr> logs) {
   std::move(callback).Run(std::move(logs));
 }
 

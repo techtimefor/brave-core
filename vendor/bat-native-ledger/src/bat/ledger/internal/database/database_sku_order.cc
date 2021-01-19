@@ -4,6 +4,7 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <utility>
+#include <vector>
 
 #include "base/strings/stringprintf.h"
 #include "bat/ledger/internal/database/database_sku_order.h"
@@ -183,7 +184,7 @@ void DatabaseSKUOrder::OnGetRecord(
 }
 
 void DatabaseSKUOrder::OnGetRecordItems(
-    type::SKUOrderItemList list,
+    std::vector<type::SKUOrderItemPtr> list,
     std::shared_ptr<type::SKUOrderPtr> shared_order,
     GetSKUOrderCallback callback) {
   if (!shared_order) {

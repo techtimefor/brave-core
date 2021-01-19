@@ -78,8 +78,8 @@ class RewardsDOMHandler : public WebUIMessageHandler,
   void RecoverWallet(const base::ListValue* args);
   void GetReconcileStamp(const base::ListValue* args);
   void SaveSetting(const base::ListValue* args);
-  void OnPublisherList(ledger::type::PublisherInfoList list);
-  void OnExcludedSiteList(ledger::type::PublisherInfoList list);
+  void OnPublisherList(std::vector<ledger::type::PublisherInfoPtr> list);
+  void OnExcludedSiteList(std::vector<ledger::type::PublisherInfoPtr> list);
   void ExcludePublisher(const base::ListValue* args);
   void RestorePublishers(const base::ListValue* args);
   void RestorePublisher(const base::ListValue* args);
@@ -136,15 +136,15 @@ class RewardsDOMHandler : public WebUIMessageHandler,
       const double earnings_this_month,
       const double earnings_last_month);
 
-  void OnGetRecurringTips(ledger::type::PublisherInfoList list);
+  void OnGetRecurringTips(std::vector<ledger::type::PublisherInfoPtr> list);
 
-  void OnGetOneTimeTips(ledger::type::PublisherInfoList list);
+  void OnGetOneTimeTips(std::vector<ledger::type::PublisherInfoPtr> list);
 
   void SetInlineTippingPlatformEnabled(const base::ListValue* args);
 
   void GetPendingContributions(const base::ListValue* args);
   void OnGetPendingContributions(
-      ledger::type::PendingContributionInfoList list);
+      std::vector<ledger::type::PendingContributionInfoPtr> list);
   void RemovePendingContribution(const base::ListValue* args);
   void RemoveAllPendingContributions(const base::ListValue* args);
   void FetchBalance(const base::ListValue* args);
@@ -209,7 +209,7 @@ class RewardsDOMHandler : public WebUIMessageHandler,
   void OnFetchPromotions(
       brave_rewards::RewardsService* rewards_service,
       const ledger::type::Result result,
-      const ledger::type::PromotionList& list) override;
+      const std::vector<ledger::type::PromotionPtr>& list) override;
   void OnPromotionFinished(
       brave_rewards::RewardsService* rewards_service,
       const ledger::type::Result result,
@@ -235,7 +235,7 @@ class RewardsDOMHandler : public WebUIMessageHandler,
 
   void OnPublisherListNormalized(
       brave_rewards::RewardsService* rewards_service,
-      ledger::type::PublisherInfoList list) override;
+      std::vector<ledger::type::PublisherInfoPtr> list) override;
 
   void OnStatementChanged(
       brave_rewards::RewardsService* rewards_service) override;
@@ -585,7 +585,7 @@ void RewardsDOMHandler::OnGetAutoContributeProperties(
 void RewardsDOMHandler::OnFetchPromotions(
     brave_rewards::RewardsService* rewards_service,
     const ledger::type::Result result,
-    const ledger::type::PromotionList& list) {
+    const std::vector<ledger::type::PromotionPtr>& list) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }
@@ -901,7 +901,8 @@ void RewardsDOMHandler::RestorePublisher(const base::ListValue *args) {
   rewards_service_->SetPublisherExclude(publisherKey, false);
 }
 
-void RewardsDOMHandler::OnPublisherList(ledger::type::PublisherInfoList list) {
+void RewardsDOMHandler::OnPublisherList(
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }
@@ -927,7 +928,7 @@ void RewardsDOMHandler::OnPublisherList(ledger::type::PublisherInfoList list) {
 }
 
 void RewardsDOMHandler::OnExcludedSiteList(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }
@@ -1001,7 +1002,7 @@ void RewardsDOMHandler::GetRecurringTips(
 }
 
 void RewardsDOMHandler::OnGetRecurringTips(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }
@@ -1026,7 +1027,8 @@ void RewardsDOMHandler::OnGetRecurringTips(
                                          *publishers);
 }
 
-void RewardsDOMHandler::OnGetOneTimeTips(ledger::type::PublisherInfoList list) {
+void RewardsDOMHandler::OnGetOneTimeTips(
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }
@@ -1364,7 +1366,7 @@ void RewardsDOMHandler::OnPendingContributionSaved(
 
 void RewardsDOMHandler::OnPublisherListNormalized(
     brave_rewards::RewardsService* rewards_service,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   OnPublisherList(std::move(list));
 }
 
@@ -1466,7 +1468,7 @@ void RewardsDOMHandler::GetPendingContributions(
 }
 
 void RewardsDOMHandler::OnGetPendingContributions(
-    ledger::type::PendingContributionInfoList list) {
+    std::vector<ledger::type::PendingContributionInfoPtr> list) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }

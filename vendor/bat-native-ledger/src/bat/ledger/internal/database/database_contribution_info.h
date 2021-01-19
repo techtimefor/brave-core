@@ -70,7 +70,7 @@ class DatabaseContributionInfo: public DatabaseTable {
       GetContributionInfoCallback callback);
 
   void OnGetPublishers(
-      type::ContributionPublisherList list,
+      std::vector<type::ContributionPublisherPtr> list,
       std::shared_ptr<type::ContributionInfoPtr> shared_contribution,
       GetContributionInfoCallback callback);
 
@@ -84,7 +84,8 @@ class DatabaseContributionInfo: public DatabaseTable {
 
   void OnGetContributionReportPublishers(
       std::vector<ContributionPublisherInfoPair> publisher_pair_list,
-      std::shared_ptr<type::ContributionInfoList> shared_contributions,
+      std::shared_ptr<std::vector<type::ContributionInfoPtr>>
+          shared_contributions,
       ledger::GetContributionReportCallback callback);
 
   void OnGetList(
@@ -92,8 +93,9 @@ class DatabaseContributionInfo: public DatabaseTable {
       ledger::ContributionInfoListCallback callback);
 
   void OnGetListPublishers(
-      type::ContributionPublisherList list,
-      std::shared_ptr<type::ContributionInfoList> shared_contributions,
+      std::vector<type::ContributionPublisherPtr> list,
+      std::shared_ptr<std::vector<type::ContributionInfoPtr>>
+          shared_contributions,
       ledger::ContributionInfoListCallback callback);
 
   std::unique_ptr<DatabaseContributionInfoPublishers> publishers_;

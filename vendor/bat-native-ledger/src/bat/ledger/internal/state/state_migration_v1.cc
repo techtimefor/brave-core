@@ -4,6 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <utility>
+#include <vector>
 
 #include "bat/ledger/internal/ledger_impl.h"
 #include "bat/ledger/internal/state/state_keys.h"
@@ -73,7 +74,7 @@ void StateMigrationV1::OnLoadState(
       kAllowVideoContribution,
       legacy_publisher_->GetPublisherAllowVideos());
 
-  type::BalanceReportInfoList reports;
+  std::vector<type::BalanceReportInfoPtr> reports;
   legacy_publisher_->GetAllBalanceReports(&reports);
   if (!reports.empty()) {
     auto save_callback = std::bind(&StateMigrationV1::BalanceReportsSaved,

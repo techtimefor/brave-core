@@ -34,7 +34,8 @@ using GetCreateScriptCallback =
 using ResultCallback =
     std::function<void(const type::Result)>;
 
-using GetPromotionListCallback = std::function<void(type::PromotionList)>;
+using GetPromotionListCallback =
+    std::function<void(std::vector<type::PromotionPtr>)>;
 
 using TransactionCallback =
     std::function<void(const type::Result, const std::string&)>;
@@ -78,7 +79,8 @@ class LEDGER_EXPORT LedgerClient {
       const int verbose_level,
       const std::string& message) = 0;
 
-  virtual void PublisherListNormalized(type::PublisherInfoList list) = 0;
+  virtual void PublisherListNormalized(
+      std::vector<type::PublisherInfoPtr> list) = 0;
 
   virtual void SetBooleanState(const std::string& name, bool value) = 0;
 

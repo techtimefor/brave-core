@@ -15,16 +15,15 @@ namespace ledger {
 namespace database {
 
 using GetUnblindedTokenListCallback =
-    std::function<void(type::UnblindedTokenList)>;
+    std::function<void(std::vector<type::UnblindedTokenPtr>)>;
 
 class DatabaseUnblindedToken: public DatabaseTable {
  public:
   explicit DatabaseUnblindedToken(LedgerImpl* ledger);
   ~DatabaseUnblindedToken() override;
 
-  void InsertOrUpdateList(
-      type::UnblindedTokenList list,
-      ledger::ResultCallback callback);
+  void InsertOrUpdateList(std::vector<type::UnblindedTokenPtr> list,
+                          ledger::ResultCallback callback);
 
   void GetSpendableRecordsByTriggerIds(
       const std::vector<std::string>& trigger_ids,

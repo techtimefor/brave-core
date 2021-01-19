@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #include <string>
+#include <vector>
 
 #include "bat/ledger/internal/database/database_table.h"
 
@@ -20,9 +21,8 @@ class DatabasePendingContribution: public DatabaseTable {
   explicit DatabasePendingContribution(LedgerImpl* ledger);
   ~DatabasePendingContribution() override;
 
-  void InsertOrUpdateList(
-      type::PendingContributionList list,
-      ledger::ResultCallback callback);
+  void InsertOrUpdateList(std::vector<type::PendingContributionPtr> list,
+                          ledger::ResultCallback callback);
 
   void GetReservedAmount(ledger::PendingContributionsTotalCallback callback);
 

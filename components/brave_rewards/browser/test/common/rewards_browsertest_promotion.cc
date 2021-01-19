@@ -38,7 +38,7 @@ void RewardsBrowserTestPromotion::WaitForPromotionInitialization() {
 void RewardsBrowserTestPromotion::OnFetchPromotions(
     brave_rewards::RewardsService* rewards_service,
     const ledger::type::Result result,
-    const ledger::type::PromotionList& list) {
+    const std::vector<ledger::type::PromotionPtr>& list) {
   ASSERT_EQ(result, ledger::type::Result::LEDGER_OK);
   initialized_ = true;
 

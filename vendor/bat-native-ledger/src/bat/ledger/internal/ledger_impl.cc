@@ -664,15 +664,12 @@ std::string LedgerImpl::GetShareURL(
 
 void LedgerImpl::GetPendingContributions(
     ledger::PendingContributionInfoListCallback callback) {
-  database()->GetPendingContributions([this, callback](
-      type::PendingContributionInfoList list) {
-    // The publisher status field may be expired. Attempt to refresh
-    // expired publisher status values before executing callback.
-    publisher::RefreshPublisherStatus(
-        this,
-        std::move(list),
-        callback);
-  });
+  database()->GetPendingContributions(
+      [this, callback](std::vector<type::PendingContributionInfoPtr> list) {
+        // The publisher status field may be expired. Attempt to refresh
+        // expired publisher status values before executing callback.
+        publisher::RefreshPublisherStatus(this, std::move(list), callback);
+      });
 }
 
 void LedgerImpl::RemovePendingContribution(

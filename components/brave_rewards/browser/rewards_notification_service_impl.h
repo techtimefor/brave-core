@@ -58,7 +58,7 @@ class RewardsNotificationServiceImpl
   void OnFetchPromotions(
       RewardsService* rewards_service,
       const ledger::type::Result result,
-      const ledger::type::PromotionList& list) override;
+      const std::vector<ledger::type::PromotionPtr>& list) override;
   void OnPromotionFinished(
       RewardsService* rewards_service,
       const ledger::type::Result result,

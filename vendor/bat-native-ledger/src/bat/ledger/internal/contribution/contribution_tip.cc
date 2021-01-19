@@ -4,6 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <utility>
+#include <vector>
 
 #include "base/guid.h"
 #include "bat/ledger/internal/contribution/contribution_tip.h"
@@ -69,7 +70,7 @@ void ContributionTip::ServerPublisher(
     return;
   }
 
-  type::ContributionQueuePublisherList queue_list;
+  std::vector<type::ContributionQueuePublisherPtr> queue_list;
   auto publisher = type::ContributionQueuePublisher::New();
   publisher->publisher_key = publisher_key;
   publisher->amount_percent = 100.0;
@@ -111,7 +112,7 @@ void ContributionTip::SavePending(
   contribution->amount = amount;
   contribution->type = type::RewardsType::ONE_TIME_TIP;
 
-  type::PendingContributionList list;
+  std::vector<type::PendingContributionPtr> list;
   list.push_back(std::move(contribution));
 
   ledger_->database()->SavePendingContribution(std::move(list), callback);

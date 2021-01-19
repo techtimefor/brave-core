@@ -58,9 +58,8 @@ class Database {
       type::PublisherInfoPtr info,
       ledger::ResultCallback callback);
 
-  void NormalizeActivityInfoList(
-      type::PublisherInfoList list,
-      ledger::ResultCallback callback);
+  void NormalizeActivityInfoList(std::vector<type::PublisherInfoPtr> list,
+                                 ledger::ResultCallback callback);
 
   void GetActivityInfoList(
       uint32_t start,
@@ -79,9 +78,8 @@ class Database {
       type::BalanceReportInfoPtr info,
       ledger::ResultCallback callback);
 
-  void SaveBalanceReportInfoList(
-      type::BalanceReportInfoList list,
-      ledger::ResultCallback callback);
+  void SaveBalanceReportInfoList(std::vector<type::BalanceReportInfoPtr> list,
+                                 ledger::ResultCallback callback);
 
   void SaveBalanceReportInfoItem(
       type::ActivityMonth month,
@@ -226,9 +224,8 @@ class Database {
   /**
    * PENDING CONTRIBUTION
    */
-  void SavePendingContribution(
-      type::PendingContributionList list,
-      ledger::ResultCallback callback);
+  void SavePendingContribution(std::vector<type::PendingContributionPtr> list,
+                               ledger::ResultCallback callback);
 
   void GetPendingContributionsTotal(
       ledger::PendingContributionsTotalCallback callback);
@@ -394,9 +391,8 @@ class Database {
   /**
    * UNBLINDED TOKEN
    */
-  void SaveUnblindedTokenList(
-      type::UnblindedTokenList list,
-      ledger::ResultCallback callback);
+  void SaveUnblindedTokenList(std::vector<type::UnblindedTokenPtr> list,
+                              ledger::ResultCallback callback);
 
   void MarkUnblindedTokensAsSpent(
       const std::vector<std::string>& ids,

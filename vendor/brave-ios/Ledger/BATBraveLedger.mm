@@ -656,19 +656,24 @@ BATClassLedgerBridge(BOOL, useShortRetries, setUseShortRetries, short_retries)
 {
   auto cppFilter = filter ? filter.cppObjPtr : ledger::type::ActivityInfoFilter::New();
   if (filter.excluded == BATExcludeFilterFilterExcluded) {
-    ledger->GetExcludedList(^(ledger::type::PublisherInfoList list) {
+    ledger->GetExcludedList(^(
+        std::vector<ledger::type::PublisherInfoPtr> list) {
       const auto publishers = NSArrayFromVector(&list, ^BATPublisherInfo *(const ledger::type::PublisherInfoPtr& info){
         return [[BATPublisherInfo alloc] initWithPublisherInfo:*info];
       });
       completion(publishers);
     });
   } else {
-    ledger->GetActivityInfoList(start, limit, std::move(cppFilter), ^(ledger::type::PublisherInfoList list) {
-      const auto publishers = NSArrayFromVector(&list, ^BATPublisherInfo *(const ledger::type::PublisherInfoPtr& info){
-        return [[BATPublisherInfo alloc] initWithPublisherInfo:*info];
-      });
-      completion(publishers);
-    });
+    ledger->GetActivityInfoList(
+        start, limit, std::move(cppFilter),
+        ^(std::vector<ledger::type::PublisherInfoPtr> list) {
+          const auto publishers = NSArrayFromVector(
+              &list,
+              ^BATPublisherInfo*(const ledger::type::PublisherInfoPtr& info) {
+                return [[BATPublisherInfo alloc] initWithPublisherInfo:*info];
+              });
+          completion(publishers);
+        });
   }
 }
 
@@ -782,7 +787,7 @@ BATClassLedgerBridge(BOOL, useShortRetries, setUseShortRetries, short_retries)
 
 - (void)listRecurringTips:(void (^)(NSArray<BATPublisherInfo *> *))completion
 {
-  ledger->GetRecurringTips(^(ledger::type::PublisherInfoList list){
+  ledger->GetRecurringTips(^(std::vector<ledger::type::PublisherInfoPtr> list) {
     const auto publishers = NSArrayFromVector(&list, ^BATPublisherInfo *(const ledger::type::PublisherInfoPtr& info){
       return [[BATPublisherInfo alloc] initWithPublisherInfo:*info];
     });
@@ -824,7 +829,7 @@ BATClassLedgerBridge(BOOL, useShortRetries, setUseShortRetries, short_retries)
 
 - (void)listOneTimeTips:(void (^)(NSArray<BATPublisherInfo *> *))completion
 {
-  ledger->GetOneTimeTips(^(ledger::type::PublisherInfoList list){
+  ledger->GetOneTimeTips(^(std::vector<ledger::type::PublisherInfoPtr> list) {
     const auto publishers = NSArrayFromVector(&list, ^BATPublisherInfo *(const ledger::type::PublisherInfoPtr& info){
       return [[BATPublisherInfo alloc] initWithPublisherInfo:*info];
     });
@@ -990,7 +995,8 @@ BATClassLedgerBridge(BOOL, useShortRetries, setUseShortRetries, short_retries)
 
 - (void)pendingContributions:(void (^)(NSArray<BATPendingContributionInfo *> *publishers))completion
 {
-  ledger->GetPendingContributions(^(ledger::type::PendingContributionInfoList list){
+  ledger->GetPendingContributions(^(
+      std::vector<ledger::type::PendingContributionInfoPtr> list) {
     const auto convetedList = NSArrayFromVector(&list, ^BATPendingContributionInfo *(const ledger::type::PendingContributionInfoPtr& info){
       return [[BATPendingContributionInfo alloc] initWithPendingContributionInfo:*info];
     });
@@ -1079,7 +1085,8 @@ BATClassLedgerBridge(BOOL, useShortRetries, setUseShortRetries, short_retries)
 
 - (void)allContributions:(void (^)(NSArray<BATContributionInfo *> *contributions))completion
 {
-  ledger->GetAllContributions(^(ledger::type::ContributionInfoList list) {
+  ledger->GetAllContributions(^(
+      std::vector<ledger::type::ContributionInfoPtr> list) {
     const auto convetedList = NSArrayFromVector(&list, ^BATContributionInfo *(const ledger::type::ContributionInfoPtr& info){
       return [[BATContributionInfo alloc] initWithContributionInfo:*info];
     });
@@ -1749,8 +1756,8 @@ BATLedgerBridge(BOOL,
     return info.cppObjPtr;
   }));
 }
-- (void)publisherListNormalized:(ledger::type::PublisherInfoList)list
-{
+- (void)publisherListNormalized:
+    (std::vector<ledger::type::PublisherInfoPtr>)list {
   const auto list_converted = NSArrayFromVector(&list, ^BATPublisherInfo *(const ledger::type::PublisherInfoPtr& info) {
     return [[BATPublisherInfo alloc] initWithPublisherInfo:*info];
   });

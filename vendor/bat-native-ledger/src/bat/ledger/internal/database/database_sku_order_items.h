@@ -8,22 +8,23 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "bat/ledger/internal/database/database_table.h"
 
 namespace ledger {
 namespace database {
 
-using GetSKUOrderItemsCallback = std::function<void(type::SKUOrderItemList)>;
+using GetSKUOrderItemsCallback =
+    std::function<void(std::vector<type::SKUOrderItemPtr>)>;
 
 class DatabaseSKUOrderItems: public DatabaseTable {
  public:
   explicit DatabaseSKUOrderItems(LedgerImpl* ledger);
   ~DatabaseSKUOrderItems() override;
 
-  void InsertOrUpdateList(
-      type::DBTransaction* transaction,
-      type::SKUOrderItemList list);
+  void InsertOrUpdateList(type::DBTransaction* transaction,
+                          std::vector<type::SKUOrderItemPtr> list);
 
   void GetRecordsByOrderId(
       const std::string& order_id,

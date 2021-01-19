@@ -20,7 +20,7 @@ class LedgerImpl;
 namespace promotion {
 
 using GetEligibleTokensCallback =
-    std::function<void(type::UnblindedTokenList list)>;
+    std::function<void(std::vector<type::UnblindedTokenPtr> list)>;
 
 class PromotionTransfer {
  public:
@@ -34,13 +34,11 @@ class PromotionTransfer {
  private:
   void GetEligibleTokens(GetEligibleTokensCallback callback);
 
-  void OnGetEligiblePromotions(
-      type::PromotionList promotions,
-      GetEligibleTokensCallback callback);
+  void OnGetEligiblePromotions(std::vector<type::PromotionPtr> promotions,
+                               GetEligibleTokensCallback callback);
 
-  void OnGetEligibleTokens(
-      type::UnblindedTokenList list,
-      ledger::ResultCallback callback);
+  void OnGetEligibleTokens(std::vector<type::UnblindedTokenPtr> list,
+                           ledger::ResultCallback callback);
 
   std::vector<type::PromotionType> GetEligiblePromotions();
 

@@ -5,6 +5,7 @@
 
 #include <map>
 #include <utility>
+#include <vector>
 
 #include "base/strings/stringprintf.h"
 #include "bat/ledger/internal/common/time_util.h"
@@ -33,7 +34,7 @@ DatabaseContributionQueuePublishers::
 
 void DatabaseContributionQueuePublishers::InsertOrUpdate(
     const std::string& id,
-    type::ContributionQueuePublisherList list,
+    std::vector<type::ContributionQueuePublisherPtr> list,
     ledger::ResultCallback callback) {
   if (id.empty() || list.empty()) {
     BLOG(1, "Empty data");
@@ -119,7 +120,7 @@ void DatabaseContributionQueuePublishers::OnGetRecordsByQueueId(
     return;
   }
 
-  type::ContributionQueuePublisherList list;
+  std::vector<type::ContributionQueuePublisherPtr> list;
   for (auto const& record : response->result->get_records()) {
     auto info = type::ContributionQueuePublisher::New();
     auto* record_pointer = record.get();

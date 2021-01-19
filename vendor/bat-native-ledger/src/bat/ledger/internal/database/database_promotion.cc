@@ -432,7 +432,7 @@ void DatabasePromotion::OnGetRecords(
     return;
   }
 
-  type::PromotionList list;
+  std::vector<type::PromotionPtr> list;
   type::PromotionPtr info;
   for (auto const& record : response->result->get_records()) {
     info = type::Promotion::New();

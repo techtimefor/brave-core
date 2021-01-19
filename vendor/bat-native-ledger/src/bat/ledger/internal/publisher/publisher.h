@@ -80,8 +80,8 @@ class Publisher {
       bool min_visits);
 
   void NormalizeContributeWinners(
-      type::PublisherInfoList* newList,
-      const type::PublisherInfoList* list,
+      std::vector<type::PublisherInfoPtr>* newList,
+      const std::vector<type::PublisherInfoPtr>* list,
       uint32_t /* next_record */);
 
   void OnRestorePublishers(
@@ -135,10 +135,9 @@ class Publisher {
       type::Result result,
       type::PublisherInfoPtr info);
 
-  void OnGetActivityInfo(
-      type::PublisherInfoList list,
-      ledger::PublisherInfoCallback callback,
-      const std::string& publisher_key);
+  void OnGetActivityInfo(std::vector<type::PublisherInfoPtr> list,
+                         ledger::PublisherInfoCallback callback,
+                         const std::string& publisher_key);
 
   void SaveVisitInternal(
       const type::PublisherStatus,
@@ -178,11 +177,12 @@ class Publisher {
 
   double concaveScore(const uint64_t& duration_seconds);
 
-  void SynopsisNormalizerCallback(type::PublisherInfoList list);
+  void SynopsisNormalizerCallback(std::vector<type::PublisherInfoPtr> list);
 
-  void synopsisNormalizerInternal(type::PublisherInfoList* newList,
-                                  const type::PublisherInfoList* list,
-                                  uint32_t /* next_record */);
+  void synopsisNormalizerInternal(
+      std::vector<type::PublisherInfoPtr>* newList,
+      const std::vector<type::PublisherInfoPtr>* list,
+      uint32_t /* next_record */);
 
   void OnSaveVisitInternal(
     type::Result result,

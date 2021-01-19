@@ -68,21 +68,20 @@ class UnblindedTest : public ::testing::Test {
 
 TEST_F(UnblindedTest, NotEnoughFunds) {
   ON_CALL(*mock_database_, GetReservedUnblindedTokens(_, _))
-    .WillByDefault(
-      Invoke([](
-          const std::string&,
-          database::GetUnblindedTokenListCallback callback) {
-        type::UnblindedTokenList list;
+      .WillByDefault(
+          Invoke([](const std::string&,
+                    database::GetUnblindedTokenListCallback callback) {
+            std::vector<type::UnblindedTokenPtr> list;
 
-        auto info = type::UnblindedToken::New();
-        info->id = 1;
-        info->token_value = "asdfasdfasdfsad=";
-        info->value = 2;
-        info->expires_at = 1574133178;
-        list.push_back(info->Clone());
+            auto info = type::UnblindedToken::New();
+            info->id = 1;
+            info->token_value = "asdfasdfasdfsad=";
+            info->value = 2;
+            info->expires_at = 1574133178;
+            list.push_back(info->Clone());
 
-        callback(std::move(list));
-      }));
+            callback(std::move(list));
+          }));
 
   unblinded_->Start(
       {type::CredsBatchType::PROMOTION},

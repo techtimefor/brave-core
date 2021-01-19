@@ -11,6 +11,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "bat/ledger/internal/endpoint/promotion/promotion_server.h"
 #include "bat/ledger/ledger.h"
@@ -41,10 +42,9 @@ class WalletBalance {
       type::BalancePtr balance,
       ledger::FetchBalanceCallback callback);
 
-  void OnGetUnblindedTokens(
-      type::Balance info,
-      ledger::FetchBalanceCallback callback,
-      type::UnblindedTokenList list);
+  void OnGetUnblindedTokens(type::Balance info,
+                            ledger::FetchBalanceCallback callback,
+                            std::vector<type::UnblindedTokenPtr> list);
 
   void ExternalWallets(
       type::BalancePtr balance,

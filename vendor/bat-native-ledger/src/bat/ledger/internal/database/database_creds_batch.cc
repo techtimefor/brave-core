@@ -238,7 +238,7 @@ void DatabaseCredsBatch::OnGetRecords(
     return;
   }
 
-  type::CredsBatchList list;
+  std::vector<type::CredsBatchPtr> list;
   type::CredsBatchPtr info;
   for (auto const& record : response->result->get_records()) {
     auto* record_pointer = record.get();

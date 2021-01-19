@@ -51,16 +51,14 @@ class Promotion {
   void GetTransferableAmount(ledger::GetTransferableAmountCallback callback);
 
  private:
-  void OnFetch(
-      const type::Result result,
-      type::PromotionList list,
-      const std::vector<std::string>& corrupted_promotions,
-      ledger::FetchPromotionCallback callback);
+  void OnFetch(const type::Result result,
+               std::vector<type::PromotionPtr> list,
+               const std::vector<std::string>& corrupted_promotions,
+               ledger::FetchPromotionCallback callback);
 
-  void OnGetAllPromotions(
-      type::PromotionMap promotions,
-      std::shared_ptr<type::PromotionList> list,
-      ledger::FetchPromotionCallback callback);
+  void OnGetAllPromotions(type::PromotionMap promotions,
+                          std::shared_ptr<std::vector<type::PromotionPtr>> list,
+                          ledger::FetchPromotionCallback callback);
 
   void OnGetAllPromotionsFromDatabase(
       type::PromotionMap promotions,
@@ -104,10 +102,9 @@ class Promotion {
       const type::Result result,
       ledger::AttestPromotionCallback callback);
 
-  void ProcessFetchedPromotions(
-      const type::Result result,
-      type::PromotionList promotions,
-      ledger::FetchPromotionCallback callback);
+  void ProcessFetchedPromotions(const type::Result result,
+                                std::vector<type::PromotionPtr> promotions,
+                                ledger::FetchPromotionCallback callback);
 
   void GetCredentials(
       type::PromotionPtr promotion,
@@ -124,11 +121,10 @@ class Promotion {
 
   void CorruptedPromotionFixed(const type::Result result);
 
-  void CheckForCorruptedCreds(type::CredsBatchList list);
+  void CheckForCorruptedCreds(std::vector<type::CredsBatchPtr> list);
 
-  void CorruptedPromotions(
-      type::PromotionList promotions,
-      const std::vector<std::string>& ids);
+  void CorruptedPromotions(std::vector<type::PromotionPtr> promotions,
+                           const std::vector<std::string>& ids);
 
   void OnCheckForCorrupted(
       const type::Result result,

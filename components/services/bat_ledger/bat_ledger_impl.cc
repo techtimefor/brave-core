@@ -207,7 +207,7 @@ void BatLedgerImpl::RestorePublishers(RestorePublishersCallback callback) {
 void BatLedgerImpl::OnFetchPromotions(
     CallbackHolder<FetchPromotionsCallback>* holder,
     const ledger::type::Result result,
-    ledger::type::PromotionList promotions) {
+    std::vector<ledger::type::PromotionPtr> promotions) {
   DCHECK(holder);
   if (holder->is_valid()) {
     std::move(holder->get()).Run(result, std::move(promotions));
@@ -476,7 +476,7 @@ void BatLedgerImpl::SaveRecurringTip(
 // static
 void BatLedgerImpl::OnGetRecurringTips(
     CallbackHolder<GetRecurringTipsCallback>* holder,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   DCHECK(holder);
   if (holder->is_valid())
     std::move(holder->get()).Run(std::move(list));
@@ -495,7 +495,7 @@ void BatLedgerImpl::GetRecurringTips(GetRecurringTipsCallback callback) {
 // static
 void BatLedgerImpl::OnGetOneTimeTips(
     CallbackHolder<GetRecurringTipsCallback>* holder,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   DCHECK(holder);
   if (holder->is_valid())
     std::move(holder->get()).Run(std::move(list));
@@ -514,7 +514,7 @@ void BatLedgerImpl::GetOneTimeTips(GetOneTimeTipsCallback callback) {
 // static
 void BatLedgerImpl::OnGetActivityInfoList(
     CallbackHolder<GetActivityInfoListCallback>* holder,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   DCHECK(holder);
   if (holder->is_valid())
     std::move(holder->get()).Run(std::move(list));
@@ -540,7 +540,7 @@ void BatLedgerImpl::GetActivityInfoList(
 // static
 void BatLedgerImpl::OnGetExcludedList(
     CallbackHolder<GetExcludedListCallback>* holder,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   DCHECK(holder);
   if (holder->is_valid())
     std::move(holder->get()).Run(std::move(list));
@@ -707,7 +707,7 @@ void BatLedgerImpl::GetShareURL(
 // static
 void BatLedgerImpl::OnGetPendingContributions(
     CallbackHolder<GetPendingContributionsCallback>* holder,
-    ledger::type::PendingContributionInfoList list) {
+    std::vector<ledger::type::PendingContributionInfoPtr> list) {
   DCHECK(holder);
   if (holder->is_valid()) {
     std::move(holder->get()).Run(std::move(list));
@@ -908,7 +908,7 @@ void BatLedgerImpl::GetAnonWalletStatus(GetAnonWalletStatusCallback callback) {
 // static
 void BatLedgerImpl::OnGetTransactionReport(
     CallbackHolder<GetTransactionReportCallback>* holder,
-    ledger::type::TransactionReportInfoList list) {
+    std::vector<ledger::type::TransactionReportInfoPtr> list) {
   if (!holder) {
     return;
   }
@@ -937,7 +937,7 @@ void BatLedgerImpl::GetTransactionReport(
 // static
 void BatLedgerImpl::OnGetContributionReport(
     CallbackHolder<GetContributionReportCallback>* holder,
-    ledger::type::ContributionReportInfoList list) {
+    std::vector<ledger::type::ContributionReportInfoPtr> list) {
   if (!holder) {
     return;
   }
@@ -966,7 +966,7 @@ void BatLedgerImpl::GetContributionReport(
 // static
 void BatLedgerImpl::OnGetAllContributions(
     CallbackHolder<GetAllContributionsCallback>* holder,
-    ledger::type::ContributionInfoList list) {
+    std::vector<ledger::type::ContributionInfoPtr> list) {
   DCHECK(holder);
   if (holder->is_valid())
     std::move(holder->get()).Run(std::move(list));
@@ -1107,7 +1107,7 @@ void BatLedgerImpl::Shutdown(ShutdownCallback callback) {
 // static
 void BatLedgerImpl::OnGetEventLogs(
     CallbackHolder<GetEventLogsCallback>* holder,
-    ledger::type::EventLogs logs) {
+    std::vector<ledger::type::EventLogPtr> logs) {
   DCHECK(holder);
   if (holder->is_valid()) {
     std::move(holder->get()).Run(std::move(logs));

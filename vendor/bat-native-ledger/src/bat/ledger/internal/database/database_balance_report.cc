@@ -5,6 +5,7 @@
 
 #include <map>
 #include <utility>
+#include <vector>
 
 #include "base/strings/stringprintf.h"
 #include "bat/ledger/global_constants.h"
@@ -97,7 +98,7 @@ void DatabaseBalanceReport::InsertOrUpdate(
 }
 
 void DatabaseBalanceReport::InsertOrUpdateList(
-    type::BalanceReportInfoList list,
+    std::vector<type::BalanceReportInfoPtr> list,
     ledger::ResultCallback callback) {
   if (list.empty()) {
     BLOG(1, "List is empty");
@@ -323,7 +324,7 @@ void DatabaseBalanceReport::OnGetAllRecords(
     return;
   }
 
-  type::BalanceReportInfoList list;
+  std::vector<type::BalanceReportInfoPtr> list;
   for (const auto& record : response->result->get_records()) {
     auto* record_pointer = record.get();
     auto info = type::BalanceReportInfo::New();

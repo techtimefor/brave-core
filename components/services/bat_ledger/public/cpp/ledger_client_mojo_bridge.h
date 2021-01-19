@@ -51,7 +51,8 @@ class LedgerClientMojoBridge :
       ledger::type::UrlRequestPtr request,
       LoadURLCallback callback) override;
 
-  void PublisherListNormalized(ledger::type::PublisherInfoList list) override;
+  void PublisherListNormalized(
+      std::vector<ledger::type::PublisherInfoPtr> list) override;
 
   void SetBooleanState(const std::string& name, bool value) override;
   void GetBooleanState(const std::string& name,

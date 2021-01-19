@@ -99,7 +99,7 @@ void WalletBalance::GetUnblindedTokens(
 void WalletBalance::OnGetUnblindedTokens(
     type::Balance info,
     ledger::FetchBalanceCallback callback,
-    type::UnblindedTokenList list) {
+    std::vector<type::UnblindedTokenPtr> list) {
   auto info_ptr = type::Balance::New(info);
   double total = 0.0;
   for (auto & item : list) {

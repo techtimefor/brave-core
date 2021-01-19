@@ -31,7 +31,7 @@ PromotionTransfer::~PromotionTransfer() = default;
 
 void PromotionTransfer::GetAmount(
     ledger::GetTransferableAmountCallback callback) {
-  GetEligibleTokens([callback](type::UnblindedTokenList list) {
+  GetEligibleTokens([callback](std::vector<type::UnblindedTokenPtr> list) {
     double amount = 0.0;
     for (const auto& item : list) {
       amount += item->value;
@@ -52,7 +52,7 @@ void PromotionTransfer::GetEligibleTokens(GetEligibleTokensCallback callback) {
 }
 
 void PromotionTransfer::OnGetEligiblePromotions(
-    type::PromotionList promotions,
+    std::vector<type::PromotionPtr> promotions,
     GetEligibleTokensCallback callback) {
   std::vector<std::string> ids;
   for (auto& promotion : promotions) {
@@ -78,7 +78,7 @@ void PromotionTransfer::Start(ledger::ResultCallback callback) {
 }
 
 void PromotionTransfer::OnGetEligibleTokens(
-    type::UnblindedTokenList list,
+    std::vector<type::UnblindedTokenPtr> list,
     ledger::ResultCallback callback) {
   std::vector<type::UnblindedToken> token_list;
   for (auto& item : list) {

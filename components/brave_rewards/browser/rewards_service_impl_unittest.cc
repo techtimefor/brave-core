@@ -24,9 +24,10 @@ using ::testing::_;
 
 class MockRewardsServiceObserver : public RewardsServiceObserver {
  public:
-  MOCK_METHOD3(OnFetchPromotions, void(RewardsService*,
-      const ledger::type::Result result,
-      const ledger::type::PromotionList& list));
+  MOCK_METHOD3(OnFetchPromotions,
+               void(RewardsService*,
+                    const ledger::type::Result result,
+                    const std::vector<ledger::type::PromotionPtr>& list));
   MOCK_METHOD2(OnRecoverWallet,
       void(RewardsService*, const ledger::type::Result));
   MOCK_METHOD3(OnPromotionFinished, void(
@@ -41,7 +42,8 @@ class MockRewardsServiceObserver : public RewardsServiceObserver {
       const ledger::type::RewardsType,
       const ledger::type::ContributionProcessor));
   MOCK_METHOD2(OnGetRecurringTips,
-      void(RewardsService*, ledger::type::PublisherInfoList list));
+               void(RewardsService*,
+                    std::vector<ledger::type::PublisherInfoPtr> list));
   MOCK_METHOD2(OnPublisherBanner,
       void(RewardsService*, ledger::type::PublisherBannerPtr banner));
   MOCK_METHOD4(OnPanelPublisherInfo,

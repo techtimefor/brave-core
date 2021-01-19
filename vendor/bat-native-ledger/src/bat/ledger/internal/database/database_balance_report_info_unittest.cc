@@ -99,7 +99,8 @@ TEST_F(DatabaseBalanceReportTest, GetAllRecordsOk) {
           ASSERT_EQ(transaction->commands[0]->bindings.size(), 0u);
         }));
 
-  balance_report_->GetAllRecords([](type::BalanceReportInfoList) {});
+  balance_report_->GetAllRecords(
+      [](std::vector<type::BalanceReportInfoPtr>) {});
 }
 
 TEST_F(DatabaseBalanceReportTest, GetRecordOk) {

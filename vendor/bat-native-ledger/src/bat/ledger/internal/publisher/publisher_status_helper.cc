@@ -10,6 +10,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "base/time/time.h"
 #include "bat/ledger/internal/ledger_impl.h"
@@ -100,10 +101,9 @@ void RefreshPublisherStatusMap(
 namespace ledger {
 namespace publisher {
 
-void RefreshPublisherStatus(
-    LedgerImpl* ledger,
-    type::PublisherInfoList&& info_list,
-    ledger::PublisherInfoListCallback callback) {
+void RefreshPublisherStatus(LedgerImpl* ledger,
+                            std::vector<type::PublisherInfoPtr>&& info_list,
+                            ledger::PublisherInfoListCallback callback) {
   DCHECK(ledger);
 
   PublisherStatusMap map;
@@ -111,7 +111,7 @@ void RefreshPublisherStatus(
     map[info->id] = {info->status, info->status_updated_at};
   }
 
-  auto shared_list = std::make_shared<type::PublisherInfoList>(
+  auto shared_list = std::make_shared<std::vector<type::PublisherInfoPtr>>(
       std::move(info_list));
 
   RefreshPublisherStatusMap(ledger, std::move(map),
@@ -125,7 +125,7 @@ void RefreshPublisherStatus(
 
 void RefreshPublisherStatus(
     LedgerImpl* ledger,
-    type::PendingContributionInfoList&& info_list,
+    std::vector<type::PendingContributionInfoPtr>&& info_list,
     ledger::PendingContributionInfoListCallback callback) {
   DCHECK(ledger);
 
@@ -134,8 +134,9 @@ void RefreshPublisherStatus(
     map[info->publisher_key] = {info->status, info->status_updated_at};
   }
 
-  auto shared_list = std::make_shared<type::PendingContributionInfoList>(
-      std::move(info_list));
+  auto shared_list =
+      std::make_shared<std::vector<type::PendingContributionInfoPtr>>(
+          std::move(info_list));
 
   RefreshPublisherStatusMap(ledger, std::move(map),
       [shared_list, callback](auto map) {

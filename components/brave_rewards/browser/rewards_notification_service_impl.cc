@@ -328,7 +328,7 @@ std::string RewardsNotificationServiceImpl::GetPromotionIdPrefix(
 void RewardsNotificationServiceImpl::OnFetchPromotions(
     RewardsService* rewards_service,
     const ledger::type::Result result,
-    const ledger::type::PromotionList& list) {
+    const std::vector<ledger::type::PromotionPtr>& list) {
   if (static_cast<ledger::type::Result>(result) !=
       ledger::type::Result::LEDGER_OK) {
     return;

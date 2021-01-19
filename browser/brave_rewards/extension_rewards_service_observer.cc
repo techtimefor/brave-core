@@ -61,7 +61,7 @@ void ExtensionRewardsServiceObserver::OnPanelPublisherInfo(
 void ExtensionRewardsServiceObserver::OnFetchPromotions(
     RewardsService* rewards_service,
     const ledger::type::Result result,
-    const ledger::type::PromotionList& list) {
+    const std::vector<ledger::type::PromotionPtr>& list) {
   auto* event_router = extensions::EventRouter::Get(profile_);
   if (!event_router) {
     return;
@@ -160,7 +160,7 @@ void ExtensionRewardsServiceObserver::OnPendingContributionSaved(
 
 void ExtensionRewardsServiceObserver::OnPublisherListNormalized(
     RewardsService* rewards_service,
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   auto* event_router = extensions::EventRouter::Get(profile_);
   if (!event_router) {
     return;

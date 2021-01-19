@@ -28,10 +28,10 @@ using ServerPublisherAmountsCallback =
     std::function<void(const std::vector<double>& amounts)>;
 
 using ContributionQueuePublishersListCallback =
-    std::function<void(type::ContributionQueuePublisherList)>;
+    std::function<void(std::vector<type::ContributionQueuePublisherPtr>)>;
 
 using ContributionPublisherListCallback =
-    std::function<void(type::ContributionPublisherList)>;
+    std::function<void(std::vector<type::ContributionPublisherPtr>)>;
 
 using ContributionPublisherPairListCallback =
     std::function<void(std::vector<ContributionPublisherInfoPair>)>;

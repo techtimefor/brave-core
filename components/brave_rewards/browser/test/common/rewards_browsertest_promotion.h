@@ -44,7 +44,7 @@ class RewardsBrowserTestPromotion
   void OnFetchPromotions(
       brave_rewards::RewardsService* rewards_service,
       const ledger::type::Result result,
-      const ledger::type::PromotionList& list) override;
+      const std::vector<ledger::type::PromotionPtr>& list) override;
 
   void OnPromotionFinished(
       brave_rewards::RewardsService* rewards_service,

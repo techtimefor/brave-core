@@ -67,7 +67,7 @@ void Report::OnBalance(
 }
 
 void Report::OnTransactions(
-    type::TransactionReportInfoList transaction_report,
+    std::vector<type::TransactionReportInfoPtr> transaction_report,
     const type::ActivityMonth month,
     const uint32_t year,
     std::shared_ptr<type::MonthlyReportInfoPtr> shared_report,
@@ -93,7 +93,7 @@ void Report::OnTransactions(
 }
 
 void Report::OnContributions(
-    type::ContributionReportInfoList contribution_report,
+    std::vector<type::ContributionReportInfoPtr> contribution_report,
     std::shared_ptr<type::MonthlyReportInfoPtr> shared_report,
     ledger::GetMonthlyReportCallback callback) {
   if (!shared_report) {
@@ -145,7 +145,7 @@ void Report::GetAllMonthlyIds(ledger::GetAllMonthlyReportIdsCallback callback) {
 }
 
 void Report::OnGetAllBalanceReports(
-    type::BalanceReportInfoList reports,
+    std::vector<type::BalanceReportInfoPtr> reports,
     ledger::GetAllMonthlyReportIdsCallback callback) {
   if (reports.empty()) {
     callback({});

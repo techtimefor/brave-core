@@ -38,20 +38,19 @@ class Report {
       ledger::GetMonthlyReportCallback callback);
 
   void OnTransactions(
-      type::TransactionReportInfoList transaction_report,
+      std::vector<type::TransactionReportInfoPtr> transaction_report,
       const type::ActivityMonth month,
       const uint32_t year,
       std::shared_ptr<type::MonthlyReportInfoPtr> shared_report,
       ledger::GetMonthlyReportCallback callback);
 
   void OnContributions(
-      type::ContributionReportInfoList contribution_report,
+      std::vector<type::ContributionReportInfoPtr> contribution_report,
       std::shared_ptr<type::MonthlyReportInfoPtr> shared_report,
       ledger::GetMonthlyReportCallback callback);
 
-  void OnGetAllBalanceReports(
-      type::BalanceReportInfoList reports,
-      ledger::GetAllMonthlyReportIdsCallback callback);
+  void OnGetAllBalanceReports(std::vector<type::BalanceReportInfoPtr> reports,
+                              ledger::GetAllMonthlyReportIdsCallback callback);
 
   LedgerImpl* ledger_;  // NOT OWNED
 };

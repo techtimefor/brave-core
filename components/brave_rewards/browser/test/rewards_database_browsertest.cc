@@ -261,7 +261,7 @@ IN_PROC_BROWSER_TEST_F(RewardsDatabaseBrowserTest, Migration_4_ActivityInfo) {
     base::ScopedAllowBlockingForTesting allow_blocking;
     InitDB();
 
-    ledger::type::PublisherInfoList list;
+    std::vector<ledger::type::PublisherInfoPtr> list;
     const std::string query =
         "SELECT publisher_id, visits FROM activity_info";
     sql::Statement info_sql(db_.GetUniqueStatement(query.c_str()));
@@ -285,7 +285,7 @@ IN_PROC_BROWSER_TEST_F(RewardsDatabaseBrowserTest, Migration_5_ActivityInfo) {
     base::ScopedAllowBlockingForTesting allow_blocking;
     InitDB();
 
-    ledger::type::PublisherInfoList list;
+    std::vector<ledger::type::PublisherInfoPtr> list;
     const std::string query = "SELECT publisher_id, visits FROM activity_info";
     sql::Statement info_sql(db_.GetUniqueStatement(query.c_str()));
     while (info_sql.Step()) {
@@ -309,7 +309,7 @@ IN_PROC_BROWSER_TEST_F(RewardsDatabaseBrowserTest, Migration_6_ActivityInfo) {
     base::ScopedAllowBlockingForTesting allow_blocking;
     InitDB();
 
-    ledger::type::PublisherInfoList list;
+    std::vector<ledger::type::PublisherInfoPtr> list;
     const std::string query =
         "SELECT publisher_id, visits, "
         "duration, score, percent, weight, reconcile_stamp "
@@ -444,7 +444,7 @@ IN_PROC_BROWSER_TEST_F(
 
     EXPECT_EQ(CountTableRows("pending_contribution"), 4);
 
-    ledger::type::PendingContributionInfoList list;
+    std::vector<ledger::type::PendingContributionInfoPtr> list;
     const std::string query =
         "SELECT pending_contribution_id, publisher_id "
         "FROM pending_contribution";
@@ -487,7 +487,7 @@ IN_PROC_BROWSER_TEST_F(
 
     EXPECT_EQ(CountTableRows("unblinded_tokens"), 5);
 
-    ledger::type::UnblindedTokenList list;
+    std::vector<ledger::type::UnblindedTokenPtr> list;
     std::string query = "SELECT value FROM unblinded_tokens";
     sql::Statement tokens_sql(db_.GetUniqueStatement(query.c_str()));
     while (tokens_sql.Step()) {
@@ -658,7 +658,7 @@ IN_PROC_BROWSER_TEST_F(
 
     EXPECT_EQ(CountTableRows("contribution_info_publishers"), 4);
 
-    ledger::type::ContributionPublisherList list;
+    std::vector<ledger::type::ContributionPublisherPtr> list;
     const std::string query =
         "SELECT contribution_id, publisher_key, total_amount, "
         "contributed_amount "

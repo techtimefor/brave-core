@@ -73,7 +73,7 @@ LegacyPublisherState::GetAlreadyProcessedPublishers() const {
 }
 
 void LegacyPublisherState::GetAllBalanceReports(
-    ledger::type::BalanceReportInfoList* reports) {
+    std::vector<ledger::type::BalanceReportInfoPtr>* reports) {
   DCHECK(reports);
 
   for (auto const& report : state_->monthly_balances) {

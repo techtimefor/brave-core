@@ -4,6 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <utility>
+#include <vector>
 
 #include "base/guid.h"
 #include "bat/ledger/internal/contribution/contribution_monthly.h"
@@ -33,15 +34,15 @@ void ContributionMonthly::Process(ledger::ResultCallback callback) {
 }
 
 void ContributionMonthly::PrepareTipList(
-    type::PublisherInfoList list,
+    std::vector<type::PublisherInfoPtr> list,
     ledger::ResultCallback callback) {
-  type::PublisherInfoList verified_list;
+  std::vector<type::PublisherInfoPtr> verified_list;
   GetVerifiedTipList(list, &verified_list);
 
   type::ContributionQueuePtr queue;
   type::ContributionQueuePublisherPtr publisher;
   for (const auto &item : verified_list) {
-    type::ContributionQueuePublisherList queue_list;
+    std::vector<type::ContributionQueuePublisherPtr> queue_list;
     publisher = type::ContributionQueuePublisher::New();
     publisher->publisher_key = item->id;
     publisher->amount_percent = 100.0;
@@ -66,10 +67,10 @@ void ContributionMonthly::PrepareTipList(
 }
 
 void ContributionMonthly::GetVerifiedTipList(
-    const type::PublisherInfoList& list,
-    type::PublisherInfoList* verified_list) {
+    const std::vector<type::PublisherInfoPtr>& list,
+    std::vector<type::PublisherInfoPtr>* verified_list) {
   DCHECK(verified_list);
-  type::PendingContributionList non_verified;
+  std::vector<type::PendingContributionPtr> non_verified;
 
   for (const auto& publisher : list) {
     if (!publisher || publisher->id.empty() || publisher->weight == 0.0) {
@@ -143,7 +144,7 @@ void ContributionMonthly::OnSufficientBalanceWallet(
 }
 
 void ContributionMonthly::OnHasSufficientBalance(
-    const type::PublisherInfoList& publisher_list,
+    const std::vector<type::PublisherInfoPtr>& publisher_list,
     const double balance,
     ledger::HasSufficientBalanceToReconcileCallback callback) {
   if (publisher_list.empty()) {

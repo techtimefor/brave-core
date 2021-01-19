@@ -5,6 +5,7 @@
 
 #include <map>
 #include <utility>
+#include <vector>
 
 #include "base/strings/stringprintf.h"
 #include "bat/ledger/internal/database/database_multi_tables.h"
@@ -43,7 +44,7 @@ void DatabaseMultiTables::OnGetTransactionReportPromotion(
     const int year,
     ledger::GetTransactionReportCallback callback) {
   const auto converted_month = static_cast<int>(month);
-  type::TransactionReportInfoList list;
+  std::vector<type::TransactionReportInfoPtr> list;
 
   for (const auto& promotion : promotions) {
     if (!promotion.second ||

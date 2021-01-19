@@ -56,7 +56,8 @@ class BatLedgerClientMojoBridge :
 
   std::string URIEncode(const std::string& value) override;
 
-  void PublisherListNormalized(ledger::type::PublisherInfoList list) override;
+  void PublisherListNormalized(
+      std::vector<ledger::type::PublisherInfoPtr> list) override;
 
   void SetBooleanState(const std::string& name, bool value) override;
   bool GetBooleanState(const std::string& name) const override;

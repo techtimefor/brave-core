@@ -4,6 +4,7 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <utility>
+#include <vector>
 
 #include "base/guid.h"
 #include "base/strings/stringprintf.h"
@@ -144,7 +145,7 @@ void DatabaseEventLog::OnGetAllRecords(
     return;
   }
 
-  type::EventLogs list;
+  std::vector<type::EventLogPtr> list;
   for (auto const& record : response->result->get_records()) {
     auto info = type::EventLog::New();
     auto* record_pointer = record.get();

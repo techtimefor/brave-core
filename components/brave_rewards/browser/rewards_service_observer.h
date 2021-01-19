@@ -24,7 +24,7 @@ class RewardsServiceObserver : public base::CheckedObserver {
   virtual void OnFetchPromotions(
       RewardsService* rewards_service,
       const ledger::type::Result result,
-      const ledger::type::PromotionList& list) {}
+      const std::vector<ledger::type::PromotionPtr>& list) {}
 
   virtual void OnRecoverWallet(
       RewardsService* rewards_service,
@@ -58,7 +58,7 @@ class RewardsServiceObserver : public base::CheckedObserver {
 
   virtual void OnPublisherListNormalized(
       RewardsService* rewards_service,
-      ledger::type::PublisherInfoList list) {}
+      std::vector<ledger::type::PublisherInfoPtr> list) {}
 
   virtual void OnStatementChanged(
       brave_rewards::RewardsService* rewards_service) {}

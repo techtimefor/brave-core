@@ -30,7 +30,7 @@ DatabaseSKUOrderItems::~DatabaseSKUOrderItems() = default;
 
 void DatabaseSKUOrderItems::InsertOrUpdateList(
     type::DBTransaction* transaction,
-    type::SKUOrderItemList list) {
+    std::vector<type::SKUOrderItemPtr> list) {
   DCHECK(transaction);
   if (list.empty()) {
     BLOG(1, "List is empty");
@@ -120,7 +120,7 @@ void DatabaseSKUOrderItems::OnGetRecordsByOrderId(
     return;
   }
 
-  type::SKUOrderItemList list;
+  std::vector<type::SKUOrderItemPtr> list;
   type::SKUOrderItemPtr info = nullptr;
   for (auto const& record : response->result->get_records()) {
     auto* record_pointer = record.get();

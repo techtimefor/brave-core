@@ -7,6 +7,7 @@
 #define BRAVELEDGER_DATABASE_DATABASE_ACTIVITY_INFO_H_
 
 #include <string>
+#include <vector>
 
 #include "bat/ledger/internal/database/database_table.h"
 
@@ -22,9 +23,8 @@ class DatabaseActivityInfo: public DatabaseTable {
       type::PublisherInfoPtr info,
       ledger::ResultCallback callback);
 
-  void NormalizeList(
-      type::PublisherInfoList list,
-      ledger::ResultCallback callback);
+  void NormalizeList(std::vector<type::PublisherInfoPtr> list,
+                     ledger::ResultCallback callback);
 
   void GetRecordsList(
       const int start,

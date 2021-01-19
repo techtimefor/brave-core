@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "bat/ledger/ledger.h"
 #include "bat/ledger/internal/credentials/credentials_factory.h"
@@ -81,10 +82,9 @@ class ContributionSKU {
       const std::string& contribution_id,
       ledger::ResultCallback callback);
 
-  void GetUnblindedTokens(
-      type::UnblindedTokenList list,
-      const type::SKUTransaction& transaction,
-      client::TransactionCallback callback);
+  void GetUnblindedTokens(std::vector<type::UnblindedTokenPtr> list,
+                          const type::SKUTransaction& transaction,
+                          client::TransactionCallback callback);
 
   void GetOrderMerchant(
       type::SKUOrderPtr order,

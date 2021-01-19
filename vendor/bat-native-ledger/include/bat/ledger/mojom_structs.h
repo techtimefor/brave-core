@@ -33,8 +33,6 @@ using BalancePtr = mojom::BalancePtr;
 
 using BalanceReportInfo = mojom::BalanceReportInfo;
 using BalanceReportInfoPtr = mojom::BalanceReportInfoPtr;
-using BalanceReportInfoList =
-    std::vector<mojom::BalanceReportInfoPtr>;
 
 using BraveWallet = mojom::BraveWallet;
 using BraveWalletPtr = mojom::BraveWalletPtr;
@@ -44,32 +42,25 @@ using ClientInfoPtr = mojom::ClientInfoPtr;
 
 using ContributionInfo = mojom::ContributionInfo;
 using ContributionInfoPtr = mojom::ContributionInfoPtr;
-using ContributionInfoList = std::vector<ContributionInfoPtr>;
 
 using ContributionProcessor = mojom::ContributionProcessor;
 
 using ContributionPublisher = mojom::ContributionPublisher;
 using ContributionPublisherPtr = mojom::ContributionPublisherPtr;
-using ContributionPublisherList = std::vector<ContributionPublisherPtr>;
 
 using ContributionReportInfo = mojom::ContributionReportInfo;
 using ContributionReportInfoPtr = mojom::ContributionReportInfoPtr;
-using ContributionReportInfoList = std::vector<ContributionReportInfoPtr>;
 
 using ContributionQueue = mojom::ContributionQueue;
 using ContributionQueuePtr = mojom::ContributionQueuePtr;
 
 using ContributionQueuePublisher = mojom::ContributionQueuePublisher;
-using ContributionQueuePublisherPtr =
-    mojom::ContributionQueuePublisherPtr;
-using ContributionQueuePublisherList =
-    std::vector<ContributionQueuePublisherPtr>;
+using ContributionQueuePublisherPtr = mojom::ContributionQueuePublisherPtr;
 
 using ContributionStep = mojom::ContributionStep;
 
 using CredsBatch = mojom::CredsBatch;
 using CredsBatchPtr = mojom::CredsBatchPtr;
-using CredsBatchList = std::vector<CredsBatchPtr>;
 
 using CredsBatchType = mojom::CredsBatchType;
 
@@ -77,7 +68,6 @@ using CredsBatchStatus = mojom::CredsBatchStatus;
 
 using EventLog = mojom::EventLog;
 using EventLogPtr = mojom::EventLogPtr;
-using EventLogs = std::vector<EventLogPtr>;
 
 using Environment = mojom::Environment;
 
@@ -100,15 +90,12 @@ using Platform = mojom::Platform;
 
 using PendingContribution = mojom::PendingContribution;
 using PendingContributionPtr = mojom::PendingContributionPtr;
-using PendingContributionList = std::vector<PendingContributionPtr>;
 
 using PendingContributionInfo = mojom::PendingContributionInfo;
 using PendingContributionInfoPtr = mojom::PendingContributionInfoPtr;
-using PendingContributionInfoList = std::vector<PendingContributionInfoPtr>;
 
 using Promotion = mojom::Promotion;
 using PromotionPtr = mojom::PromotionPtr;
-using PromotionList = std::vector<PromotionPtr>;
 using PromotionMap = base::flat_map<std::string, PromotionPtr>;
 
 using PromotionType = mojom::PromotionType;
@@ -120,7 +107,6 @@ using PublisherBannerPtr = mojom::PublisherBannerPtr;
 
 using PublisherInfo = mojom::PublisherInfo;
 using PublisherInfoPtr = mojom::PublisherInfoPtr;
-using PublisherInfoList = std::vector<PublisherInfoPtr>;
 
 using PublisherStatus = mojom::PublisherStatus;
 
@@ -151,7 +137,6 @@ using SKUOrderStatus = mojom::SKUOrderStatus;
 
 using SKUOrderItem = mojom::SKUOrderItem;
 using SKUOrderItemPtr = mojom::SKUOrderItemPtr;
-using SKUOrderItemList = std::vector<SKUOrderItemPtr>;
 
 using SKUOrderItemType = mojom::SKUOrderItemType;
 
@@ -164,11 +149,9 @@ using SKUTransactionType = mojom::SKUTransactionType;
 
 using TransactionReportInfo = mojom::TransactionReportInfo;
 using TransactionReportInfoPtr = mojom::TransactionReportInfoPtr;
-using TransactionReportInfoList = std::vector<TransactionReportInfoPtr>;
 
 using UnblindedToken = mojom::UnblindedToken;
 using UnblindedTokenPtr = mojom::UnblindedTokenPtr;
-using UnblindedTokenList = std::vector<UnblindedTokenPtr>;
 
 using UrlMethod = mojom::UrlMethod;
 

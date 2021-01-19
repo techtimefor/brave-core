@@ -4,6 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <utility>
+#include <vector>
 
 #include "bat/ledger/global_constants.h"
 #include "bat/ledger/internal/contribution/contribution_external_wallet.h"
@@ -136,7 +137,7 @@ void ContributionExternalWallet::OnServerPublisherInfo(
     contribution->amount = amount;
     contribution->type = type;
 
-    type::PendingContributionList list;
+    std::vector<type::PendingContributionPtr> list;
     list.push_back(std::move(contribution));
 
     ledger_->database()->SavePendingContribution(

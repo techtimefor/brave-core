@@ -6,6 +6,8 @@
 #ifndef BRAVELEDGER_CONTRIBUTION_CONTRIBUTION_AC_H_
 #define BRAVELEDGER_CONTRIBUTION_CONTRIBUTION_AC_H_
 
+#include <vector>
+
 #include "bat/ledger/ledger.h"
 
 namespace ledger {
@@ -22,7 +24,7 @@ class ContributionAC {
   void Process(const uint64_t reconcile_stamp);
 
  private:
-  void PreparePublisherList(type::PublisherInfoList list);
+  void PreparePublisherList(std::vector<type::PublisherInfoPtr> list);
 
   void QueueSaved(const type::Result result);
 

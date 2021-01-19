@@ -15,7 +15,8 @@ namespace ledger {
 namespace database {
 
 using GetCredsBatchCallback = std::function<void(type::CredsBatchPtr)>;
-using GetCredsBatchListCallback = std::function<void(type::CredsBatchList)>;
+using GetCredsBatchListCallback =
+    std::function<void(std::vector<type::CredsBatchPtr>)>;
 
 class DatabaseCredsBatch: public DatabaseTable {
  public:

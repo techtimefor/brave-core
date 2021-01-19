@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "bat/ledger/internal/database/database_contribution_queue_publishers.h"
 #include "bat/ledger/internal/database/database_table.h"
@@ -43,10 +44,9 @@ class DatabaseContributionQueue: public DatabaseTable {
       type::DBCommandResponsePtr response,
       GetFirstContributionQueueCallback callback);
 
-  void OnGetPublishers(
-      type::ContributionQueuePublisherList list,
-      std::shared_ptr<type::ContributionQueuePtr> shared_queue,
-      GetFirstContributionQueueCallback callback);
+  void OnGetPublishers(std::vector<type::ContributionQueuePublisherPtr> list,
+                       std::shared_ptr<type::ContributionQueuePtr> shared_queue,
+                       GetFirstContributionQueueCallback callback);
 
   std::unique_ptr<DatabaseContributionQueuePublishers> publishers_;
 };

@@ -78,7 +78,7 @@ void Database::SaveActivityInfo(
 }
 
 void Database::NormalizeActivityInfoList(
-    type::PublisherInfoList list,
+    std::vector<type::PublisherInfoPtr> list,
     ledger::ResultCallback callback) {
   activity_info_->NormalizeList(std::move(list), callback);
 }
@@ -107,8 +107,8 @@ void Database::SaveBalanceReportInfo(
 }
 
 void Database::SaveBalanceReportInfoList(
-      type::BalanceReportInfoList list,
-      ledger::ResultCallback callback) {
+    std::vector<type::BalanceReportInfoPtr> list,
+    ledger::ResultCallback callback) {
   balance_report_->InsertOrUpdateList(std::move(list), callback);
 }
 
@@ -334,7 +334,7 @@ void Database::GetTransactionReport(
  * PENDING CONTRIBUTION
  */
 void Database::SavePendingContribution(
-    type::PendingContributionList list,
+    std::vector<type::PendingContributionPtr> list,
     ledger::ResultCallback callback) {
   pending_contribution_->InsertOrUpdateList(std::move(list), callback);
 }
@@ -589,9 +589,8 @@ void Database::GetSKUTransactionByOrderId(
 /**
  * UNBLINDED TOKEN
  */
-void Database::SaveUnblindedTokenList(
-    type::UnblindedTokenList list,
-    ledger::ResultCallback callback) {
+void Database::SaveUnblindedTokenList(std::vector<type::UnblindedTokenPtr> list,
+                                      ledger::ResultCallback callback) {
   unblinded_token_->InsertOrUpdateList(std::move(list), callback);
 }
 

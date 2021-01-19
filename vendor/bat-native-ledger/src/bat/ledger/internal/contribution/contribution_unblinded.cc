@@ -53,7 +53,7 @@ bool GetStatisticalVotingWinner(
 void GetStatisticalVotingWinners(
     uint32_t total_votes,
     const double amount,
-    const ledger::type::ContributionPublisherList& list,
+    const std::vector<ledger::type::ContributionPublisherPtr>& list,
     ledger::contribution::Winners* winners) {
   DCHECK(winners);
   std::vector<ledger::type::ContributionPublisher> converted_list;
@@ -130,7 +130,7 @@ void Unblinded::GetContributionInfoAndUnblindedTokens(
 }
 
 void Unblinded::OnUnblindedTokens(
-    type::UnblindedTokenList list,
+    std::vector<type::UnblindedTokenPtr> list,
     const std::string& contribution_id,
     GetContributionInfoAndUnblindedTokensCallback callback) {
   BLOG_IF(1, list.empty(), "Token list is empty");
@@ -170,7 +170,7 @@ void Unblinded::GetContributionInfoAndReservedUnblindedTokens(
 }
 
 void Unblinded::OnReservedUnblindedTokens(
-    type::UnblindedTokenList list,
+    std::vector<type::UnblindedTokenPtr> list,
     const std::string& contribution_id,
     GetContributionInfoAndUnblindedTokensCallback callback) {
   BLOG_IF(1, list.empty(), "Token list is empty");
@@ -330,7 +330,7 @@ void Unblinded::PreparePublishers(
       save_callback);
 }
 
-type::ContributionPublisherList Unblinded::PrepareAutoContribution(
+std::vector<type::ContributionPublisherPtr> Unblinded::PrepareAutoContribution(
     const std::vector<type::UnblindedToken>& list,
     type::ContributionInfoPtr contribution) {
   if (!contribution) {
@@ -356,7 +356,7 @@ type::ContributionPublisherList Unblinded::PrepareAutoContribution(
       std::move(contribution->publishers),
       &winners);
 
-  type::ContributionPublisherList publisher_list;
+  std::vector<type::ContributionPublisherPtr> publisher_list;
   for (auto & winner : winners) {
     if (winner.second == 0) {
       continue;
@@ -588,7 +588,7 @@ void Unblinded::Retry(
 }
 
 void Unblinded::OnReservedUnblindedTokensForRetryAttempt(
-    const type::UnblindedTokenList& list,
+    const std::vector<type::UnblindedTokenPtr>& list,
     const std::vector<type::CredsBatchType>& types,
     std::shared_ptr<type::ContributionInfoPtr> shared_contribution,
     ledger::ResultCallback callback) {

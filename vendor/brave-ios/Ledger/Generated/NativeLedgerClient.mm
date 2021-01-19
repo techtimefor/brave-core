@@ -32,7 +32,8 @@ void NativeLedgerClient::OnPanelPublisherInfo(ledger::type::Result result, ledge
 void NativeLedgerClient::OnReconcileComplete(ledger::type::Result result, ledger::type::ContributionInfoPtr contribution) {
   [bridge_ onReconcileComplete:result contribution:std::move(contribution)];
 }
-void NativeLedgerClient::PublisherListNormalized(ledger::type::PublisherInfoList list) {
+void NativeLedgerClient::PublisherListNormalized(
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   [bridge_ publisherListNormalized:std::move(list)];
 }
 std::string NativeLedgerClient::URIEncode(const std::string & value) {

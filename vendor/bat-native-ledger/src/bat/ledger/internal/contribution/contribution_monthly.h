@@ -6,6 +6,8 @@
 #ifndef BRAVELEDGER_CONTRIBUTION_CONTRIBUTION_MONTHLY_H_
 #define BRAVELEDGER_CONTRIBUTION_CONTRIBUTION_MONTHLY_H_
 
+#include <vector>
+
 #include "bat/ledger/ledger.h"
 
 namespace ledger {
@@ -25,13 +27,11 @@ class ContributionMonthly {
       ledger::HasSufficientBalanceToReconcileCallback callback);
 
  private:
-  void PrepareTipList(
-      type::PublisherInfoList list,
-      ledger::ResultCallback callback);
+  void PrepareTipList(std::vector<type::PublisherInfoPtr> list,
+                      ledger::ResultCallback callback);
 
-  void GetVerifiedTipList(
-      const type::PublisherInfoList& list,
-      type::PublisherInfoList* verified_list);
+  void GetVerifiedTipList(const std::vector<type::PublisherInfoPtr>& list,
+                          std::vector<type::PublisherInfoPtr>* verified_list);
 
   void OnSavePendingContribution(const type::Result result);
 
@@ -41,7 +41,7 @@ class ContributionMonthly {
       ledger::HasSufficientBalanceToReconcileCallback callback);
 
   void OnHasSufficientBalance(
-      const type::PublisherInfoList& publisher_list,
+      const std::vector<type::PublisherInfoPtr>& publisher_list,
       const double balance,
       ledger::HasSufficientBalanceToReconcileCallback callback);
 

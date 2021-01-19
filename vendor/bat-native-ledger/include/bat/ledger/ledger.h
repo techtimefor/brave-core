@@ -44,7 +44,7 @@ using ExternalWalletAuthorizationCallback =
     std::function<void(type::Result, base::flat_map<std::string, std::string>)>;
 
 using FetchPromotionCallback =
-    std::function<void(type::Result, type::PromotionList)>;
+    std::function<void(type::Result, std::vector<type::PromotionPtr>)>;
 
 using ClaimPromotionCallback =
     std::function<void(const type::Result, const std::string&)>;
@@ -59,10 +59,10 @@ using GetBalanceReportCallback =
     std::function<void(const type::Result, type::BalanceReportInfoPtr)>;
 
 using GetBalanceReportListCallback =
-    std::function<void(type::BalanceReportInfoList)>;
+    std::function<void(std::vector<type::BalanceReportInfoPtr>)>;
 
 using ContributionInfoListCallback =
-    std::function<void(type::ContributionInfoList)>;
+    std::function<void(std::vector<type::ContributionInfoPtr>)>;
 
 using GetMonthlyReportCallback =
     std::function<void(const type::Result, type::MonthlyReportInfoPtr)>;
@@ -70,16 +70,17 @@ using GetMonthlyReportCallback =
 using GetAllMonthlyReportIdsCallback =
     std::function<void(const std::vector<std::string>&)>;
 
-using GetEventLogsCallback = std::function<void(type::EventLogs)>;
+using GetEventLogsCallback =
+    std::function<void(std::vector<type::EventLogPtr>)>;
 
 using SKUOrderCallback =
     std::function<void(const type::Result, const std::string&)>;
 
 using GetContributionReportCallback =
-    std::function<void(type::ContributionReportInfoList)>;
+    std::function<void(std::vector<type::ContributionReportInfoPtr>)>;
 
 using GetTransactionReportCallback =
-    std::function<void(type::TransactionReportInfoList)>;
+    std::function<void(std::vector<type::TransactionReportInfoPtr>)>;
 
 using GetAllPromotionsCallback = std::function<void(type::PromotionMap)>;
 
@@ -88,9 +89,10 @@ using ResultCallback = std::function<void(const type::Result)>;
 using PendingContributionsTotalCallback = std::function<void(double)>;
 
 using PendingContributionInfoListCallback =
-    std::function<void(type::PendingContributionInfoList)>;
+    std::function<void(std::vector<type::PendingContributionInfoPtr>)>;
 
-using PublisherInfoListCallback = std::function<void(type::PublisherInfoList)>;
+using PublisherInfoListCallback =
+    std::function<void(std::vector<type::PublisherInfoPtr>)>;
 
 using PublisherInfoCallback =
     std::function<void(const type::Result, type::PublisherInfoPtr)>;

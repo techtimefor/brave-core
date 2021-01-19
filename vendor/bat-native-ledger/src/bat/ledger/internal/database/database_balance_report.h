@@ -7,6 +7,7 @@
 #define BRAVELEDGER_DATABASE_DATABASE_BALANCE_REPORT_H_
 
 #include <string>
+#include <vector>
 
 #include "bat/ledger/internal/database/database_table.h"
 
@@ -22,9 +23,8 @@ class DatabaseBalanceReport : public DatabaseTable {
       type::BalanceReportInfoPtr info,
       ledger::ResultCallback callback);
 
-  void InsertOrUpdateList(
-      type::BalanceReportInfoList list,
-      ledger::ResultCallback callback);
+  void InsertOrUpdateList(std::vector<type::BalanceReportInfoPtr> list,
+                          ledger::ResultCallback callback);
 
   void SetAmount(
       type::ActivityMonth month,

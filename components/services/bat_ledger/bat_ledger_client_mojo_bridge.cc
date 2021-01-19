@@ -140,7 +140,7 @@ std::string BatLedgerClientMojoBridge::URIEncode(const std::string& value) {
 }
 
 void BatLedgerClientMojoBridge::PublisherListNormalized(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   if (!Connected()) {
     return;
   }

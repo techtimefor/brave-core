@@ -123,7 +123,7 @@ void Contribution::CheckNotCompletedContributions() {
 }
 
 void Contribution::NotCompletedContributions(
-    type::ContributionInfoList list) {
+    std::vector<type::ContributionInfoPtr> list) {
   if (list.empty()) {
     return;
   }
@@ -334,7 +334,7 @@ void Contribution::CreateNewEntry(
   contribution->created_at = now;
   contribution->processor = GetProcessor(wallet_type);
 
-  type::ContributionQueuePublisherList queue_publishers;
+  std::vector<type::ContributionQueuePublisherPtr> queue_publishers;
   for (auto& item : queue->publishers) {
     queue_publishers.push_back(item->Clone());
   }
@@ -349,7 +349,7 @@ void Contribution::CreateNewEntry(
   BLOG(1, "Creating contribution(" << wallet_type << ") for " <<
       contribution->amount << " type " << queue->type);
 
-  type::ContributionPublisherList publisher_list;
+  std::vector<type::ContributionPublisherPtr> publisher_list;
   for (const auto& item : queue_publishers) {
     auto publisher = type::ContributionPublisher::New();
     publisher->contribution_id = contribution_id;
@@ -755,15 +755,12 @@ void Contribution::Retry(
 
 void Contribution::GetRecurringTips(
     ledger::PublisherInfoListCallback callback) {
-  ledger_->database()->GetRecurringTips([this, callback](
-      type::PublisherInfoList list) {
-    // The publisher status field may be expired. Attempt to refresh
-    // expired publisher status values before executing callback.
-    publisher::RefreshPublisherStatus(
-        ledger_,
-        std::move(list),
-        callback);
-  });
+  ledger_->database()->GetRecurringTips(
+      [this, callback](std::vector<type::PublisherInfoPtr> list) {
+        // The publisher status field may be expired. Attempt to refresh
+        // expired publisher status values before executing callback.
+        publisher::RefreshPublisherStatus(ledger_, std::move(list), callback);
+      });
 }
 
 }  // namespace contribution

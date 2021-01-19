@@ -15,7 +15,8 @@
 - (void)log:(const char *)file line:(const int)line verboseLevel:(const int)verbose_level message:(const std::string &) message;
 - (void)onPanelPublisherInfo:(ledger::type::Result)result publisherInfo:(ledger::type::PublisherInfoPtr)publisher_info windowId:(uint64_t)windowId;
 - (void)onReconcileComplete:(ledger::type::Result)result contribution:(ledger::type::ContributionInfoPtr)contribution;
-- (void)publisherListNormalized:(ledger::type::PublisherInfoList)list;
+- (void)publisherListNormalized:
+    (std::vector<ledger::type::PublisherInfoPtr>)list;
 - (std::string)URIEncode:(const std::string &)value;
 - (void)onContributeUnverifiedPublishers:(ledger::type::Result)result publisherKey:(const std::string&)publisher_key publisherName:(const std::string&)publisher_name;
 - (void)setBooleanState:(const std::string&)name value:(bool)value;

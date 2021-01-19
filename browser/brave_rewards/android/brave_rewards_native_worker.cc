@@ -425,7 +425,7 @@ void BraveRewardsNativeWorker::GetRecurringDonations(JNIEnv* env,
 }
 
 void BraveRewardsNativeWorker::OnGetRecurringTips(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   map_recurrent_publishers_.clear();
   for (const auto& item : list) {
     map_recurrent_publishers_[item->id] = item->Clone();

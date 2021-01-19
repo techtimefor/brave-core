@@ -47,9 +47,10 @@ class RewardsInternalsDOMHandler : public content::WebUIMessageHandler {
     const ledger::type::Result result,
     ledger::type::BalancePtr balance);
   void GetContributions(const base::ListValue* args);
-  void OnGetContributions(ledger::type::ContributionInfoList contributions);
+  void OnGetContributions(
+      std::vector<ledger::type::ContributionInfoPtr> contributions);
   void GetPromotions(const base::ListValue* args);
-  void OnGetPromotions(ledger::type::PromotionList list);
+  void OnGetPromotions(std::vector<ledger::type::PromotionPtr> list);
   void GetPartialLog(const base::ListValue* args);
   void OnGetPartialLog(const std::string& log);
   void GetFulllLog(const base::ListValue* args);
@@ -61,7 +62,7 @@ class RewardsInternalsDOMHandler : public content::WebUIMessageHandler {
       const ledger::type::Result result,
       ledger::type::UpholdWalletPtr wallet);
   void GetEventLogs(const base::ListValue* args);
-  void OnGetEventLogs(ledger::type::EventLogs logs);
+  void OnGetEventLogs(std::vector<ledger::type::EventLogPtr> logs);
 
   brave_rewards::RewardsService* rewards_service_;  // NOT OWNED
   Profile* profile_;
@@ -197,7 +198,7 @@ void RewardsInternalsDOMHandler::GetContributions(const base::ListValue *args) {
 }
 
 void RewardsInternalsDOMHandler::OnGetContributions(
-    ledger::type::ContributionInfoList contributions) {
+    std::vector<ledger::type::ContributionInfoPtr> contributions) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }
@@ -245,7 +246,7 @@ void RewardsInternalsDOMHandler::GetPromotions(const base::ListValue *args) {
 }
 
 void RewardsInternalsDOMHandler::OnGetPromotions(
-    ledger::type::PromotionList list) {
+    std::vector<ledger::type::PromotionPtr> list) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }
@@ -384,7 +385,8 @@ void RewardsInternalsDOMHandler::GetEventLogs(const base::ListValue* args) {
           weak_ptr_factory_.GetWeakPtr()));
 }
 
-void RewardsInternalsDOMHandler::OnGetEventLogs(ledger::type::EventLogs logs) {
+void RewardsInternalsDOMHandler::OnGetEventLogs(
+    std::vector<ledger::type::EventLogPtr> logs) {
   if (!web_ui()->CanCallJavascript()) {
     return;
   }

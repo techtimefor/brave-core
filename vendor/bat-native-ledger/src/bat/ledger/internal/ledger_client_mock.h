@@ -60,7 +60,8 @@ class MockLedgerClient : public LedgerClient {
       const int verbose_level,
       const std::string& message));
 
-  MOCK_METHOD1(PublisherListNormalized, void(type::PublisherInfoList list));
+  MOCK_METHOD1(PublisherListNormalized,
+               void(std::vector<type::PublisherInfoPtr> list));
 
   MOCK_METHOD2(SetBooleanState, void(
       const std::string& name,

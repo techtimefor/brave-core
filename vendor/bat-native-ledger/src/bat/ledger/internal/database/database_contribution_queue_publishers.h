@@ -7,6 +7,7 @@
 #define BRAVELEDGER_DATABASE_DATABASE_CONTRIBUTION_QUEUE_PUBLISHERS_H_
 
 #include <string>
+#include <vector>
 
 #include "bat/ledger/internal/database/database_table.h"
 
@@ -18,10 +19,9 @@ class DatabaseContributionQueuePublishers: public DatabaseTable {
   explicit DatabaseContributionQueuePublishers(LedgerImpl* ledger);
   ~DatabaseContributionQueuePublishers() override;
 
-  void InsertOrUpdate(
-      const std::string& id,
-      type::ContributionQueuePublisherList list,
-      ledger::ResultCallback callback);
+  void InsertOrUpdate(const std::string& id,
+                      std::vector<type::ContributionQueuePublisherPtr> list,
+                      ledger::ResultCallback callback);
 
   void GetRecordsByQueueId(
       const std::string& queue_id,

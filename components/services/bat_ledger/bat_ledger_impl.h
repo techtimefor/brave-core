@@ -336,22 +336,22 @@ class BatLedgerImpl :
 
   static void OnGetRecurringTips(
       CallbackHolder<GetRecurringTipsCallback>* holder,
-      ledger::type::PublisherInfoList list);
+      std::vector<ledger::type::PublisherInfoPtr> list);
 
   static void OnGetOneTimeTips(
       CallbackHolder<GetRecurringTipsCallback>* holder,
-      ledger::type::PublisherInfoList list);
+      std::vector<ledger::type::PublisherInfoPtr> list);
   static void OnRefreshPublisher(
       CallbackHolder<RefreshPublisherCallback>* holder,
       ledger::type::PublisherStatus status);
 
   static void OnGetActivityInfoList(
-    CallbackHolder<GetActivityInfoListCallback>* holder,
-    ledger::type::PublisherInfoList list);
+      CallbackHolder<GetActivityInfoListCallback>* holder,
+      std::vector<ledger::type::PublisherInfoPtr> list);
 
   static void OnGetExcludedList(
       CallbackHolder<GetExcludedListCallback>* holder,
-      ledger::type::PublisherInfoList list);
+      std::vector<ledger::type::PublisherInfoPtr> list);
 
   static void OnSaveMediaInfoCallback(
     CallbackHolder<SaveMediaInfoCallback>* holder,
@@ -359,8 +359,8 @@ class BatLedgerImpl :
     ledger::type::PublisherInfoPtr info);
 
   static void OnGetPendingContributions(
-    CallbackHolder<GetPendingContributionsCallback>* holder,
-    ledger::type::PendingContributionInfoList list);
+      CallbackHolder<GetPendingContributionsCallback>* holder,
+      std::vector<ledger::type::PendingContributionInfoPtr> list);
 
   static void OnRemovePendingContribution(
     CallbackHolder<RemovePendingContributionCallback>* holder,
@@ -375,9 +375,9 @@ class BatLedgerImpl :
     double amount);
 
   static void OnFetchPromotions(
-    CallbackHolder<FetchPromotionsCallback>* holder,
-    const ledger::type::Result result,
-    ledger::type::PromotionList promotions);
+      CallbackHolder<FetchPromotionsCallback>* holder,
+      const ledger::type::Result result,
+      std::vector<ledger::type::PromotionPtr> promotions);
 
   static void OnHasSufficientBalanceToReconcile(
     CallbackHolder<HasSufficientBalanceToReconcileCallback>* holder,
@@ -408,15 +408,15 @@ class BatLedgerImpl :
 
   static void OnGetTransactionReport(
       CallbackHolder<GetTransactionReportCallback>* holder,
-      ledger::type::TransactionReportInfoList list);
+      std::vector<ledger::type::TransactionReportInfoPtr> list);
 
   static void OnGetContributionReport(
       CallbackHolder<GetContributionReportCallback>* holder,
-      ledger::type::ContributionReportInfoList list);
+      std::vector<ledger::type::ContributionReportInfoPtr> list);
 
   static void OnGetAllContributions(
       CallbackHolder<GetAllContributionsCallback>* holder,
-      ledger::type::ContributionInfoList list);
+      std::vector<ledger::type::ContributionInfoPtr> list);
 
   static void OnSavePublisherInfoForTip(
       CallbackHolder<SavePublisherInfoForTipCallback>* holder,
@@ -443,9 +443,8 @@ class BatLedgerImpl :
       CallbackHolder<ShutdownCallback>* holder,
       const ledger::type::Result result);
 
-  static void OnGetEventLogs(
-      CallbackHolder<GetEventLogsCallback>* holder,
-      ledger::type::EventLogs logs);
+  static void OnGetEventLogs(CallbackHolder<GetEventLogsCallback>* holder,
+                             std::vector<ledger::type::EventLogPtr> logs);
 
   static void OnGetBraveWallet(
       CallbackHolder<GetBraveWalletCallback>* holder,

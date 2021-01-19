@@ -6,7 +6,8 @@
 #ifndef BRAVELEDGER_CONTRIBUTION_CONTRIBUTION_MONTHLY_UTIL_H_
 #define BRAVELEDGER_CONTRIBUTION_CONTRIBUTION_MONTHLY_UTIL_H_
 
-#include "base/values.h"
+#include <vector>
+
 #include "bat/ledger/mojom_structs.h"
 
 namespace ledger {
@@ -15,7 +16,7 @@ class LedgerImpl;
 namespace contribution {
 
 double GetTotalFromVerifiedTips(
-    const type::PublisherInfoList& publisher_list);
+    const std::vector<type::PublisherInfoPtr>& publisher_list);
 
 }  // namespace contribution
 }  // namespace ledger

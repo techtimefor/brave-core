@@ -109,7 +109,7 @@ class Contribution {
 
   void CheckNotCompletedContributions();
 
-  void NotCompletedContributions(type::ContributionInfoList list);
+  void NotCompletedContributions(std::vector<type::ContributionInfoPtr> list);
 
   void OnBalance(
       const type::Result result,

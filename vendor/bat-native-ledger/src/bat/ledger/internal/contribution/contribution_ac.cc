@@ -4,6 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <utility>
+#include <vector>
 
 #include "base/guid.h"
 #include "bat/ledger/internal/contribution/contribution_ac.h"
@@ -50,8 +51,9 @@ void ContributionAC::Process(const uint64_t reconcile_stamp) {
       get_callback);
 }
 
-void ContributionAC::PreparePublisherList(type::PublisherInfoList list) {
-  type::PublisherInfoList normalized_list;
+void ContributionAC::PreparePublisherList(
+    std::vector<type::PublisherInfoPtr> list) {
+  std::vector<type::PublisherInfoPtr> normalized_list;
 
   ledger_->publisher()->NormalizeContributeWinners(&normalized_list, &list, 0);
 
@@ -60,7 +62,7 @@ void ContributionAC::PreparePublisherList(type::PublisherInfoList list) {
     return;
   }
 
-  type::ContributionQueuePublisherList queue_list;
+  std::vector<type::ContributionQueuePublisherPtr> queue_list;
   type::ContributionQueuePublisherPtr publisher;
   for (const auto &item : normalized_list) {
     if (!item || item->percent == 0) {

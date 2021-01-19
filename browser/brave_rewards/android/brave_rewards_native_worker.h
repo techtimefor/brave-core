@@ -214,7 +214,7 @@ class BraveRewardsNativeWorker : public brave_rewards::RewardsServiceObserver,
         const ledger::type::Result result,
         ledger::type::PromotionPtr promotion) override;
 
-    void OnGetRecurringTips(ledger::type::PublisherInfoList list);
+    void OnGetRecurringTips(std::vector<ledger::type::PublisherInfoPtr> list);
 
     bool IsAnonWallet(JNIEnv* env,
         const base::android::JavaParamRef<jobject>& jcaller);
@@ -268,7 +268,7 @@ class BraveRewardsNativeWorker : public brave_rewards::RewardsServiceObserver,
     std::map<std::string, ledger::type::PublisherInfoPtr>
       map_recurrent_publishers_;
     std::map<std::string, std::string> addresses_;
-    ledger::type::PromotionList promotions_;
+    std::vector<ledger::type::PromotionPtr> promotions_;
     base::WeakPtrFactory<BraveRewardsNativeWorker> weak_factory_;
 };
 }  // namespace android

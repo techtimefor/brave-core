@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "base/test/task_environment.h"
 #include "bat/ledger/internal/database/database_activity_info.h"
@@ -53,7 +54,7 @@ class DatabaseActivityInfoTest : public ::testing::Test {
 TEST_F(DatabaseActivityInfoTest, InsertOrUpdateNull) {
   EXPECT_CALL(*mock_ledger_client_, RunDBTransaction(_, _)).Times(0);
 
-  type::PublisherInfoList list;
+  std::vector<type::PublisherInfoPtr> list;
   list.push_back(nullptr);
 
   activity_->InsertOrUpdate(nullptr, [](const type::Result){});
@@ -96,7 +97,8 @@ TEST_F(DatabaseActivityInfoTest, InsertOrUpdateOk) {
 TEST_F(DatabaseActivityInfoTest, GetRecordsListNull) {
   EXPECT_CALL(*mock_ledger_client_, RunDBTransaction(_, _)).Times(0);
 
-  activity_->GetRecordsList(0, 0, nullptr, [](type::PublisherInfoList){});
+  activity_->GetRecordsList(0, 0, nullptr,
+                            [](std::vector<type::PublisherInfoPtr>) {});
 }
 
 TEST_F(DatabaseActivityInfoTest, GetRecordsListEmpty) {
@@ -131,11 +133,8 @@ TEST_F(DatabaseActivityInfoTest, GetRecordsListEmpty) {
 
   auto filter = type::ActivityInfoFilter::New();
 
-  activity_->GetRecordsList(
-      0,
-      0,
-      std::move(filter),
-      [](type::PublisherInfoList){});
+  activity_->GetRecordsList(0, 0, std::move(filter),
+                            [](std::vector<type::PublisherInfoPtr>) {});
 }
 
 TEST_F(DatabaseActivityInfoTest, GetRecordsListOk) {
@@ -171,11 +170,8 @@ TEST_F(DatabaseActivityInfoTest, GetRecordsListOk) {
   auto filter = type::ActivityInfoFilter::New();
   filter->id = "publisher_key";
 
-  activity_->GetRecordsList(
-      0,
-      0,
-      std::move(filter),
-      [](type::PublisherInfoList){});
+  activity_->GetRecordsList(0, 0, std::move(filter),
+                            [](std::vector<type::PublisherInfoPtr>) {});
 }
 
 TEST_F(DatabaseActivityInfoTest, DeleteRecordEmpty) {

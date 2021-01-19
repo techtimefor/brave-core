@@ -34,7 +34,7 @@ DatabaseUnblindedToken::DatabaseUnblindedToken(
 DatabaseUnblindedToken::~DatabaseUnblindedToken() = default;
 
 void DatabaseUnblindedToken::InsertOrUpdateList(
-    type::UnblindedTokenList list,
+    std::vector<type::UnblindedTokenPtr> list,
     ledger::ResultCallback callback) {
   if (list.empty()) {
     BLOG(1, "List is empty");
@@ -89,7 +89,7 @@ void DatabaseUnblindedToken::OnGetRecords(
     return;
   }
 
-  type::UnblindedTokenList list;
+  std::vector<type::UnblindedTokenPtr> list;
   for (auto const& record : response->result->get_records()) {
     auto info = type::UnblindedToken::New();
     auto* record_pointer = record.get();

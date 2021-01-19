@@ -5,6 +5,7 @@
 
 #include <map>
 #include <utility>
+#include <vector>
 
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
@@ -33,7 +34,7 @@ DatabasePendingContribution::DatabasePendingContribution(
 DatabasePendingContribution::~DatabasePendingContribution() = default;
 
 void DatabasePendingContribution::InsertOrUpdateList(
-    type::PendingContributionList list,
+    std::vector<type::PendingContributionPtr> list,
     ledger::ResultCallback callback) {
   if (list.empty()) {
     BLOG(1, "List is empty");
@@ -176,7 +177,7 @@ void DatabasePendingContribution::OnGetAllRecords(
     return;
   }
 
-  type::PendingContributionInfoList list;
+  std::vector<type::PendingContributionInfoPtr> list;
   for (auto const& record : response->result->get_records()) {
     auto info = type::PendingContributionInfo::New();
     auto* record_pointer = record.get();

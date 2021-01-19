@@ -7,6 +7,7 @@
 #define BRAVELEDGER_RECOVERY_RECOVERY_EMPTY_BALANCE_H_
 
 #include <memory>
+#include <vector>
 
 #include "bat/ledger/internal/endpoint/promotion/promotion_server.h"
 
@@ -23,7 +24,7 @@ class EmptyBalance {
   void Check();
 
  private:
-  void OnAllContributions(type::ContributionInfoList list);
+  void OnAllContributions(std::vector<type::ContributionInfoPtr> list);
 
   void GetPromotions(client::GetPromotionListCallback callback);
 
@@ -31,20 +32,18 @@ class EmptyBalance {
       type::PromotionMap promotions,
       client::GetPromotionListCallback callback);
 
-  void GetCredsByPromotions(type::PromotionList list);
+  void GetCredsByPromotions(std::vector<type::PromotionPtr> list);
 
-  void OnCreds(type::CredsBatchList list);
+  void OnCreds(std::vector<type::CredsBatchPtr> list);
 
   void OnSaveUnblindedCreds(const type::Result result);
 
-  void GetAllTokens(
-      type::PromotionList list,
-      const double contribution_sum);
+  void GetAllTokens(std::vector<type::PromotionPtr> list,
+                    const double contribution_sum);
 
-  void ReportResults(
-      type::UnblindedTokenList list,
-      const double contribution_sum,
-      const double promotion_sum);
+  void ReportResults(std::vector<type::UnblindedTokenPtr> list,
+                     const double contribution_sum,
+                     const double promotion_sum);
 
   void Sent(const type::Result result);
 

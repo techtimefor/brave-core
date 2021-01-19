@@ -39,7 +39,8 @@ class LegacyPublisherState {
 
   std::vector<std::string> GetAlreadyProcessedPublishers() const;
 
-  void GetAllBalanceReports(ledger::type::BalanceReportInfoList* reports);
+  void GetAllBalanceReports(
+      std::vector<ledger::type::BalanceReportInfoPtr>* reports);
 
  private:
   void OnLoad(

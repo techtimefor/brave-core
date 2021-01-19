@@ -110,7 +110,7 @@ void DatabaseContributionInfoPublishers::OnGetRecordByContributionList(
     return;
   }
 
-  type::ContributionPublisherList list;
+  std::vector<type::ContributionPublisherPtr> list;
   for (auto const& record : response->result->get_records()) {
     auto info = type::ContributionPublisher::New();
     auto* record_pointer = record.get();

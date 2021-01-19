@@ -39,7 +39,7 @@ class RewardsServiceObserver;
 class RewardsServicePrivateObserver;
 
 using GetPublisherInfoListCallback =
-    base::Callback<void(ledger::type::PublisherInfoList list)>;
+    base::Callback<void(std::vector<ledger::type::PublisherInfoPtr> list)>;
 using GetAutoContributionAmountCallback = base::Callback<void(double)>;
 using GetAutoContributePropertiesCallback = base::Callback<void(
     ledger::type::AutoContributePropertiesPtr)>;
@@ -54,9 +54,9 @@ using GetRewardsInternalsInfoCallback =
     base::OnceCallback<void(ledger::type::RewardsInternalsInfoPtr info)>;
 using SaveRecurringTipCallback = base::OnceCallback<void(bool)>;
 using GetRecurringTipsCallback =
-    base::OnceCallback<void(ledger::type::PublisherInfoList list)>;
+    base::OnceCallback<void(std::vector<ledger::type::PublisherInfoPtr> list)>;
 using GetOneTimeTipsCallback =
-    base::OnceCallback<void(ledger::type::PublisherInfoList list)>;
+    base::OnceCallback<void(std::vector<ledger::type::PublisherInfoPtr> list)>;
 using GetPublisherBannerCallback =
     base::OnceCallback<void(ledger::type::PublisherBannerPtr banner)>;
 using RefreshPublisherCallback =
@@ -72,8 +72,8 @@ using SaveMediaInfoCallback =
     base::OnceCallback<void(ledger::type::PublisherInfoPtr publisher)>;
 using GetInlineTippingPlatformEnabledCallback = base::OnceCallback<void(bool)>;
 using GetShareURLCallback = base::OnceCallback<void(const std::string&)>;
-using GetPendingContributionsCallback =
-    base::OnceCallback<void(ledger::type::PendingContributionInfoList list)>;
+using GetPendingContributionsCallback = base::OnceCallback<void(
+    std::vector<ledger::type::PendingContributionInfoPtr> list)>;
 using GetCurrentCountryCallback = base::OnceCallback<void(const std::string&)>;
 using FetchBalanceCallback = base::OnceCallback<void(
     const ledger::type::Result,
@@ -109,11 +109,11 @@ using GetMonthlyReportCallback =
 using GetAllMonthlyReportIdsCallback =
     base::OnceCallback<void(const std::vector<std::string>&)>;
 
-using GetAllContributionsCallback =
-    base::OnceCallback<void(ledger::type::ContributionInfoList contributions)>;
+using GetAllContributionsCallback = base::OnceCallback<void(
+    std::vector<ledger::type::ContributionInfoPtr> contributions)>;
 
 using GetAllPromotionsCallback =
-    base::OnceCallback<void(ledger::type::PromotionList list)>;
+    base::OnceCallback<void(std::vector<ledger::type::PromotionPtr> list)>;
 
 using GetRewardsParametersCallback =
     base::OnceCallback<void(ledger::type::RewardsParametersPtr)>;
@@ -125,7 +125,7 @@ using ClearDiagnosticLogCallback = base::OnceCallback<void(const bool success)>;
 using SuccessCallback = base::OnceCallback<void(const bool success)>;
 
 using GetEventLogsCallback =
-    base::OnceCallback<void(ledger::type::EventLogs logs)>;
+    base::OnceCallback<void(std::vector<ledger::type::EventLogPtr> logs)>;
 
 using GetBraveWalletCallback =
     base::OnceCallback<void(ledger::type::BraveWalletPtr wallet)>;

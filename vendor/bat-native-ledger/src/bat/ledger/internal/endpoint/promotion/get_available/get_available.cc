@@ -74,7 +74,7 @@ type::Result GetAvailable::CheckStatusCode(const int status_code) {
 
 type::Result GetAvailable::ParseBody(
     const std::string& body,
-    type::PromotionList* list,
+    std::vector<type::PromotionPtr>* list,
     std::vector<std::string>* corrupted_promotions) {
   DCHECK(list && corrupted_promotions);
 
@@ -204,7 +204,7 @@ void GetAvailable::OnRequest(
     GetAvailableCallback callback) {
   ledger::LogUrlResponse(__func__, response);
 
-  type::PromotionList list;
+  std::vector<type::PromotionPtr> list;
   std::vector<std::string> corrupted_promotions;
   type::Result result = CheckStatusCode(response.status_code);
 

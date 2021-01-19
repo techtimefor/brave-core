@@ -5,6 +5,7 @@
 
 #include <map>
 #include <utility>
+#include <vector>
 
 #include "base/strings/stringprintf.h"
 #include "bat/ledger/global_constants.h"
@@ -348,7 +349,7 @@ void DatabasePublisherInfo::OnGetExcludedList(
     return;
   }
 
-  type::PublisherInfoList list;
+  std::vector<type::PublisherInfoPtr> list;
   for (auto const& record : response->result->get_records()) {
     auto info = type::PublisherInfo::New();
     auto* record_pointer = record.get();

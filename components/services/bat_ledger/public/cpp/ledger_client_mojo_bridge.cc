@@ -127,7 +127,7 @@ void LedgerClientMojoBridge::LoadURL(
 }
 
 void LedgerClientMojoBridge::PublisherListNormalized(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   ledger_client_->PublisherListNormalized(std::move(list));
 }
 

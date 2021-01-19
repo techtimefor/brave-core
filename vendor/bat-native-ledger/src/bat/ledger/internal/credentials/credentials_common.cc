@@ -84,7 +84,7 @@ void CredentialsCommon::SaveUnblindedCreds(
     const std::vector<std::string>& unblinded_encoded_creds,
     const CredentialsTrigger& trigger,
     ledger::ResultCallback callback) {
-  type::UnblindedTokenList list;
+  std::vector<type::UnblindedTokenPtr> list;
   type::UnblindedTokenPtr unblinded;
   for (auto & cred : unblinded_encoded_creds) {
     unblinded = type::UnblindedToken::New();

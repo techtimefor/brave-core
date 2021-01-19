@@ -180,7 +180,7 @@ void DatabaseContributionInfo::OnGetRecord(
 }
 
 void DatabaseContributionInfo::OnGetPublishers(
-    type::ContributionPublisherList list,
+    std::vector<type::ContributionPublisherPtr> list,
     std::shared_ptr<type::ContributionInfoPtr> shared_contribution,
     GetContributionInfoCallback callback) {
   auto contribution = std::move(*shared_contribution);
@@ -306,7 +306,7 @@ void DatabaseContributionInfo::OnGetOneTimeTips(
     return;
   }
 
-  type::PublisherInfoList list;
+  std::vector<type::PublisherInfoPtr> list;
   for (auto const& record : response->result->get_records()) {
     auto info = type::PublisherInfo::New();
     auto* record_pointer = record.get();
@@ -389,7 +389,7 @@ void DatabaseContributionInfo::OnGetContributionReport(
     return;
   }
 
-  type::ContributionInfoList list;
+  std::vector<type::ContributionInfoPtr> list;
   std::vector<std::string> contribution_ids;
   for (auto const& record : response->result->get_records()) {
     auto info = type::ContributionInfo::New();
@@ -407,13 +407,10 @@ void DatabaseContributionInfo::OnGetContributionReport(
     list.push_back(std::move(info));
   }
 
-  auto publisher_callback =
-      std::bind(&DatabaseContributionInfo::OnGetContributionReportPublishers,
-          this,
-          _1,
-          std::make_shared<type::ContributionInfoList>(
-              std::move(list)),
-          callback);
+  auto publisher_callback = std::bind(
+      &DatabaseContributionInfo::OnGetContributionReportPublishers, this, _1,
+      std::make_shared<std::vector<type::ContributionInfoPtr>>(std::move(list)),
+      callback);
 
   publishers_->GetContributionPublisherPairList(
       contribution_ids,
@@ -422,9 +419,10 @@ void DatabaseContributionInfo::OnGetContributionReport(
 
 void DatabaseContributionInfo::OnGetContributionReportPublishers(
     std::vector<ContributionPublisherInfoPair> publisher_pair_list,
-    std::shared_ptr<type::ContributionInfoList> shared_contributions,
+    std::shared_ptr<std::vector<type::ContributionInfoPtr>>
+        shared_contributions,
     ledger::GetContributionReportCallback callback) {
-  type::ContributionReportInfoList report_list;
+  std::vector<type::ContributionReportInfoPtr> report_list;
   for (const auto& contribution : *shared_contributions) {
     auto report = type::ContributionReportInfo::New();
     report->contribution_id = contribution->contribution_id;
@@ -501,7 +499,7 @@ void DatabaseContributionInfo::OnGetList(
     return;
   }
 
-  type::ContributionInfoList list;
+  std::vector<type::ContributionInfoPtr> list;
   std::vector<std::string> contribution_ids;
   for (const auto& record : response->result->get_records()) {
     auto info = type::ContributionInfo::New();
@@ -522,13 +520,10 @@ void DatabaseContributionInfo::OnGetList(
     list.push_back(std::move(info));
   }
 
-  auto publisher_callback =
-      std::bind(&DatabaseContributionInfo::OnGetListPublishers,
-          this,
-          _1,
-          std::make_shared<type::ContributionInfoList>(
-              std::move(list)),
-          callback);
+  auto publisher_callback = std::bind(
+      &DatabaseContributionInfo::OnGetListPublishers, this, _1,
+      std::make_shared<std::vector<type::ContributionInfoPtr>>(std::move(list)),
+      callback);
 
   publishers_->GetRecordByContributionList(
       contribution_ids,
@@ -536,8 +531,9 @@ void DatabaseContributionInfo::OnGetList(
 }
 
 void DatabaseContributionInfo::OnGetListPublishers(
-    type::ContributionPublisherList list,
-    std::shared_ptr<type::ContributionInfoList> shared_contributions,
+    std::vector<type::ContributionPublisherPtr> list,
+    std::shared_ptr<std::vector<type::ContributionInfoPtr>>
+        shared_contributions,
     ledger::ContributionInfoListCallback callback) {
   for (const auto& contribution : *shared_contributions) {
     for (const auto& item : list) {

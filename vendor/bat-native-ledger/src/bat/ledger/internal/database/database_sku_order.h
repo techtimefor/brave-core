@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "bat/ledger/internal/database/database_sku_order_items.h"
 #include "bat/ledger/internal/database/database_table.h"
@@ -49,10 +50,9 @@ class DatabaseSKUOrder: public DatabaseTable {
       type::DBCommandResponsePtr response,
       GetSKUOrderCallback callback);
 
-  void OnGetRecordItems(
-      type::SKUOrderItemList list,
-      std::shared_ptr<type::SKUOrderPtr> shared_order,
-      GetSKUOrderCallback callback);
+  void OnGetRecordItems(std::vector<type::SKUOrderItemPtr> list,
+                        std::shared_ptr<type::SKUOrderPtr> shared_order,
+                        GetSKUOrderCallback callback);
 
   std::unique_ptr<DatabaseSKUOrderItems> items_;
 };

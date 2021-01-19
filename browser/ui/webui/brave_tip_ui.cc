@@ -95,7 +95,8 @@ class TipMessageHandler : public WebUIMessageHandler,
 
   void GetAutoContributeAmountCallback(double amount);
 
-  void GetRecurringTipsCallback(ledger::type::PublisherInfoList list);
+  void GetRecurringTipsCallback(
+      std::vector<ledger::type::PublisherInfoPtr> list);
 
   void GetUpholdWalletCallback(
       const ledger::type::Result result,
@@ -500,7 +501,7 @@ void TipMessageHandler::GetRewardsParametersCallback(
 }
 
 void TipMessageHandler::GetRecurringTipsCallback(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   if (!IsJavascriptAllowed()) {
     return;
   }

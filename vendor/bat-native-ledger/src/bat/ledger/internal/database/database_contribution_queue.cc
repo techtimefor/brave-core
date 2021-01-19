@@ -173,7 +173,7 @@ void DatabaseContributionQueue::OnGetFirstRecord(
 }
 
 void DatabaseContributionQueue::OnGetPublishers(
-    type::ContributionQueuePublisherList list,
+    std::vector<type::ContributionQueuePublisherPtr> list,
     std::shared_ptr<type::ContributionQueuePtr> shared_queue,
     GetFirstContributionQueueCallback callback) {
   if (!shared_queue) {

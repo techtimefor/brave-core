@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "base/bind.h"
 #include "base/strings/string_number_conversions.h"
@@ -793,7 +794,7 @@ BraveRewardsGetRecurringTipsFunction::Run() {
 }
 
 void BraveRewardsGetRecurringTipsFunction::OnGetRecurringTips(
-    ledger::type::PublisherInfoList list) {
+    std::vector<ledger::type::PublisherInfoPtr> list) {
   base::DictionaryValue result;
   auto recurringTips = std::make_unique<base::ListValue>();
 

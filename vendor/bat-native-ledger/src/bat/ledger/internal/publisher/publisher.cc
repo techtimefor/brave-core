@@ -244,10 +244,9 @@ void Publisher::OnSaveVisitServerPublisher(
       list_callback);
 }
 
-void Publisher::OnGetActivityInfo(
-    type::PublisherInfoList list,
-    ledger::PublisherInfoCallback callback,
-    const std::string& publisher_key) {
+void Publisher::OnGetActivityInfo(std::vector<type::PublisherInfoPtr> list,
+                                  ledger::PublisherInfoCallback callback,
+                                  const std::string& publisher_key) {
   if (list.empty()) {
     ledger_->database()->GetPublisherInfo(publisher_key, callback);
     return;
@@ -501,15 +500,15 @@ void Publisher::OnRestorePublishers(
 }
 
 void Publisher::NormalizeContributeWinners(
-    type::PublisherInfoList* newList,
-    const type::PublisherInfoList* list,
+    std::vector<type::PublisherInfoPtr>* newList,
+    const std::vector<type::PublisherInfoPtr>* list,
     uint32_t record) {
   synopsisNormalizerInternal(newList, list, record);
 }
 
 void Publisher::synopsisNormalizerInternal(
-    type::PublisherInfoList* newList,
-    const type::PublisherInfoList* list,
+    std::vector<type::PublisherInfoPtr>* newList,
+    const std::vector<type::PublisherInfoPtr>* list,
     uint32_t /* next_record */) {
   if (list->empty()) {
     BLOG(1, "Publisher list is empty");
@@ -593,10 +592,10 @@ void Publisher::SynopsisNormalizer() {
 }
 
 void Publisher::SynopsisNormalizerCallback(
-    type::PublisherInfoList list) {
-  type::PublisherInfoList normalized_list;
+    std::vector<type::PublisherInfoPtr> list) {
+  std::vector<type::PublisherInfoPtr> normalized_list;
   synopsisNormalizerInternal(&normalized_list, &list, 0);
-  type::PublisherInfoList save_list;
+  std::vector<type::PublisherInfoPtr> save_list;
   for (auto& item : list) {
     save_list.push_back(item.Clone());
   }

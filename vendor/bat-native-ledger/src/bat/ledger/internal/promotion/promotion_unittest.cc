@@ -98,10 +98,9 @@ class PromotionTest : public testing::Test {
 };
 
 TEST_F(PromotionTest, LegacyPromotionIsNotOverwritten) {
-  ledger::FetchPromotionCallback fetch_promotion_callback =
-      std::bind([&](type::Result result, type::PromotionList promotions) {},
-      _1,
-      _2);
+  ledger::FetchPromotionCallback fetch_promotion_callback = std::bind(
+      [&](type::Result result, std::vector<type::PromotionPtr> promotions) {},
+      _1, _2);
 
   bool inserted = false;
   ON_CALL(*mock_database_, GetAllPromotions(_))

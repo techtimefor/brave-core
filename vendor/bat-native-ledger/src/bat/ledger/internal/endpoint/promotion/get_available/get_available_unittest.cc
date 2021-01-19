@@ -74,10 +74,8 @@ TEST_F(GetAvailableTest, ServerOK) {
 
   available_->Request(
       "macos",
-      [](
-          const type::Result result,
-          type::PromotionList list,
-          const std::vector<std::string>& corrupted_promotions) {
+      [](const type::Result result, std::vector<type::PromotionPtr> list,
+         const std::vector<std::string>& corrupted_promotions) {
         type::Promotion expected_promotion;
         expected_promotion.id = "83b3b77b-e7c3-455b-adda-e476fa0656d2";
         expected_promotion.expires_at = 1602169485;
@@ -111,10 +109,8 @@ TEST_F(GetAvailableTest, ServerError400) {
 
   available_->Request(
       "macos",
-      [](
-          const type::Result result,
-          type::PromotionList list,
-          const std::vector<std::string>& corrupted_promotions) {
+      [](const type::Result result, std::vector<type::PromotionPtr> list,
+         const std::vector<std::string>& corrupted_promotions) {
         EXPECT_EQ(result, type::Result::LEDGER_ERROR);
         EXPECT_TRUE(list.empty());
         EXPECT_TRUE(corrupted_promotions.empty());
@@ -136,10 +132,8 @@ TEST_F(GetAvailableTest, ServerError404) {
 
   available_->Request(
       "macos",
-      [](
-          const type::Result result,
-          type::PromotionList list,
-          const std::vector<std::string>& corrupted_promotions) {
+      [](const type::Result result, std::vector<type::PromotionPtr> list,
+         const std::vector<std::string>& corrupted_promotions) {
         EXPECT_EQ(result, type::Result::NOT_FOUND);
         EXPECT_TRUE(list.empty());
         EXPECT_TRUE(corrupted_promotions.empty());
@@ -161,10 +155,8 @@ TEST_F(GetAvailableTest, ServerError500) {
 
   available_->Request(
       "macos",
-      [](
-          const type::Result result,
-          type::PromotionList list,
-          const std::vector<std::string>& corrupted_promotions) {
+      [](const type::Result result, std::vector<type::PromotionPtr> list,
+         const std::vector<std::string>& corrupted_promotions) {
         EXPECT_EQ(result, type::Result::LEDGER_ERROR);
         EXPECT_TRUE(list.empty());
         EXPECT_TRUE(corrupted_promotions.empty());
@@ -186,10 +178,8 @@ TEST_F(GetAvailableTest, ServerErrorRandom) {
 
   available_->Request(
       "macos",
-      [](
-          const type::Result result,
-          type::PromotionList list,
-          const std::vector<std::string>& corrupted_promotions) {
+      [](const type::Result result, std::vector<type::PromotionPtr> list,
+         const std::vector<std::string>& corrupted_promotions) {
         EXPECT_EQ(result, type::Result::LEDGER_ERROR);
         EXPECT_TRUE(list.empty());
         EXPECT_TRUE(corrupted_promotions.empty());
@@ -217,10 +207,8 @@ TEST_F(GetAvailableTest, ServerWrongResponse) {
 
   available_->Request(
       "macos",
-      [](
-          const type::Result result,
-          type::PromotionList list,
-          const std::vector<std::string>& corrupted_promotions) {
+      [](const type::Result result, std::vector<type::PromotionPtr> list,
+         const std::vector<std::string>& corrupted_promotions) {
         EXPECT_EQ(result, type::Result::CORRUPTED_DATA);
         EXPECT_TRUE(list.empty());
         EXPECT_TRUE(corrupted_promotions.empty());
