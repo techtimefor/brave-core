@@ -437,7 +437,7 @@ class BatLedgerImpl :
 
   static void OnGetAllPromotions(
       CallbackHolder<GetAllPromotionsCallback>* holder,
-      ledger::type::PromotionMap items);
+      base::flat_map<std::string, ledger::type::PromotionPtr> items);
 
   static void OnShutdown(
       CallbackHolder<ShutdownCallback>* holder,

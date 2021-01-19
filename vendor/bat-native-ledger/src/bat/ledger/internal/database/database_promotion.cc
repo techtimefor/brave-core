@@ -8,8 +8,9 @@
 #include <map>
 #include <utility>
 
-#include "base/strings/stringprintf.h"
+#include "base/containers/flat_map.h"
 #include "base/strings/string_util.h"
+#include "base/strings/stringprintf.h"
 #include "bat/ledger/internal/common/time_util.h"
 #include "bat/ledger/internal/database/database_promotion.h"
 #include "bat/ledger/internal/database/database_util.h"
@@ -212,7 +213,7 @@ void DatabasePromotion::OnGetAllRecords(
     return;
   }
 
-  type::PromotionMap map;
+  base::flat_map<std::string, type::PromotionPtr> map;
   for (auto const& record : response->result->get_records()) {
     auto info = type::Promotion::New();
     auto* record_pointer = record.get();

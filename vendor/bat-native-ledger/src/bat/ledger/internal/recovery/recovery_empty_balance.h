@@ -7,8 +7,10 @@
 #define BRAVELEDGER_RECOVERY_RECOVERY_EMPTY_BALANCE_H_
 
 #include <memory>
+#include <string>
 #include <vector>
 
+#include "base/containers/flat_map.h"
 #include "bat/ledger/internal/endpoint/promotion/promotion_server.h"
 
 namespace ledger {
@@ -28,9 +30,8 @@ class EmptyBalance {
 
   void GetPromotions(client::GetPromotionListCallback callback);
 
-  void OnPromotions(
-      type::PromotionMap promotions,
-      client::GetPromotionListCallback callback);
+  void OnPromotions(base::flat_map<std::string, type::PromotionPtr> promotions,
+                    client::GetPromotionListCallback callback);
 
   void GetCredsByPromotions(std::vector<type::PromotionPtr> list);
 

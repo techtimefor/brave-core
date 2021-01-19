@@ -15,6 +15,9 @@
 
 namespace ledger {
 namespace type {
+
+// DEPRECATED: Use ledger::mojom namespace instead.
+
 /**
  * LEDGER
  */
@@ -96,7 +99,6 @@ using PendingContributionInfoPtr = mojom::PendingContributionInfoPtr;
 
 using Promotion = mojom::Promotion;
 using PromotionPtr = mojom::PromotionPtr;
-using PromotionMap = base::flat_map<std::string, PromotionPtr>;
 
 using PromotionType = mojom::PromotionType;
 

@@ -77,7 +77,7 @@ void EmptyBalance::GetPromotions(client::GetPromotionListCallback callback) {
 }
 
 void EmptyBalance::OnPromotions(
-    type::PromotionMap promotions,
+    base::flat_map<std::string, type::PromotionPtr> promotions,
     client::GetPromotionListCallback callback) {
   std::vector<type::PromotionPtr> list;
 

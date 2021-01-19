@@ -39,7 +39,7 @@ void DatabaseMultiTables::GetTransactionReport(
 }
 
 void DatabaseMultiTables::OnGetTransactionReportPromotion(
-    type::PromotionMap promotions,
+    base::flat_map<std::string, type::PromotionPtr> promotions,
     const type::ActivityMonth month,
     const int year,
     ledger::GetTransactionReportCallback callback) {

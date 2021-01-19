@@ -9,6 +9,7 @@
 #include <utility>
 #include <vector>
 
+#include "base/containers/flat_map.h"
 #include "base/test/task_environment.h"
 #include "bat/ledger/internal/database/database_mock.h"
 #include "bat/ledger/internal/ledger_client_mock.h"
@@ -107,7 +108,7 @@ TEST_F(PromotionTest, LegacyPromotionIsNotOverwritten) {
     .WillByDefault(
         Invoke([&inserted](ledger::GetAllPromotionsCallback callback) {
           auto promotion = type::Promotion::New();
-          type::PromotionMap map;
+          base::flat_map<std::string, type::PromotionPtr> map;
           if (inserted) {
             const std::string id = "36baa4c3-f92d-4121-b6d9-db44cb273a02";
             promotion->id = id;

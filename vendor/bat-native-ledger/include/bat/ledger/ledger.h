@@ -82,7 +82,8 @@ using GetContributionReportCallback =
 using GetTransactionReportCallback =
     std::function<void(std::vector<type::TransactionReportInfoPtr>)>;
 
-using GetAllPromotionsCallback = std::function<void(type::PromotionMap)>;
+using GetAllPromotionsCallback =
+    std::function<void(base::flat_map<std::string, type::PromotionPtr>)>;
 
 using ResultCallback = std::function<void(const type::Result)>;
 

@@ -1063,7 +1063,7 @@ void BatLedgerImpl:: GetAllMonthlyReportIds(
 // static
 void BatLedgerImpl::OnGetAllPromotions(
     CallbackHolder<GetAllPromotionsCallback>* holder,
-    ledger::type::PromotionMap items) {
+    base::flat_map<std::string, ledger::type::PromotionPtr> items) {
   DCHECK(holder);
   if (holder->is_valid()) {
     std::move(holder->get()).Run(std::move(items));

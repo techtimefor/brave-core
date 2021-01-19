@@ -866,7 +866,8 @@ BATClassLedgerBridge(BOOL, useShortRetries, setUseShortRetries, short_retries)
 
 - (void)updatePendingAndFinishedPromotions:(void (^)())completion
 {
-  ledger->GetAllPromotions(^(ledger::type::PromotionMap map) {
+  ledger->GetAllPromotions(^(
+      base::flat_map<std::string, ledger::type::PromotionPtr> map) {
     NSMutableArray *promos = [[NSMutableArray alloc] init];
     for (auto it = map.begin(); it != map.end(); ++it) {
       if (it->second.get() != nullptr) {

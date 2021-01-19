@@ -8,6 +8,7 @@
 
 #include <string>
 
+#include "base/containers/flat_map.h"
 #include "bat/ledger/ledger.h"
 
 namespace ledger {
@@ -27,7 +28,7 @@ class DatabaseMultiTables {
 
  private:
   void OnGetTransactionReportPromotion(
-      type::PromotionMap promotions,
+      base::flat_map<std::string, type::PromotionPtr> promotions,
       const type::ActivityMonth month,
       const int year,
       ledger::GetTransactionReportCallback callback);

@@ -11,12 +11,13 @@
 #include <string>
 #include <vector>
 
+#include "base/containers/flat_map.h"
 #include "base/timer/timer.h"
-#include "bat/ledger/ledger.h"
-#include "bat/ledger/mojom_structs.h"
 #include "bat/ledger/internal/attestation/attestation_impl.h"
 #include "bat/ledger/internal/credentials/credentials_factory.h"
 #include "bat/ledger/internal/endpoint/promotion/promotion_server.h"
+#include "bat/ledger/ledger.h"
+#include "bat/ledger/mojom_structs.h"
 
 namespace ledger {
 class LedgerImpl;
@@ -56,12 +57,13 @@ class Promotion {
                const std::vector<std::string>& corrupted_promotions,
                ledger::FetchPromotionCallback callback);
 
-  void OnGetAllPromotions(type::PromotionMap promotions,
-                          std::shared_ptr<std::vector<type::PromotionPtr>> list,
-                          ledger::FetchPromotionCallback callback);
+  void OnGetAllPromotions(
+      base::flat_map<std::string, type::PromotionPtr> promotions,
+      std::shared_ptr<std::vector<type::PromotionPtr>> list,
+      ledger::FetchPromotionCallback callback);
 
   void OnGetAllPromotionsFromDatabase(
-      type::PromotionMap promotions,
+      base::flat_map<std::string, type::PromotionPtr> promotions,
       ledger::FetchPromotionCallback callback);
 
   void LegacyClaimedSaved(
@@ -115,9 +117,10 @@ class Promotion {
       const std::string& promotion_id,
       ledger::ResultCallback callback);
 
-  void Retry(type::PromotionMap promotions);
+  void Retry(base::flat_map<std::string, type::PromotionPtr> promotions);
 
-  void CheckForCorrupted(const type::PromotionMap& promotions);
+  void CheckForCorrupted(
+      const base::flat_map<std::string, type::PromotionPtr>& promotions);
 
   void CorruptedPromotionFixed(const type::Result result);
 

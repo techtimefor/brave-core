@@ -43,7 +43,7 @@ const int kFetchPromotionsThresholdInSeconds =
 
 void HandleExpiredPromotions(
     LedgerImpl* ledger_impl,
-    type::PromotionMap* promotions) {
+    base::flat_map<std::string, type::PromotionPtr>* promotions) {
   DCHECK(promotions);
   if (!promotions) {
     return;
@@ -177,7 +177,7 @@ void Promotion::OnFetch(const type::Result result,
 }
 
 void Promotion::OnGetAllPromotions(
-    type::PromotionMap promotions,
+    base::flat_map<std::string, type::PromotionPtr> promotions,
     std::shared_ptr<std::vector<type::PromotionPtr>> list,
     ledger::FetchPromotionCallback callback) {
   HandleExpiredPromotions(ledger_, &promotions);
@@ -247,7 +247,7 @@ void Promotion::OnGetAllPromotions(
 }
 
 void Promotion::OnGetAllPromotionsFromDatabase(
-    type::PromotionMap promotions,
+    base::flat_map<std::string, type::PromotionPtr> promotions,
     ledger::FetchPromotionCallback callback) {
   HandleExpiredPromotions(ledger_, &promotions);
 
@@ -520,7 +520,8 @@ void Promotion::CredentialsProcessed(
       callback);
 }
 
-void Promotion::Retry(type::PromotionMap promotions) {
+void Promotion::Retry(
+    base::flat_map<std::string, type::PromotionPtr> promotions) {
   HandleExpiredPromotions(ledger_, &promotions);
 
   for (auto& promotion : promotions) {
@@ -584,7 +585,8 @@ void Promotion::Refresh(const bool retry_after_error) {
           base::Unretained(this)));
 }
 
-void Promotion::CheckForCorrupted(const type::PromotionMap& promotions) {
+void Promotion::CheckForCorrupted(
+    const base::flat_map<std::string, type::PromotionPtr>& promotions) {
   if (promotions.empty()) {
     BLOG(1, "Promotion is empty");
     return;
