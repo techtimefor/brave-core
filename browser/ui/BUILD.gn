@@ -43,8 +43,6 @@ source_set("ui") {
     "webui/brave_webui_source.h",
     "webui/webcompat_reporter_ui.cc",
     "webui/webcompat_reporter_ui.h",
-    "views/payments/bat_payment_request_dialog_view.cc",
-    "views/payments/bat_payment_request_dialog_view.h",
   ]
 
   if (ipfs_enabled) {
@@ -291,6 +289,7 @@ source_set("ui") {
       "//chrome/app:chromium_strings",
       "//components/sync_device_info",
       "//third_party/blink/public/common",
+      "//third_party/libaddressinput",
     ]
   }
 

@@ -126,7 +126,7 @@ void CheckoutDialogHandler::HandlePaymentCompletion(
     const base::ListValue* args) {
   payments::mojom::PaymentResponsePtr response =
       payments::mojom::PaymentResponse::New();
-  request_->Pay();
+  // request_->Pay();
 
   // Generate Response
   response->method_name = kBat;
