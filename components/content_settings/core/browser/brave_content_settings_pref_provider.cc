@@ -119,9 +119,16 @@ bool IsActive(const Rule& cookie_rule,
 
 // static
 void BravePrefProvider::CopyPluginSettingsForMigration(PrefService* prefs) {
+  if (!prefs->HasPrefPath("profile.content_settings.exceptions.plugins")) {
+    return;
+  }
+
   auto* plugins =
       prefs->GetDictionary("profile.content_settings.exceptions.plugins");
   prefs->Set("brave.migrate.content_settings.exceptions.plugins", *plugins);
+
+  // Upstream won't clean this up for ANDROID, need to do it ourselves.
+  prefs->ClearPref("profile.content_settings.exceptions.plugins");
 }
 
 BravePrefProvider::BravePrefProvider(PrefService* prefs,
@@ -163,6 +170,16 @@ void BravePrefProvider::RegisterProfilePrefs(
   // migration of obsolete plugin prefs
   registry->RegisterDictionaryPref(
       "brave.migrate.content_settings.exceptions.plugins");
+
+#if defined(OS_ANDROID)
+  // This path is no longer registered upstream but we still need it to migrate
+  // Shields settings away from ResourceIdentifier on Android.
+  if (!registry->defaults()->GetValue(
+          "profile.content_settings.exceptions.plugins", nullptr)) {
+    registry->RegisterDictionaryPref(
+        "profile.content_settings.exceptions.plugins");
+  }
+#endif
 }
 
 void BravePrefProvider::MigrateShieldsSettings(bool incognito) {
@@ -179,12 +196,11 @@ void BravePrefProvider::MigrateShieldsSettings(bool incognito) {
 
   // Now carry on with any other migration that we might need.
   MigrateShieldsSettingsV1ToV2();
-
-  // Finally clean this up now that Shields' settings have been migrated.
-  prefs_->ClearPref("brave.migrate.content_settings.exceptions.plugins");
 }
 
 void BravePrefProvider::MigrateShieldsSettingsFromResourceIds() {
+  BravePrefProvider::CopyPluginSettingsForMigration(prefs_);
+
   const base::DictionaryValue* plugins_dictionary = prefs_->GetDictionary(
       "brave.migrate.content_settings.exceptions.plugins");
   if (!plugins_dictionary)
@@ -210,15 +226,24 @@ void BravePrefProvider::MigrateShieldsSettingsFromResourceIds() {
       for (base::DictionaryValue::Iterator j(*resource_dictionary);
            !j.IsAtEnd(); j.Advance()) {
         const std::string& resource_identifier(j.key());
+        std::string shields_preference_name;
 
-        if (resource_identifier == brave_shields::kObsoleteFingerprinting) {
-          // Just drop, because these preferences were not effective anyway.
+        // For "ads" and "cookies" we need to adapt the name to the new one,
+        // otherwise it will refer to upstream's "ads" and "cookies" settings.
+        if (resource_identifier == brave_shields::kObsoleteAds)
+          shields_preference_name = brave_shields::kAds;
+        else if (resource_identifier == brave_shields::kObsoleteCookies)
+          shields_preference_name = brave_shields::kCookies;
+        else
+          shields_preference_name = resource_identifier;
+
+        // Protect against non registered paths (unlikely, but possible).
+        if (!IsShieldsContentSettingsTypeName(shields_preference_name))
           continue;
-        }
 
         // Drop a "global" value of brave shields, that actually shouldn't exist
         // at all since we don't have any global toggle for this.
-        if (resource_identifier == brave_shields::kBraveShields &&
+        if (shields_preference_name == brave_shields::kBraveShields &&
             patterns_string == "*,*") {
           continue;
         }
@@ -228,32 +253,29 @@ void BravePrefProvider::MigrateShieldsSettingsFromResourceIds() {
         DCHECK(is_integer);
         DCHECK_NE(CONTENT_SETTING_DEFAULT, setting);
 
-        // For "ads" and "cookies" we need to adapt the name to the new one,
-        // otherwise it will refer to upstream's "ads" and "cookies" settings.
-        std::string actual_name;
-        if (resource_identifier == brave_shields::kObsoleteAds)
-          actual_name = brave_shields::kAds;
-        else if (resource_identifier == brave_shields::kObsoleteCookies)
-          actual_name = brave_shields::kCookies;
-        else
-          actual_name = resource_identifier;
-
         MigrateShieldsSettingsFromResourceIdsForOneType(
-            GetShieldsSettingUserPrefsPath(actual_name), patterns_string,
-            expiration, last_modified, session_model, setting);
+            GetShieldsSettingUserPrefsPath(shields_preference_name),
+            patterns_string, expiration, last_modified, session_model, setting);
       }
     }
   }
+
+  // Finally clean this up now that Shields' settings have been migrated.
+  prefs_->ClearPref("brave.migrate.content_settings.exceptions.plugins");
 }
 
 void BravePrefProvider::MigrateShieldsSettingsFromResourceIdsForOneType(
-    const std::string& preference_name,
+    const std::string& preference_path,
     const std::string& patterns_string,
     const base::Time& expiration,
     const base::Time& last_modified,
     SessionModel session_model,
     int setting) {
-  prefs::ScopedDictionaryPrefUpdate update(prefs_, preference_name);
+  // Non-supported preference paths should have been filtered out already.
+  CHECK(prefs_->HasPrefPath(preference_path))
+      << "Attempted to migrate unsupported shields setting.";
+
+  prefs::ScopedDictionaryPrefUpdate update(prefs_, preference_path);
   std::unique_ptr<prefs::DictionaryValueUpdate> shield_settings = update.Get();
 
   std::unique_ptr<prefs::DictionaryValueUpdate> shield_settings_dictionary;

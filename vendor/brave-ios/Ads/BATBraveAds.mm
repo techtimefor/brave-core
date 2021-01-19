@@ -543,6 +543,14 @@ BATClassAdsBridge(BOOL, isDebug, setDebug, g_is_debug)
                            static_cast<ads::NewTabPageAdEventType>(eventType));
 }
 
+- (void)reportPromotedContentAdEvent:(NSString *)uuid creativeInstanceId:(NSString *)creativeInstanceId eventType:(BATPromotedContentAdEventType)eventType
+{
+  if (![self isAdsServiceRunning]) { return; }
+  ads->OnPromotedContentAdEvent(uuid.UTF8String,
+                                creativeInstanceId.UTF8String,
+                                static_cast<ads::PromotedContentAdEventType>(eventType));
+}
+
 - (void)reconcileAdRewards
 {
   if (![self isAdsServiceRunning]) { return; }
@@ -599,6 +607,11 @@ BATClassAdsBridge(BOOL, isDebug, setDebug, g_is_debug)
 - (bool)isForeground
 {
   return UIApplication.sharedApplication.applicationState == UIApplicationStateActive;
+}
+
+- (bool)canShowBackgroundNotifications
+{
+  return false;
 }
 
 - (bool)isNetworkConnectionAvailable

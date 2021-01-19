@@ -51,6 +51,8 @@ import org.chromium.chrome.browser.ntp_background_images.model.SponsoredTab;
 import org.chromium.chrome.browser.ntp_background_images.model.Wallpaper;
 import org.chromium.chrome.browser.ntp_background_images.util.SponsoredImageUtil;
 import org.chromium.chrome.browser.preferences.BravePref;
+import org.chromium.chrome.browser.preferences.BravePreferenceKeys;
+import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.settings.BackgroundImagesPreferences;
 import org.chromium.chrome.browser.tab.TabLaunchType;
@@ -101,7 +103,11 @@ public class NTPUtil {
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         CardView widgetLayout = (CardView) view.findViewById(R.id.ntp_widget_cardview_layout);
         LinearLayout.LayoutParams widgetLayoutParams = new LinearLayout.LayoutParams(
-                (isTablet ? (int) (dpWidth * 0.75) : dpToPx(context, 385)), dpToPx(context, 140));
+                (isTablet ? (int) (dpWidth * 0.75)
+                          : (ConfigurationUtils.isLandscape(context)
+                                          ? (int) (displayMetrics.widthPixels * 0.75)
+                                          : (int) (displayMetrics.widthPixels * 0.93))),
+                dpToPx(context, 140));
         widgetLayout.setLayoutParams(widgetLayoutParams);
 
         LinearLayout.LayoutParams mainLayoutLayoutParams =
@@ -131,6 +137,38 @@ public class NTPUtil {
             }
         }
         return SponsoredImageUtil.BR_INVALID_OPTION;
+    }
+
+    public static void showBREBottomBanner(View view) {
+        Context context = ContextUtils.getApplicationContext();
+        if (!PackageUtils.isFirstInstall(context)
+                && BraveAdsNativeHelper.nativeIsBraveAdsEnabled(Profile.getLastUsedRegularProfile())
+                && ContextUtils.getAppSharedPreferences().getBoolean(
+                        BackgroundImagesPreferences.PREF_SHOW_BRE_BANNER, true)) {
+            final ViewGroup breBottomBannerLayout = (ViewGroup) view.findViewById(R.id.bre_banner);
+            breBottomBannerLayout.setVisibility(View.VISIBLE);
+            BackgroundImagesPreferences.setOnPreferenceValue(
+                    BackgroundImagesPreferences.PREF_SHOW_BRE_BANNER, false);
+            ImageView bannerClose = breBottomBannerLayout.findViewById(R.id.bre_banner_close);
+            bannerClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    breBottomBannerLayout.setVisibility(View.GONE);
+                }
+            });
+
+            Button takeTourButton = breBottomBannerLayout.findViewById(R.id.btn_take_tour);
+            takeTourButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (BraveActivity.getBraveActivity() != null) {
+                        BraveRewardsHelper.setShowBraveRewardsOnboardingOnce(true);
+                        BraveActivity.getBraveActivity().openRewardsPanel();
+                    }
+                    breBottomBannerLayout.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     public static void showNonDisruptiveBanner(ChromeActivity chromeActivity, View view, int ntpType, SponsoredTab sponsoredTab, NewTabPageListener newTabPageListener) {
