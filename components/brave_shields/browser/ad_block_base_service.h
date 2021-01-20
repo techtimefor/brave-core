@@ -43,8 +43,11 @@ class AdBlockBaseService : public BaseBraveShieldsService {
   bool ShouldStartRequest(const GURL& url,
                           blink::mojom::ResourceType resource_type,
                           const std::string& tab_host,
+                          bool previously_matched_rule,
+                          bool previously_matched_exception,
+                          std::string* mock_data_url,
                           bool* did_match_exception,
-                          std::string* mock_data_url) override;
+                          bool* did_match_important) override;
   void AddResources(const std::string& resources);
   void EnableTag(const std::string& tag, bool enabled);
   bool TagExists(const std::string& tag);
