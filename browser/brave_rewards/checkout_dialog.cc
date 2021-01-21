@@ -124,17 +124,21 @@ void CheckoutDialogHandler::RegisterMessages() {
 
 void CheckoutDialogHandler::HandlePaymentCompletion(
     const base::ListValue* args) {
-  payments::mojom::PaymentResponsePtr response =
-      payments::mojom::PaymentResponse::New();
-  // request_->Pay();
+  /* payments::mojom::PaymentResponsePtr response =
+      payments::mojom::PaymentResponse::New(); */
+  request_->Pay();
 
   // Generate Response
+  /*
+
   response->method_name = kBat;
   response->stringified_details = "{}";
   payments::mojom::PayerDetailPtr payer = payments::mojom::PayerDetail::New();
   response->payer = std::move(payer);
 
   request_->OnPaymentResponseAvailable(std::move(response));
+
+  */
 }
 
 void ShowCheckoutDialog(WebContents* initiator, base::WeakPtr<PaymentRequest> request) {

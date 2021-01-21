@@ -11,7 +11,12 @@
 #define ShowDialog            \
   ShowDialog_ChromiumImpl();  \
   virtual void ShowDialog
+
+#define CloseDialog            \
+  CloseDialog_ChromiumImpl();  \
+  virtual void CloseDialog
 #include "../../../../../../../chrome/browser/ui/views/payments/payment_request_dialog_view.h"
+#undef CloseDialog
 #undef ShowDialog
 
 #endif  // BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_VIEWS_PAYMENTS_PAYMENT_REQUEST_DIALOG_VIEW_H
