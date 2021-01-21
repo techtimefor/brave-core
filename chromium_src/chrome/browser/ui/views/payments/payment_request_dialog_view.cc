@@ -14,6 +14,7 @@ void PaymentRequestDialogView::CloseDialog() {
       request_->spec()->stringified_method_data().count("bat") > 0) {
     return;
   }
+  PaymentRequestDialogView::CloseDialog_ChromiumImpl();
 }
 
 void PaymentRequestDialogView::ShowDialog() {

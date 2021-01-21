@@ -168,7 +168,6 @@ source_set("browser_process") {
     "//components/keyed_service/content",
     "//components/metrics",
     "//components/password_manager/core/common",
-    "//components/payments/content",
     "//components/permissions",
     "//components/policy/core/browser",
     "//components/prefs",
@@ -189,7 +188,6 @@ source_set("browser_process") {
     "//services/metrics/public/cpp:metrics_cpp",
     "//services/network/public/cpp",
     "//third_party/blink/public/mojom:mojom_platform_headers",
-    "//third_party/libaddressinput",
     "//third_party/widevine/cdm:buildflags",
     "//ui/base",
   ]
@@ -417,25 +415,6 @@ source_set("browser_process") {
 
     deps += [ "//google_update" ]
   }
-}
-
-source_set("sku") {
-    sources = [
-      "brave_rewards/checkout_dialog.cc",
-      "brave_rewards/checkout_dialog.h",
-    ]
-
-    deps = [
-      "importer",
-      "infobars",
-      "//chrome/browser/ui",
-      "//brave/app:brave_generated_resources_grit",
-    ]
-
-    public_deps = [
-      "//third_party/icu",
-      "//third_party/libaddressinput",
-    ]
 }
 
 buildflag_header("sparkle_buildflags") {

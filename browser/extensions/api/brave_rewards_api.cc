@@ -453,7 +453,7 @@ ExtensionFunction::ResponseAction BraveRewardsGetPublisherDataFunction::Run() {
 }
 
 BraveRewardsGetRewardsParametersFunction::
-~BraveRewardsGetRewardsParametersFunction() {}
+~BraveRewardsGetRewardsParametersFunction() = default;
 
 ExtensionFunction::ResponseAction
 BraveRewardsGetRewardsParametersFunction::Run() {
