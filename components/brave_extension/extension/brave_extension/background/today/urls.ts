@@ -21,12 +21,12 @@ function getHostname (): Promise<string> {
 
 export async function getFeedUrl () {
   const hostname = await getHostname()
-  return `https://${hostname}/brave-today/feed.json`
+  return `https://${hostname}/brave-today/feed.ja.json`
 }
 
 export async function getSourcesUrl () {
   const hostname = await getHostname()
-  return `https://${hostname}/sources.json`
+  return `https://${hostname}/sources.ja.json`
 }
 
 // Always get the hostname at startup, it's cheap
