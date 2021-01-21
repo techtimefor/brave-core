@@ -1,0 +1,22 @@
+diff --git a/components/payments/content/BUILD.gn b/components/payments/content/BUILD.gn
+index e00eea8136476c0f804367679d3be328c74cd735..3a8b672b7bd6ea604e9a83e5902f63ca6a342e33 100644
+--- a/components/payments/content/BUILD.gn
++++ b/components/payments/content/BUILD.gn
+@@ -2,6 +2,8 @@
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+ 
++import("//brave/components/payments/content/brave_payment_sources.gni")
++
+ static_library("content") {
+   sources = [
+     "android_app_communication.cc",
+@@ -46,7 +48,7 @@ static_library("content") {
+     "service_worker_payment_app_factory.cc",
+     "service_worker_payment_app_factory.h",
+   ]
+-
++  sources += brave_payment_sources
+   deps = [
+     ":content_common",
+     ":utils",
