@@ -24,6 +24,7 @@
 #include "bat/ledger/internal/publisher/publisher.h"
 #include "bat/ledger/internal/recovery/recovery.h"
 #include "bat/ledger/internal/report/report.h"
+#include "bat/ledger/internal/runtime.h"
 #include "bat/ledger/internal/sku/sku.h"
 #include "bat/ledger/internal/state/state.h"
 #include "bat/ledger/internal/uphold/uphold.h"
@@ -361,6 +362,7 @@ class LedgerImpl : public ledger::Ledger {
   void OnAllDone(const type::Result result, ledger::ResultCallback callback);
 
   ledger::LedgerClient* ledger_client_;
+  Runtime runtime_;
   std::unique_ptr<promotion::Promotion> promotion_;
   std::unique_ptr<publisher::Publisher> publisher_;
   std::unique_ptr<braveledger_media::Media> media_;
