@@ -8,6 +8,8 @@
 
 #include "base/containers/flat_map.h"
 #include "base/test/bind.h"
+#include "base/time/time.h"
+#include "base/time/time_override.h"
 #include "bat/ledger/internal/uphold/uphold_util.h"
 #include "brave/browser/brave_rewards/rewards_service_factory.h"
 #include "brave/common/brave_paths.h"
@@ -23,6 +25,7 @@
 #include "chrome/test/base/in_process_browser_test.h"
 #include "chrome/test/base/testing_profile.h"
 #include "chrome/test/base/ui_test_utils.h"
+#include "components/country_codes/country_codes.h"
 #include "components/network_session_configurator/common/network_switches.h"
 #include "content/public/test/browser_test.h"
 #include "net/dns/mock_host_resolver.h"
@@ -425,6 +428,82 @@ IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, DISABLED_UpholdLimitNoBAT) {
 
     auto found = current_url.spec().find("intention=login");
     ASSERT_TRUE(found != std::string::npos);
+  }
+}
+
+IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, BAPCutoff) {
+  rewards_browsertest_util::StartProcess(rewards_service_);
+  rewards_browsertest_util::CreateWallet(rewards_service_);
+  context_helper_->LoadURL(rewards_browsertest_util::GetRewardsUrl());
+
+  // Add to the user's balance
+  contribution_->AddBalance(promotion_->ClaimPromotionViaCode());
+
+  // Update the country code to JP
+  browser()->profile()->GetPrefs()->SetInteger(
+      country_codes::kCountryIDAtInstall, 19024);
+
+  {
+    // Verify that balance is still 30 on 2021-03-12
+    base::subtle::ScopedTimeClockOverrides time_override(
+        []() {
+          base::Time now_for_test;
+          DCHECK(base::Time::FromUTCExploded(
+              base::Time::Exploded{
+                  .year = 2021, .month = 3, .day_of_month = 12},
+              &now_for_test));
+          return now_for_test;
+        },
+        nullptr, nullptr);
+
+    context_helper_->ReloadCurrentSite();
+    rewards_browsertest_util::WaitForElementToContain(
+        contents(), "[data-test-id='balance']", "30.");
+  }
+
+  {
+    // Verify that balance is reported as 0 on 2021-03-13
+    base::subtle::ScopedTimeClockOverrides time_override(
+        []() {
+          base::Time now_for_test;
+          DCHECK(base::Time::FromUTCExploded(
+              base::Time::Exploded{
+                  .year = 2021, .month = 3, .day_of_month = 13},
+              &now_for_test));
+          return now_for_test;
+        },
+        nullptr, nullptr);
+
+    context_helper_->ReloadCurrentSite();
+    rewards_browsertest_util::WaitForElementToContain(
+        contents(), "[data-test-id='balance']", "0.");
+  }
+}
+
+IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, BAPCutoffOnlyAffectsJP) {
+  rewards_browsertest_util::StartProcess(rewards_service_);
+  rewards_browsertest_util::CreateWallet(rewards_service_);
+  context_helper_->LoadURL(rewards_browsertest_util::GetRewardsUrl());
+
+  // Add to the user's balance
+  contribution_->AddBalance(promotion_->ClaimPromotionViaCode());
+
+  {
+    // Verify that balance is still 30 on 2021-03-13
+    base::subtle::ScopedTimeClockOverrides time_override(
+        []() {
+          base::Time now_for_test;
+          DCHECK(base::Time::FromUTCExploded(
+              base::Time::Exploded{
+                  .year = 2021, .month = 3, .day_of_month = 13},
+              &now_for_test));
+          return now_for_test;
+        },
+        nullptr, nullptr);
+
+    context_helper_->ReloadCurrentSite();
+    rewards_browsertest_util::WaitForElementToContain(
+        contents(), "[data-test-id='balance']", "30.");
   }
 }
 
