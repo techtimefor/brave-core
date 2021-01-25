@@ -8,12 +8,16 @@
 #include <string>
 
 #include "base/logging.h"
+#include "base/strings/stringprintf.h"
 #include "brave/components/ipfs/ipfs_constants.h"
 #include "brave/components/ipfs/ipfs_gateway.h"
 
 namespace ipfs {
 
-bool TranslateIPFSURI(const GURL& url, GURL* new_url, const GURL& gateway_url) {
+bool TranslateIPFSURI(const GURL& url,
+                      GURL* new_url,
+                      const GURL& gateway_url,
+                      bool use_subdomain) {
   if (!url.SchemeIs(kIPFSScheme) && !url.SchemeIs(kIPNSScheme)) {
     return false;
   }
@@ -42,13 +46,24 @@ bool TranslateIPFSURI(const GURL& url, GURL* new_url, const GURL& gateway_url) {
       // new_url would be:
       // https://dweb.link/ipfs/[cid]//wiki/Vincent_van_Gogh.html
       if (new_url) {
-        std::string gateway_empty_path = gateway_url.spec();
-        if (gateway_empty_path.size() > 0 &&
-            gateway_empty_path[gateway_empty_path.size() - 1] == '/') {
-          gateway_empty_path.pop_back();
+        if (use_subdomain) {
+          GURL uri(gateway_url);
+          GURL::Replacements replacements;
+          std::string host = base::StringPrintf("%s.%s.%s", cid.c_str(),
+                                                ipfs_scheme ? "ipfs" : "ipns",
+                                                gateway_url.host().c_str());
+          replacements.SetHostStr(host);
+          replacements.SetPathStr(path);
+          *new_url = gateway_url.ReplaceComponents(replacements);
+        } else {
+          std::string gateway_empty_path = gateway_url.spec();
+          if (gateway_empty_path.size() > 0 &&
+              gateway_empty_path[gateway_empty_path.size() - 1] == '/') {
+            gateway_empty_path.pop_back();
+          }
+          *new_url = GURL(gateway_empty_path +
+                          (ipfs_scheme ? "/ipfs/" : "/ipns/") + cid + path);
         }
-        *new_url = GURL(gateway_empty_path +
-                        (ipfs_scheme ? "/ipfs/" : "/ipns/") + cid + path);
         VLOG(1) << "[IPFS] " << __func__ << " new URL: " << *new_url;
       }
 
