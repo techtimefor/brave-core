@@ -1,7 +1,11 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Copyright (c) 2020 The Brave Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
 #include <string>
 
 #include "bat/ads/internal/user_model/user_model.h"
@@ -11,14 +15,10 @@
 
 #include "base/files/file_path.h"
 
-#include <cstdlib>
-#include <fstream>
-#include <sstream>
-
 // npm run test -- brave_unit_tests --filter=BatAds*
 
 namespace ads {
-namespace ml_tools {  
+namespace ml_tools {
 
 namespace {
 
@@ -79,14 +79,14 @@ TEST_F(BatAdsUserModelTest, TopPredUnitTest) {
   ASSERT_TRUE(opt_value.has_value());
 
   const std::string model_json = opt_value.value();
-  EXPECT_TRUE(user_model.InitializePageClassifier(model_json));
+  ASSERT_TRUE(user_model.InitializePageClassifier(model_json));
 
   std::string test_page = "ethereum bitcoin bat zcash crypto tokens!";
   auto preds = user_model.ClassifyPage(test_page);
-  EXPECT_TRUE(preds.size());
-  EXPECT_TRUE(preds.size() < 100);
-  EXPECT_TRUE(preds.count("crypto-crypto"));
-  for (auto const& pred: preds) {
+  ASSERT_TRUE(preds.size());
+  ASSERT_LT(preds.size(), static_cast<size_t>(100));
+  ASSERT_TRUE(preds.count("crypto-crypto"));
+  for (auto const& pred : preds) {
     EXPECT_TRUE(pred.second <= preds["crypto-crypto"]);
   }
 }
@@ -99,7 +99,7 @@ TEST_F(BatAdsUserModelTest, TextCMCCrashTest) {
   ASSERT_TRUE(opt_value.has_value());
 
   const std::string model_json = opt_value.value();
-  EXPECT_TRUE(user_model.InitializePageClassifier(model_json));
+  ASSERT_TRUE(user_model.InitializePageClassifier(model_json));
 
   const base::Optional<std::string> opt_text_value =
       ReadFileFromTestPathToString(kTextCMCCrash);
@@ -107,10 +107,10 @@ TEST_F(BatAdsUserModelTest, TextCMCCrashTest) {
   const std::string bad_text = opt_text_value.value();
 
   auto preds = user_model.ClassifyPage(bad_text);
-  EXPECT_TRUE(preds.size() < 100);
-  EXPECT_TRUE(preds.size() > 2);
-  EXPECT_TRUE(preds.count("personal finance-personal finance"));
-  for (auto const& pred: preds) {
+  ASSERT_LT(preds.size(), static_cast<size_t>(100));
+  ASSERT_GT(preds.size(), static_cast<size_t>(2));
+  ASSERT_TRUE(preds.count("personal finance-personal finance"));
+  for (auto const& pred : preds) {
     EXPECT_TRUE(pred.second <= preds["personal finance-personal finance"]);
   }
 }

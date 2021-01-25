@@ -2,7 +2,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
- 
+
 #ifndef BAT_ADS_INTERNAL_ML_TOOLS_DATA_POINT_DATA_POINT_H_  // NOLINT
 #define BAT_ADS_INTERNAL_ML_TOOLS_DATA_POINT_DATA_POINT_H_  // NOLINT
 
@@ -17,7 +17,7 @@ namespace data_point {
 enum class DataType {
   TextData = 0,
   VectorData = 1,
-  SparseVector = 2 
+  SparseVector = 2
 };
 
 class DataPoint {
@@ -25,10 +25,10 @@ class DataPoint {
   DataPoint(
       const DataPoint& other_point);
 
-  DataPoint(
+  explicit DataPoint(
       const std::string& data);
 
-  DataPoint(
+  explicit DataPoint(
       const std::vector<double>& data);
 
   DataPoint(
@@ -37,9 +37,9 @@ class DataPoint {
 
   ~DataPoint();
 
-  friend double operator * (
-      const DataPoint a,
-      const DataPoint b);
+  friend double operator*(
+      const DataPoint& a,
+      const DataPoint& b);
 
   DataType GetType();
 

@@ -3,19 +3,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#include "bat/ads/internal/ml_tools/pipeline/pipeline.h"
 #include "base/json/json_reader.h"
 #include "base/values.h"
-#include "bat/ads/internal/ml_tools/pipeline/pipeline.h"
 
 namespace ads {
 namespace ml_tools {
 namespace pipeline {
 
 Pipeline::Pipeline() {
-    version_ = 0;
-    timestamp_ = "";
-    locale_ = "en";
-    transformations_ = {};
+  version_ = 0;
+  timestamp_ = "";
+  locale_ = "en";
+  transformations_ = {};
 }
 
 Pipeline::Pipeline(
@@ -25,8 +25,8 @@ Pipeline::Pipeline(
 }
 
 Pipeline::Pipeline(
-    std::vector<transformation::Transformation> transformations,
-    linear_svm::LinearSVM classifier) {
+    const std::vector<transformation::Transformation>& transformations,
+    const linear_svm::LinearSVM& classifier) {
   transformations_ = transformations;
   classifier_ = classifier;
 }
@@ -39,8 +39,8 @@ bool Pipeline::FromJson(
   if (!root) {
     return false;
   }
-  base::Value* version = root->FindKeyOfType(
-      "version", base::Value::Type::INTEGER);
+  base::Value* version =
+      root->FindKeyOfType("version", base::Value::Type::INTEGER);
   if (!version) {
     return false;
   }
@@ -50,14 +50,14 @@ bool Pipeline::FromJson(
     return false;
   }
   version_ = version_number;
-  
+
   base::Value* timestamp = root->FindKey("timestamp");
   if (!timestamp) {
     return false;
   }
   std::string parsed_timestamp;
   bool parsed_timestamp_success = timestamp->GetAsString(&parsed_timestamp);
-  if (!parsed_timestamp_success){
+  if (!parsed_timestamp_success) {
     return false;
   }
   timestamp_ = parsed_timestamp;
@@ -74,16 +74,16 @@ bool Pipeline::FromJson(
   locale_ = parsed_locale;
 
   base::Value* transformations = root->FindKey("transformations");
-  
+
   bool loaded_transformations = ParseTransformations(transformations);
-  if (!loaded_transformations){
+  if (!loaded_transformations) {
     return false;
   }
   base::Value* classifier = root->FindKey("classifier");
   if (!ParseClassifier(classifier)) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -124,7 +124,8 @@ bool Pipeline::ParseTransformations(
       if (!parsed_num_buckets) {
         return false;
       }
-      const base::Value* n_gram_sizes = transformation_params->FindKey("ngrams_range");
+      const base::Value* n_gram_sizes =
+          transformation_params->FindKey("ngrams_range");
       if (!n_gram_sizes->is_list()) {
         return false;
       }
@@ -147,13 +148,13 @@ bool Pipeline::ParseClassifier(
   std::vector<std::string> classes;
   base::Value* classifier_type = classifier->FindKey("classifier_type");
 
-  if (!classifier_type){
+  if (!classifier_type) {
     return false;
   }
 
   std::string parsed_classifier_type;
-  bool parsed_classifier_type_success = classifier_type->GetAsString(
-      &parsed_classifier_type);
+  bool parsed_classifier_type_success =
+      classifier_type->GetAsString(&parsed_classifier_type);
   if (!parsed_classifier_type_success) {
     return false;
   }
@@ -161,9 +162,9 @@ bool Pipeline::ParseClassifier(
   if (parsed_classifier_type.compare("LINEAR")) {
     return false;
   }
-  
+
   base::Value* specified_classes = classifier->FindKey("classes");
-  if (!specified_classes->is_list()){
+  if (!specified_classes->is_list()) {
     return false;
   }
 
@@ -178,15 +179,15 @@ bool Pipeline::ParseClassifier(
   }
 
   std::map<std::string, data_point::DataPoint> weights;
-  for (size_t i = 0; i < classes.size(); i++){
+  for (size_t i = 0; i < classes.size(); i++) {
     base::Value* this_class = class_weights->FindKey(classes[i]);
     if (!this_class->is_list()) {
       return false;
-    } 
+    }
     std::vector<double> tmp_weights = {};
-    for (size_t j = 0 ; j < this_class->GetList().size(); j++) {
+    for (size_t j = 0; j < this_class->GetList().size(); j++) {
       const base::Value& weight = this_class->GetList()[j];
-      tmp_weights.push_back(static_cast<double> (weight.GetDouble()));
+      tmp_weights.push_back(static_cast<double>(weight.GetDouble()));
     }
     auto dubs = data_point::DataPoint(tmp_weights);
     weights.insert({classes[i], dubs});
@@ -194,16 +195,16 @@ bool Pipeline::ParseClassifier(
 
   std::map<std::string, double> specified_biases = {};
   base::Value* biases = classifier->FindKey("biases");
-  if (!biases->is_list()){
+  if (!biases->is_list()) {
     return false;
   }
   if (biases->GetList().size() != classes.size()) {
     return false;
   }
-  for (size_t i = 0 ; i < biases->GetList().size();i++) {
+  for (size_t i = 0; i < biases->GetList().size(); i++) {
     const base::Value& this_bias = biases->GetList()[i];
     specified_biases.insert(
-        {classes.at(i), static_cast<double>(this_bias.GetDouble())}) ;
+        {classes.at(i), static_cast<double>(this_bias.GetDouble())});
   }
   classifier_ = linear_svm::LinearSVM(weights, specified_biases);
   return true;
@@ -256,7 +257,7 @@ std::map<std::string, double> Pipeline::GetTopPredictions(
   auto predictions = Apply(data);
   double expected_prob = 1.0 / static_cast<double>(predictions.size());
   std::map<std::string, double> rtn;
-  for (auto const &prediction: predictions) {
+  for (auto const& prediction : predictions) {
     if (prediction.second > expected_prob) {
       rtn[prediction.first] = prediction.second;
     }

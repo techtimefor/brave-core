@@ -6,13 +6,13 @@
 #include <algorithm>
 #include <codecvt>
 #include <cstring>
-#include <string>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <vector>
 
-#include "bat/ads/internal/ml_tools/transformation/crc.h"
 #include "bat/ads/internal/ml_tools/static_values.h"
+#include "bat/ads/internal/ml_tools/transformation/crc.h"
 #include "bat/ads/internal/ml_tools/transformation/hashing_extractor.h"
 
 namespace ads {
@@ -31,7 +31,7 @@ HashVectorizer::HashVectorizer() {
 
 HashVectorizer::HashVectorizer(
     int n_buckets,
-    std::vector<int> subgrams) {
+    const std::vector<int>& subgrams) {
   for (size_t i = 0; i < subgrams.size(); i++) {
     substring_sizes_.push_back(subgrams[i]);
   }
@@ -49,11 +49,9 @@ int HashVectorizer::GetBucketCount() {
 }
 
 int HashVectorizer::GetHash(
-    std::string& substring) {
+    const std::string& substring) {
   auto* u8str = substring.c_str();
-  auto rtn = CRC::Calculate(u8str,
-      strlen(u8str),
-      CRC::CRC_32()) % num_buckets_; 
+  auto rtn = CRC::Calculate(u8str, strlen(u8str), CRC::CRC_32()) % num_buckets_;
   return rtn;
 }
 

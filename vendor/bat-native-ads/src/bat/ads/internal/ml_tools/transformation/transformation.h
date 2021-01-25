@@ -2,11 +2,12 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
- 
+
 #ifndef BAT_ADS_INTERNAL_ML_TOOLS_TRANSFORMATION_TRANSFORMATION_H_  // NOLINT
 #define BAT_ADS_INTERNAL_ML_TOOLS_TRANSFORMATION_TRANSFORMATION_H_  // NOLINT
 
-#include <iostream> 
+#include <iostream>
+#include <string>
 #include <vector>
 
 #include "bat/ads/internal/ml_tools/data_point/data_point.h"
@@ -27,16 +28,16 @@ class Transformation {
  public:
   Transformation();
 
-  Transformation(
-      TransformationType t);
+  explicit Transformation(
+      const TransformationType& t);
 
-  Transformation(
-      std::string parameters);
+  explicit Transformation(
+      const std::string& parameters);
 
   ~Transformation();
 
   data_point::DataPoint Get(
-      data_point::DataPoint inp);
+      const data_point::DataPoint& inp);
 
   TransformationType GetType();
 
@@ -46,33 +47,33 @@ class Transformation {
 
  private:
   data_point::DataPoint GetLower(
-      data_point::DataPoint inp);
+      const data_point::DataPoint& inp);
 
   data_point::DataPoint GetNGrams(
-      data_point::DataPoint inp);
+      const data_point::DataPoint& inp);
 
   data_point::DataPoint GetNormalized(
-      data_point::DataPoint inp);
+      const data_point::DataPoint& inp);
 };
 
-class ToLower: public Transformation {
+class ToLower : public Transformation {
  public:
   ToLower();
 };
 
-class HashedNGrams: public Transformation {
+class HashedNGrams : public Transformation {
  public:
   HashedNGrams();
 
   HashedNGrams(
       int n_b,
-      std::vector<int> subgrams);
+      const std::vector<int>& subgrams);
 
-  HashedNGrams(
-      std::string parameters);
+  explicit HashedNGrams(
+      const std::string& parameters);
 };
 
-class Normalize: public Transformation {
+class Normalize : public Transformation {
  public:
   Normalize();
 };

@@ -5,8 +5,11 @@
 
 #include "bat/ads/internal/ml_tools/transformation/transformation.h"
 
+#include <algorithm>
 #include <cmath>
 #include <codecvt>
+#include <map>
+#include <string>
 
 namespace ads {
 namespace ml_tools {
@@ -15,7 +18,7 @@ namespace transformation {
 Transformation::Transformation() {}
 
 Transformation::Transformation(
-    TransformationType t) {
+    const TransformationType& t) {
   type = t;
 }
 
@@ -26,8 +29,8 @@ TransformationType Transformation::GetType() {
 }
 
 data_point::DataPoint Transformation::Get(
-    data_point::DataPoint inp) {
-  switch(type){
+    const data_point::DataPoint& inp) {
+  switch (type) {
     case TransformationType::TO_LOWER:
       return GetLower(inp);
     case TransformationType::HASHED_NGRAMS:
@@ -40,7 +43,7 @@ data_point::DataPoint Transformation::Get(
 }
 
 data_point::DataPoint Transformation::GetLower(
-    data_point::DataPoint datapoint) {
+    const data_point::DataPoint& datapoint) {
   std::string rtn_str;
   rtn_str.assign(datapoint.data_text);
   std::transform(rtn_str.begin(), rtn_str.end(), rtn_str.begin(), ::tolower);
@@ -48,28 +51,27 @@ data_point::DataPoint Transformation::GetLower(
 }
 
 data_point::DataPoint Transformation::GetNGrams(
-    data_point::DataPoint datapoint) {
+    const data_point::DataPoint& datapoint) {
   auto hashed_vector = hash_vectorizer.GetFrequencies(datapoint.data_text);
-  return data_point::DataPoint(
-      hashed_vector, hash_vectorizer.GetBucketCount());
+  return data_point::DataPoint(hashed_vector, hash_vectorizer.GetBucketCount());
 }
 
 data_point::DataPoint Transformation::GetNormalized(
-    data_point::DataPoint datapoint) {
+    const data_point::DataPoint& datapoint) {
   auto s = 0.0;
   std::map<unsigned, double> normalized_vector;
 
-  for (auto const& x : datapoint.data_sparse){
-    s += x.second * x.second ;
+  for (auto const& x : datapoint.data_sparse) {
+    s += x.second * x.second;
   }
 
   auto norm = sqrt(s);
-  for (auto const& x : datapoint.data_sparse){
+  for (auto const& x : datapoint.data_sparse) {
     normalized_vector[x.first] = x.second / norm;
   }
 
-  return data_point::DataPoint(
-      normalized_vector, hash_vectorizer.GetBucketCount());
+  return data_point::DataPoint(normalized_vector,
+      hash_vectorizer.GetBucketCount());
 }
 
 ToLower::ToLower() {
@@ -80,20 +82,20 @@ Normalize::Normalize() {
   type = TransformationType::NORMALIZE;
 }
 
-HashedNGrams::HashedNGrams() { 
+HashedNGrams::HashedNGrams() {
   type = TransformationType::HASHED_NGRAMS;
   hash_vectorizer = HashVectorizer();
 }
 
 HashedNGrams::HashedNGrams(
     int n_b,
-    std::vector<int> subgrams) {
+    const std::vector<int>& subgrams) {
   type = TransformationType::HASHED_NGRAMS;
   hash_vectorizer = HashVectorizer(n_b, subgrams);
 }
 
 HashedNGrams::HashedNGrams(
-    std::string config) {}
+    const std::string& config) {}
 
 }  // namespace transformation
 }  // namespace ml_tools

@@ -21,13 +21,13 @@ LinearSVM::LinearSVM() {}
 
 LinearSVM::LinearSVM(
     const std::map<std::string, data_point::DataPoint>& weights,
-    const std::map<std::string,double>& biases) {
+    const std::map<std::string, double>& biases) {
   weights_ = weights;
   biases_ = biases;
 }
 
 LinearSVM::LinearSVM(
-    LinearSVM &other) {
+    const LinearSVM &other) {
   weights_ = other.weights_;
   biases_ = other.biases_;
 }
@@ -35,9 +35,9 @@ LinearSVM::LinearSVM(
 LinearSVM::~LinearSVM() = default;
 
 std::map<std::string, double> LinearSVM::Predict(
-    data_point::DataPoint x) {
+    const data_point::DataPoint& x) {
   std::map<std::string, double> rtn;
-  for (auto kv: weights_) {
+  for (auto kv : weights_) {
     rtn[kv.first] = kv.second * x + biases_[kv.first];
   }
   return rtn;
@@ -63,7 +63,7 @@ std::map<std::string, double> LinearSVM::Softmax(
 }
 
 std::map<std::string, double> LinearSVM::TopPredictions(
-    data_point::DataPoint x,
+    const data_point::DataPoint& x,
     int top_count) {
   std::map<std::string, double> pred_map = Predict(x);
   std::map<std::string, double> pred_map_softmax = Softmax(pred_map);

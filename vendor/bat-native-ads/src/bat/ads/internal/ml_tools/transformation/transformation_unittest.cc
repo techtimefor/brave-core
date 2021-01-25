@@ -1,6 +1,7 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Copyright (c) 2020 The Brave Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <cmath>
 #include <string>
@@ -9,8 +10,8 @@
 #include "base/values.h"
 
 #include "bat/ads/internal/ml_tools/data_point/data_point.h"
-#include "bat/ads/internal/ml_tools/transformation/transformation.h"
 #include "bat/ads/internal/ml_tools/transformation/hashing_extractor.h"
+#include "bat/ads/internal/ml_tools/transformation/transformation.h"
 
 #include "bat/ads/internal/unittest_base.h"
 #include "bat/ads/internal/unittest_util.h"
@@ -33,7 +34,7 @@ TEST_F(BatAdsTransformationTest, ToLowerTest) {
   auto upper_datapoint = data_point::DataPoint(upper_case);
   transformation::ToLower to_lower;
   auto lower_datapoint = to_lower.Get(upper_datapoint);
-  EXPECT_TRUE(data_point::DataType::TextData == lower_datapoint.type);
+  ASSERT_TRUE(data_point::DataType::TextData == lower_datapoint.type);
   EXPECT_EQ(0, lower_case.compare(lower_datapoint.data_text));
 }
 
@@ -42,12 +43,12 @@ TEST_F(BatAdsTransformationTest, HashingTest) {
   auto text_datapoint = data_point::DataPoint(test_string);
   transformation::HashedNGrams hashed_ngrams;
   auto vector_data = hashed_ngrams.Get(text_datapoint);
-  EXPECT_EQ(data_point::DataType::SparseVector, vector_data.type);
+  ASSERT_EQ(data_point::DataType::SparseVector, vector_data.type);
   // 10000 is the default size
-  EXPECT_EQ(10000, vector_data.n_dims);
+  ASSERT_EQ(vector_data.n_dims, 10000);
   // Hashes for [t, i, n, y, ti, in, ny, tin, iny, tiny] -- 10 in total
   size_t expected_elements = 10;
-  EXPECT_EQ(expected_elements, vector_data.data_sparse.size());
+  EXPECT_EQ(vector_data.data_sparse.size(), expected_elements);
 }
 
 TEST_F(BatAdsTransformationTest, CustomHashingTest) {
@@ -55,10 +56,10 @@ TEST_F(BatAdsTransformationTest, CustomHashingTest) {
   auto text_datapoint = data_point::DataPoint(test_string);
   transformation::HashedNGrams hashed_ngrams(3, std::vector<int>{1, 2, 3});
   auto vector_data = hashed_ngrams.Get(text_datapoint);
-  EXPECT_EQ(data_point::DataType::SparseVector, vector_data.type);
-  EXPECT_EQ(3, vector_data.n_dims);
+  ASSERT_EQ(data_point::DataType::SparseVector, vector_data.type);
+  ASSERT_EQ(vector_data.n_dims, 3);
   size_t expected_elements = 3;
-  EXPECT_EQ(expected_elements, vector_data.data_sparse.size());
+  EXPECT_EQ(vector_data.data_sparse.size(), expected_elements);
 }
 
 TEST_F(BatAdsTransformationTest, NormalizationTest) {
@@ -70,10 +71,10 @@ TEST_F(BatAdsTransformationTest, NormalizationTest) {
   auto vector_data = hashed_ngrams.Get(text_datapoint);
   transformation::Normalize normalize;
   auto normalized_datapoint = normalize.Get(vector_data);
-  auto s = 0.0; 
+  auto s = 0.0;
   for (auto const& x : normalized_datapoint.data_sparse) {
-    EXPECT_TRUE(x.second >= 0.0);
-    EXPECT_TRUE(x.second <= 1.0);
+    ASSERT_TRUE(x.second >= 0.0);
+    ASSERT_TRUE(x.second <= 1.0);
     s += x.second * x.second;
   }
 
@@ -95,11 +96,11 @@ TEST_F(BatAdsTransformationTest, ChainingTest) {
     last_point = transform.Get(last_point);
   }
 
-  EXPECT_EQ(data_point::DataType::SparseVector, last_point.type);
-  EXPECT_EQ(10000, last_point.n_dims);
+  ASSERT_EQ(data_point::DataType::SparseVector, last_point.type);
+  ASSERT_EQ(last_point.n_dims, 10000);
   // Hashes for [t, i, n, y, ti, in, ny, tin, iny, tiny] -- 10 in total
   size_t expected_elements = 10;
-  EXPECT_EQ(expected_elements, last_point.data_sparse.size());
+  EXPECT_EQ(last_point.data_sparse.size(), expected_elements);
 }
 
 }  // namespace ml_tools

@@ -20,22 +20,22 @@ class LinearSVM {
   LinearSVM();
 
   LinearSVM(
-      LinearSVM& other);
+      const LinearSVM& other);
 
-  LinearSVM(
+  explicit LinearSVM(
       const std::string& model);
 
   LinearSVM(
       const std::map<std::string, data_point::DataPoint>& weights,
-      const std::map<std::string, double> &biases);
+      const std::map<std::string, double>& biases);
 
   ~LinearSVM();
 
   std::map<std::string, double> Predict(
-      data_point::DataPoint x);
+      const data_point::DataPoint& x);
 
   std::map<std::string, double> TopPredictions(
-      data_point::DataPoint x,
+      const data_point::DataPoint& x,
       int top_count = -1);
 
   std::map<std::string, double> Softmax(

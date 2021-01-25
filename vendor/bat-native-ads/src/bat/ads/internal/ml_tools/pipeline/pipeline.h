@@ -7,15 +7,15 @@
 #define BAT_ADS_INTERNAL_ML_TOOLS_PIPELINE_PIPELINE_H_  // NOLINT
 
 #include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 #include "base/values.h"
 
 #include "bat/ads/internal/ml_tools/data_point/data_point.h"
-#include "bat/ads/internal/ml_tools/transformation/transformation.h"
 #include "bat/ads/internal/ml_tools/linear_svm/linear_svm.h"
+#include "bat/ads/internal/ml_tools/transformation/transformation.h"
 
 namespace ads {
 namespace ml_tools {
@@ -29,8 +29,8 @@ class Pipeline {
       const Pipeline& pipeline);
 
   Pipeline(
-      std::vector<transformation::Transformation> transformations,
-      linear_svm::LinearSVM classifier);
+      const std::vector<transformation::Transformation>& transformations,
+      const linear_svm::LinearSVM& classifier);
 
   ~Pipeline();
 

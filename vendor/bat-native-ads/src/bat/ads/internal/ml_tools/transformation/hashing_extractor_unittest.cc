@@ -3,11 +3,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include <fstream>
-#include <codecvt>
-#include <cmath>
-#include <utility>
 #include <stddef.h>
+#include <cmath>
+#include <codecvt>
+#include <fstream>
+#include <utility>
 
 #include "bat/ads/internal/ml_tools/transformation/hashing_extractor.h"
 
@@ -36,7 +36,8 @@ class BatAdsHashingExtractorTest : public UnitTestBase {
   ~BatAdsHashingExtractorTest() override = default;
 };
 
-void run_hashing_extractor_test_case(std::string test_case_name) {
+void run_hashing_extractor_test_case(
+    const std::string& test_case_name) {
   const double kEps = 1e-7;
 
   const base::Optional<std::string> opt_value =
@@ -48,16 +49,15 @@ void run_hashing_extractor_test_case(std::string test_case_name) {
   base::Optional<base::Value> root = base::JSONReader::Read(hash_check_json);
   ASSERT_TRUE(root);
 
-  base::Value* case_params = root->FindKeyOfType(
-      test_case_name,
-      base::Value::Type::DICTIONARY);
+  base::Value* case_params =
+      root->FindKeyOfType(test_case_name, base::Value::Type::DICTIONARY);
   ASSERT_TRUE(case_params);
 
   base::Value* input = case_params->FindKey("input");
   ASSERT_TRUE(input);
 
   std::string input_value;
-  EXPECT_TRUE(input->GetAsString(&input_value));
+  ASSERT_TRUE(input->GetAsString(&input_value));
 
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
@@ -69,11 +69,11 @@ void run_hashing_extractor_test_case(std::string test_case_name) {
 
   transformation::HashVectorizer vectorizer;
   auto frequencies = vectorizer.GetFrequencies(input_value);
-  EXPECT_EQ(idx->GetList().size(), frequencies.size());
+  ASSERT_EQ(idx->GetList().size(), frequencies.size());
   for (size_t i = 0; i < frequencies.size(); ++i) {
-      const base::Value& idx_val = idx->GetList()[i];
-      const base::Value& count_val = count->GetList()[i];
-      EXPECT_TRUE(count_val.GetInt() - frequencies[idx_val.GetInt()] < kEps);
+    const base::Value& idx_val = idx->GetList()[i];
+    const base::Value& count_val = count->GetList()[i];
+    EXPECT_TRUE(count_val.GetInt() - frequencies[idx_val.GetInt()] < kEps);
   }
 }
 
@@ -95,31 +95,32 @@ TEST_F(BatAdsHashingExtractorTest, ValidJsonScheme) {
   ASSERT_TRUE(root);
   ASSERT_TRUE(root->is_dict());
 
-  base::Value* dict = root->FindKeyOfType("test", base::Value::Type::DICTIONARY);
+  base::Value* dict =
+      root->FindKeyOfType("test", base::Value::Type::DICTIONARY);
   ASSERT_TRUE(dict);
 
   base::Value* list = root->FindKeyOfType("list", base::Value::Type::LIST);
-  ASSERT_TRUE(list);
+  EXPECT_TRUE(list);
 }
 
 TEST_F(BatAdsHashingExtractorTest, EmptyText) {
-    run_hashing_extractor_test_case("empty");
+  run_hashing_extractor_test_case("empty");
 }
 
 TEST_F(BatAdsHashingExtractorTest, ShortText) {
-    run_hashing_extractor_test_case("tiny");
+  run_hashing_extractor_test_case("tiny");
 }
 
 TEST_F(BatAdsHashingExtractorTest, EnglishText) {
-    run_hashing_extractor_test_case("english");
+  run_hashing_extractor_test_case("english");
 }
 
 TEST_F(BatAdsHashingExtractorTest, GreekText) {
-    run_hashing_extractor_test_case("greek");
+  run_hashing_extractor_test_case("greek");
 }
 
 TEST_F(BatAdsHashingExtractorTest, JapaneseText) {
-    run_hashing_extractor_test_case("japanese");
+  run_hashing_extractor_test_case("japanese");
 }
 
 }  // namespace ml_tools

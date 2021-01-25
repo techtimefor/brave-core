@@ -15,8 +15,7 @@ UserModel* UserModel::CreateInstance() {
   return new UserModel();
 }
 
-UserModel::UserModel()
-    : is_initialized_(false) {}
+UserModel::UserModel() : is_initialized_(false) {}
 
 bool UserModel::InitializePageClassifier(
     const std::string& model) {
@@ -39,8 +38,8 @@ const std::map<std::string, double> UserModel::ClassifyPage(
     return {};
   }
 
-  const std::map<std::string, double> top_predictions
-      = page_classifier_pipeline_.GetTopPredictions(content);
+  const std::map<std::string, double> top_predictions =
+      page_classifier_pipeline_.GetTopPredictions(content);
 
   return top_predictions;
 }

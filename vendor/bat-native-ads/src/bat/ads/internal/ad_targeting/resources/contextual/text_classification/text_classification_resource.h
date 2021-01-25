@@ -9,8 +9,8 @@
 #include <memory>
 #include <string>
 
-#include "bat/ads/internal/user_model/user_model.h"
 #include "bat/ads/internal/ad_targeting/resources/resource.h"
+#include "bat/ads/internal/user_model/user_model.h"
 
 namespace ads {
 

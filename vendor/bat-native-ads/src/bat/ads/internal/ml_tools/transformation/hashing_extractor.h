@@ -2,12 +2,12 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
- 
+
 #ifndef BAT_ADS_INTERNAL_ML_TOOLS_TRANSFORMATION_HASHING_EXTRACTOR_H_  // NOLINT
 #define BAT_ADS_INTERNAL_ML_TOOLS_TRANSFORMATION_HASHING_EXTRACTOR_H_  // NOLINT
 
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
 
 #include "bat/ads/internal/ml_tools/data_point/data_point.h"
@@ -25,7 +25,7 @@ class HashVectorizer {
 
   HashVectorizer(
       int n_buckets,
-      std::vector<int> subgrams);
+      const std::vector<int>& subgrams);
 
   ~HashVectorizer();
 
@@ -36,10 +36,11 @@ class HashVectorizer {
 
  private:
   int GetHash(
-      std::string& substring);
+      const std::string& substring);
 
-  std::vector<unsigned> substring_sizes_; // not ints for type comparison issues
-  int num_buckets_; // number of buckets to use for hashing
+  std::vector<unsigned>
+      substring_sizes_;  // not ints for type comparison issues
+  int num_buckets_;      // number of buckets to use for hashing
 };
 
 }  // namespace transformation
