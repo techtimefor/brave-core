@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "bat/ads/internal/ml_tools/static_values.h"
+#include "bat/ads/internal/ml_tools/ml_tools_static_values.h"
 #include "bat/ads/internal/ml_tools/transformation/crc.h"
 #include "bat/ads/internal/ml_tools/transformation/hashing_extractor.h"
 

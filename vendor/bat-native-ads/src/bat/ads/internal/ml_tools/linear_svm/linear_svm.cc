@@ -43,30 +43,11 @@ std::map<std::string, double> LinearSVM::Predict(
   return rtn;
 }
 
-std::map<std::string, double> LinearSVM::Softmax(
-    const std::map<std::string, double>& y) {
-  double maximum = -std::numeric_limits<double>::infinity();
-  for (auto const& x : y) {
-    maximum = std::max(maximum, x.second);
-  }
-  std::map<std::string, double> rtn;
-  double sum_exp = 0.0;
-  for (auto const& x : y) {
-    double val = std::exp(x.second - maximum);
-    rtn[x.first] = val;
-    sum_exp += val;
-  }
-  for (auto const& x : rtn) {
-    rtn[x.first] /= sum_exp;
-  }
-  return rtn;
-}
-
 std::map<std::string, double> LinearSVM::TopPredictions(
     const data_point::DataPoint& x,
     int top_count) {
   std::map<std::string, double> pred_map = Predict(x);
-  std::map<std::string, double> pred_map_softmax = Softmax(pred_map);
+  std::map<std::string, double> pred_map_softmax = softmax(pred_map);
   std::vector<std::pair<double, std::string>> pred_order;
   pred_order.reserve(pred_map_softmax.size());
   for (auto pred_it = pred_map_softmax.begin();

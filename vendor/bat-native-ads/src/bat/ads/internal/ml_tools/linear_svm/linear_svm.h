@@ -10,6 +10,7 @@
 #include <string>
 
 #include "bat/ads/internal/ml_tools/data_point/data_point.h"
+#include "bat/ads/internal/ml_tools/ml_tools_util.h"
 
 namespace ads {
 namespace ml_tools {
@@ -37,9 +38,6 @@ class LinearSVM {
   std::map<std::string, double> TopPredictions(
       const data_point::DataPoint& x,
       int top_count = -1);
-
-  std::map<std::string, double> Softmax(
-      const std::map<std::string, double>& y);
 
  private:
   std::map<std::string, data_point::DataPoint> weights_;

@@ -142,50 +142,5 @@ TEST_F(BatAdsLinearSVMTest, TopPredictionsTest) {
   EXPECT_EQ(res_3.size(), static_cast<size_t>(1));
 }
 
-TEST_F(BatAdsLinearSVMTest, SoftmaxTest) {
-  const double kEps = 1e-8;
-
-  std::map<std::string, double> group_1 = {
-      {"c1", -1.0}, {"c2", 2.0}, {"c3", 3.0}};
-
-  linear_svm::LinearSVM dummy_svm;
-  auto sm = dummy_svm.Softmax(group_1);
-
-  ASSERT_TRUE(sm["c3"] > sm["c1"]);
-  ASSERT_TRUE(sm["c3"] > sm["c2"]);
-  ASSERT_TRUE(sm["c2"] > sm["c1"]);
-  ASSERT_TRUE(sm["c1"] > 0.0);
-  ASSERT_TRUE(sm["c3"] < 1.0);
-
-  double sum = 0.0;
-  for (auto const& x : sm) {
-    sum += x.second;
-  }
-
-  EXPECT_TRUE(sum - 1.0 < kEps);
-}
-
-TEST_F(BatAdsLinearSVMTest, ExtendedSoftmaxTest) {
-  const double kEps = 1e-8;
-
-  std::map<std::string, double> group_1 = {
-      {"c1", 0.0}, {"c2", 1.0}, {"c3", 2.0}};
-
-  std::map<std::string, double> group_2 = {
-      {"c1", 3.0}, {"c2", 4.0}, {"c3", 5.0}};
-
-  linear_svm::LinearSVM dummy_svm;
-
-  auto sm_1 = dummy_svm.Softmax(group_1);
-  auto sm_2 = dummy_svm.Softmax(group_2);
-  ASSERT_TRUE(std::fabs(sm_1["c1"] - sm_2["c1"]) < kEps);
-  ASSERT_TRUE(std::fabs(sm_1["c2"] - sm_2["c2"]) < kEps);
-  ASSERT_TRUE(std::fabs(sm_1["c3"] - sm_2["c3"]) < kEps);
-
-  EXPECT_TRUE(std::fabs(sm_1["c1"] - 0.09003057) < kEps
-      && std::fabs(sm_1["c2"] - 0.24472847) < kEps
-      && std::fabs(sm_1["c3"] - 0.66524095) < kEps);
-}
-
 }  // namespace ml_tools
 }  // namespace ads
