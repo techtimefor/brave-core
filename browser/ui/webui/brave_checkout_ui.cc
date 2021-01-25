@@ -39,6 +39,7 @@ class CheckoutMessageHandler : public content::WebUIMessageHandler {
   // Message handlers
   void OnGetWalletBalance(const base::ListValue* args);
   void GetExternalWallet(const base::ListValue* args);
+  void GetRewardsParameters(const base::ListValue* args);
 
   // Rewards service callbacks
   void FetchBalanceCallback(const ledger::type::Result result,
@@ -47,6 +48,8 @@ class CheckoutMessageHandler : public content::WebUIMessageHandler {
   void GetUpholdWalletCallback(
       const ledger::type::Result result,
       ledger::type::UpholdWalletPtr wallet);
+  void GetRewardsParametersCallback(
+      ledger::type::RewardsParametersPtr parameters);
 
   RewardsService* rewards_service_ = nullptr;  // NOT OWNED
   base::WeakPtrFactory<CheckoutMessageHandler> weak_factory_;
@@ -79,6 +82,35 @@ void CheckoutMessageHandler::RegisterMessages() {
       "getExternalWallet",
       base::BindRepeating(&CheckoutMessageHandler::GetExternalWallet,
                           base::Unretained(this)));
+
+  web_ui()->RegisterMessageCallback(
+      "getRewardsParameters",
+      base::BindRepeating(&CheckoutMessageHandler::GetRewardsParameters,
+                          base::Unretained(this)));
+}
+
+void CheckoutMessageHandler::GetRewardsParameters(const base::ListValue* args) {
+  if (auto* service = GetRewardsService()) {
+    AllowJavascript();
+    service->GetRewardsParameters(base::Bind(
+        &CheckoutMessageHandler::GetRewardsParametersCallback,
+        weak_factory_.GetWeakPtr()));
+  }
+}
+
+void CheckoutMessageHandler::GetRewardsParametersCallback(
+    ledger::type::RewardsParametersPtr parameters) {
+  if (!IsJavascriptAllowed()) {
+    return;
+  }
+
+  base::Value data(base::Value::Type::DICTIONARY);
+  if (parameters) {
+    data.SetDoubleKey("rate", parameters->rate);
+    data.SetDoubleKey("lastUpdated", 
+                      base::Time::Now().ToJsTimeIgnoringNull());
+  }
+  FireWebUIListener("rewardsParametersUpdated", data);
 }
 
 void CheckoutMessageHandler::OnGetWalletBalance(const base::ListValue* args) {
@@ -122,7 +154,7 @@ void CheckoutMessageHandler::FetchBalanceCallback(
     data.SetKey("balance", std::move(balance_value));
   }
 
-  FireWebUIListener("balanceUpdated", data);
+  FireWebUIListener("walletBalanceUpdated", data);
 }
 
 void CheckoutMessageHandler::GetUpholdWalletCallback(

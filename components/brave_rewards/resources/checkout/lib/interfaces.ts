@@ -8,7 +8,7 @@ export interface WalletInfo {
 }
 
 export interface ExchangeRateInfo {
-  rates: Record<string, number>
+  rate: number
   lastUpdated: string
 }
 
@@ -17,16 +17,31 @@ export interface OrderInfo {
   total: number
 }
 
-export interface CheckoutHostListener {
+export interface BalanceInfo {
+  total: number
+  wallets: Record<string, number>
+}
+
+export interface HostError {
+  type: string
+  code?: number
+}
+
+export interface HostState {
+  balanceInfo?: BalanceInfo
+  hostError?: HostError
+}
+
+export interface HostListener {
   onWalletUpdated: (wallet: WalletInfo) => void
-  onExchangeRatesUpdated: (exchangeInfo: ExchangeRateInfo) => void
+  onRatesUpdated: (exchangeInfo: ExchangeRateInfo) => void
   onOrderUpdated: (order: OrderInfo) => void
 }
 
-export interface CheckoutHost {
+export interface Host {
   getLocaleString: (key: string) => string
   closeDialog: () => void
   payWithCreditCard: () => void
   payWithWallet: () => void
-  setListener: (listener: CheckoutHostListener) => void
+  setListener: (listener: HostListener) => void
 }

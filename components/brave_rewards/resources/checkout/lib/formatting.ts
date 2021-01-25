@@ -12,7 +12,7 @@ function createCurrencyFormatter (currency: string) {
 }
 
 export function getExchangeRate (
-  exchangeRates: Record<string, number>,
+  exchangeRates: number,
   currency: string
 ) {
   const rate = +(exchangeRates[currency || ''])
@@ -20,11 +20,15 @@ export function getExchangeRate (
 }
 
 export function createExchangeFormatter (
-  exchangeRates: Record<string, number>,
+  exchangeRate: number,
   currency: string
 ) {
   const formatter = createCurrencyFormatter(currency)
-  const rate = getExchangeRate(exchangeRates, currency)
+  const rate = exchangeRate
+ 
+  console.log("Exchange Rate")
+  console.log(exchangeRate)
+
   return (value: number) => formatter.format(value * rate)
 }
 

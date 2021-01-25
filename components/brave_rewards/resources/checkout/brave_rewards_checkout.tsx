@@ -10,7 +10,7 @@ import Theme from 'brave-ui/theme/brave-default'
 import { initLocale } from 'brave-ui/helpers'
 
 import { App } from './components/app'
-import { createHost } from './host'
+import { createHost } from './lib/host'
 import { LocaleContext } from '../ui/components/checkout/localeContext'
 
 import 'emptykit.css'

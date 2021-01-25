@@ -4,7 +4,7 @@
 
 import * as React from 'react'
 
-import { WalletInfo, OrderInfo, ExchangeRateInfo, CheckoutHost } from '../interfaces'
+import { WalletInfo, OrderInfo, ExchangeRateInfo, Host } from '../lib/interfaces'
 import { DialogFrame } from '../../ui/components/checkout/dialogFrame'
 import { PaymentMethodPanel } from '../../ui/components/checkout/paymentMethodPanel'
 import { AddFundsPanel } from '../../ui/components/checkout/addFundsPanel'
@@ -15,7 +15,7 @@ import {
   createExchangeFormatter,
   formatLastUpdatedDate,
   formatTokenValue
-} from '../formatting'
+} from '../lib/formatting'
 
 type FlowState =
   'start' |
@@ -24,14 +24,14 @@ type FlowState =
   'payment-complete'
 
 interface AppProps {
-  host: CheckoutHost
+  host: Host
   exchangeCurrency: string
 }
 
 export function App (props: AppProps) {
   const [flowState, setFlowState] = React.useState<FlowState>('start')
-  const [rateInfos, setRateInfo] = React.useState<ExchangeRateInfo | null>(null)
-  const [walletInfos, setWalletInfo] = React.useState<WalletInfo | null>(null)
+  const [rateInfo, setRateInfo] = React.useState<ExchangeRateInfo | null>(null)
+  const [walletInfo, setWalletInfo] = React.useState<WalletInfo | null>(null)
   const [orderInfo, setOrderInfo] = React.useState<OrderInfo | null>(null)
 
   const showTitle =
@@ -44,28 +44,12 @@ export function App (props: AppProps) {
   React.useEffect(() => {
     props.host.setListener({
       onWalletUpdated: setWalletInfo,
-      onExchangeRatesUpdated: setRateInfo,
+      onRatesUpdated: setRateInfo,
       onOrderUpdated: setOrderInfo
     })
   }, [props.host])
 
   const onClose = () => { props.host.closeDialog() }
-  
-   const rateInfo = {
-    rates: {"USD": 0.21},
-    lastUpdated: "2021-10-05T14:48:00.000Z" 
-  }
-
-  const walletInfo = {
-    balance: 300,
-    verified: true 
-  }
-
-  console.log(rateInfos);
-  console.log(walletInfos);
-  console.log(rateInfo);
-  console.log(walletInfo);
-  console.log(orderInfo);
 
   if (!rateInfo || !walletInfo || !orderInfo) {
     // TODO(zenparsing): Create a loading screen
@@ -84,7 +68,7 @@ export function App (props: AppProps) {
   const onCancelAddFunds = () => setFlowState('start')
 
   const formatExchange = createExchangeFormatter(
-    rateInfo.rates,
+    rateInfo.rate,
     props.exchangeCurrency)
 
   const amountNeeded = Math.max(0, orderInfo.total - walletInfo.balance)
