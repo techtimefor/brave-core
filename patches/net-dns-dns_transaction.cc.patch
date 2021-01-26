@@ -1,0 +1,12 @@
+diff --git a/net/dns/dns_transaction.cc b/net/dns/dns_transaction.cc
+index 3a7dfbb08f52790b48284c63aacae0b06aa2923a..18788ecab35daf97b6938ef5c96f8f76fc409de9 100644
+--- a/net/dns/dns_transaction.cc
++++ b/net/dns/dns_transaction.cc
+@@ -1290,6 +1290,7 @@ class DnsTransactionImpl : public DnsTransaction,
+     DCHECK(secure_);
+ 
+     size_t doh_server_index = dns_server_iterator_->GetNextAttemptIndex();
++    BRAVE_MAKE_HTTP_ATTEMPT
+ 
+     unsigned attempt_number = attempts_.size();
+     ConstructDnsHTTPAttempt(

@@ -25,6 +25,17 @@ Polymer({
     disableTorOption_: Boolean,
     ipfsEnabled_: Boolean,
     showChangeIPFSGatewayDialog_: Boolean,
+    udResolveMethod_: {
+      readOnly: true,
+      type: Array,
+      value() {
+        return [
+          {value:0, name: "Ask"},
+          {value:1, name: "Disabled"},
+          {value:2, name: "Public DNS over HTTPS server"},
+        ];
+      },
+    },
   },
 
   /** @private {?settings.BraveDefaultExtensionsBrowserProxy} */

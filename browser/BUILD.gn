@@ -15,6 +15,7 @@ import("//brave/components/greaselion/browser/buildflags/buildflags.gni")
 import("//brave/components/ipfs/buildflags/buildflags.gni")
 import("//brave/components/speedreader/buildflags.gni")
 import("//brave/components/tor/buildflags/buildflags.gni")
+import("//brave/components/unstoppable_domains/buildflags/buildflags.gni")
 import("//build/buildflag_header.gni")
 import("//build/config/features.gni")
 import("//chrome/common/features.gni")
@@ -151,6 +152,7 @@ source_set("browser_process") {
     "//brave/components/resources",
     "//brave/components/speedreader:buildflags",
     "//brave/components/tor/buildflags",
+    "//brave/components/unstoppable_domains/buildflags",
     "//brave/components/weekly_storage",
     "//brave/services/network/public/cpp",
     "//brave/ui/brave_ads",
@@ -280,6 +282,17 @@ source_set("browser_process") {
       "//brave/components/crypto_dot_com/common",
       "//components/keyed_service/content",
     ]
+  }
+
+  if (unstoppable_domains_enabled) {
+    sources += [
+      "unstoppable_domains/unstoppable_domains_service_delegate_impl.cc",
+      "unstoppable_domains/unstoppable_domains_service_delegate_impl.h",
+      "unstoppable_domains/unstoppable_domains_service_factory.cc",
+      "unstoppable_domains/unstoppable_domains_service_factory.h",
+    ]
+
+    deps += [ "//brave/components/unstoppable_domains" ]
   }
 
   if (ipfs_enabled) {

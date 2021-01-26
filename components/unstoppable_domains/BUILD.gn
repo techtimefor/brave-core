@@ -1,0 +1,15 @@
+source_set("unstoppable_domains") {
+  sources = [
+    "constants.h",
+    "pref_names.cc",
+    "pref_names.h",
+    "unstoppable_domains_service.cc",
+    "unstoppable_domains_service.h",
+    "unstoppable_domains_service_delegate.h",
+  ]
+
+  deps = [
+    "//components/keyed_service/core",
+    "//components/prefs",
+  ]
+}
