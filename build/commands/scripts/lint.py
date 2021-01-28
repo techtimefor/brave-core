@@ -19,25 +19,20 @@ import traceback
 import git_cl
 import git_common
 
-def HasFormatErrors():
+def FormatCheck():
   # For more options, see vendor/depot_tools/git_cl.py
   cmd = ['cl', 'format', '--diff']
-  diff = git_cl.RunGit(cmd)
-  print(diff)
-  return bool(diff)
+  try:
+    return git_cl.RunGit(cmd)
+  except:
+    return 'Format check failed. Run npm format to fix.'
 
 def RunFormatCheck(upstream_branch):
   # XXX: upstream_branch is hard-coded in git_cl and is not changed
   # by the --base_branch arg
   upstream_commit = git_cl.RunGit(['merge-base', 'HEAD', upstream_branch])
   print('Running git cl/gn format on the diff from %s...' % upstream_commit)
-  try:
-    if HasFormatErrors():
-      return 'Format check failed. Run npm format to fix.'
-  except:
-    e = traceback.format_exc()
-    return 'Error running format check:\n' + e
-
+  return FormatCheck()
 
 def main(args):
   """Runs cpplint on the current changelist."""
@@ -105,8 +100,12 @@ def main(args):
     os.chdir(previous_cwd)
 
   if format_output:
-      print(format_output)
-      return 1
+      try:
+        print(format_output)
+      except:
+        e = traceback.format_exc()
+        print('Error printing cl-format diff:\n' + e)
+
   if cpplint._cpplint_state.error_count != 0:
     print('cpplint errors found: %d\n' % cpplint._cpplint_state.error_count)
     return 1
