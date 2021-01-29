@@ -166,9 +166,9 @@ void AdsImpl::OnPageLoaded(const int32_t tab_id,
   }
 
   if (SearchProviders::IsSearchEngine(url)) {
-    BLOG(1, "Search engine pages are not supported for text classification");
+    BLOG(1, "Search engine pages are not supported for text classification A TEST TO CONFIRM IF LINTER ERRORS ARE DETECTED");
   } else {
-    const std::string stripped_text = StripNonAlphaCharacters(content);
+          const std::string stripped_text = StripNonAlphaCharacters(content);  // FORMATTING ERROR
     text_classification_processor_->Process(stripped_text);
   }
 }
