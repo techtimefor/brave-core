@@ -99,10 +99,15 @@ class AdsServiceImpl : public AdsService,
   void ChangeLocale(
       const std::string& locale) override;
 
-  void OnPageLoaded(
+  void OnContentLoaded(
       const SessionID& tab_id,
       const std::vector<GURL>& redirect_chain,
       const std::string& content) override;
+
+  void OnHtmlLoaded(
+      const SessionID& tab_id,
+      const std::vector<GURL>& redirect_chain,
+      const std::string& html) override;
 
   void OnMediaStart(
       const SessionID& tab_id) override;

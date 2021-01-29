@@ -38,7 +38,8 @@ class Conversions {
   bool ShouldAllow() const;
 
   void MaybeConvert(
-      const std::vector<std::string>& redirect_chain);
+      const std::vector<std::string>& redirect_chain,
+      const std::string& html);
 
   void StartTimerIfReady();
 
@@ -53,10 +54,12 @@ class Conversions {
   Timer timer_;
 
   void CheckRedirectChain(
-      const std::vector<std::string>& redirect_chain);
+      const std::vector<std::string>& redirect_chain,
+      const std::string& conversion_id);
 
   void Convert(
-      const AdEventInfo& ad_event);
+      const AdEventInfo& ad_event,
+      const std::string& conversion_id);
 
   ConversionList FilterConversions(
       const std::vector<std::string>& redirect_chain,
@@ -65,7 +68,8 @@ class Conversions {
       const ConversionList& conversions);
 
   void AddItemToQueue(
-      const AdEventInfo& ad_event);
+      const AdEventInfo& ad_event,
+      const std::string& conversion_id);
   bool RemoveItemFromQueue(
       const std::string& creative_instance_id);
   void ProcessQueueItem(

@@ -70,11 +70,18 @@ void BatAdsImpl::OnAdsSubdivisionTargetingCodeHasChanged() {
   ads_->OnAdsSubdivisionTargetingCodeHasChanged();
 }
 
-void BatAdsImpl::OnPageLoaded(
+void BatAdsImpl::OnContentLoaded(
     const int32_t tab_id,
     const std::vector<std::string>& redirect_chain,
     const std::string& content) {
-  ads_->OnPageLoaded(tab_id, redirect_chain, content);
+  ads_->OnContentLoaded(tab_id, redirect_chain, content);
+}
+
+void BatAdsImpl::OnHtmlLoaded(
+    const int32_t tab_id,
+    const std::vector<std::string>& redirect_chain,
+    const std::string& html) {
+  ads_->OnHtmlLoaded(tab_id, redirect_chain, html);
 }
 
 void BatAdsImpl::OnUnIdle() {

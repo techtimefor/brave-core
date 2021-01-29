@@ -94,10 +94,16 @@ class ADS_EXPORT Ads {
   // analysis. |redirect_chain| contains the chain of redirects, incuding
   // client-side redirect and the current URL. |content| will contain the HTML
   // page content
-  virtual void OnPageLoaded(
+  virtual void OnContentLoaded(
       const int32_t tab_id,
       const std::vector<std::string>& redirect_chain,
       const std::string& content) = 0;
+
+  // TODO(Moritz Haller): Add description
+  virtual void OnHtmlLoaded(
+      const int32_t tab_id,
+      const std::vector<std::string>& redirect_chain,
+      const std::string& html) = 0;
 
   // Should be called when a user is no longer idle. This call is optional for
   // mobile devices

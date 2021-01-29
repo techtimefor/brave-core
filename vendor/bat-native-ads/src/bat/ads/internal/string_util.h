@@ -19,6 +19,9 @@ std::string StripNonAlphaCharacters(
 std::string StripNonAlphaNumericCharacters(
     const std::string& value);
 
+bool IsLatinAlphaNumeric(
+    const std::string& value);
+
 }  // namespace ads
 
 #endif  // BAT_ADS_INTERNAL_STRING_UTIL_H_

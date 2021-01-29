@@ -108,10 +108,15 @@ class AdsImpl
 
   void OnAdsSubdivisionTargetingCodeHasChanged() override;
 
-  void OnPageLoaded(
+  void OnContentLoaded(
       const int32_t tab_id,
       const std::vector<std::string>& redirect_chain,
       const std::string& content) override;
+
+  void OnHtmlLoaded(
+      const int32_t tab_id,
+      const std::vector<std::string>& redirect_chain,
+      const std::string& html) override;
 
   void OnIdle() override;
   void OnUnIdle() override;

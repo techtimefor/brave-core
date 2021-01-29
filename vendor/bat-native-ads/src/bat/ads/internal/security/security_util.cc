@@ -9,10 +9,13 @@
 #include <openssl/hkdf.h>
 #include <openssl/sha.h>
 
+#include <iostream>
+
 #include <algorithm>
 
 #include "base/base64.h"
 #include "base/json/json_reader.h"
+#include "base/rand_util.h"
 #include "base/stl_util.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/values.h"
@@ -21,6 +24,8 @@
 #include "bat/ads/internal/account/confirmations/confirmation_info.h"
 #include "bat/ads/internal/logging.h"
 #include "bat/ads/internal/privacy/challenge_bypass_ristretto_util.h"
+#include "bat/ads/internal/security/conversion_id_info.h"
+#include "bat/ads/internal/string_util.h"
 #include "bat/ads/internal/tokens/redeem_unblinded_token/create_confirmation_util.h"
 
 namespace ads {
@@ -33,6 +38,12 @@ using challenge_bypass_ristretto::VerificationSignature;
 namespace {
 
 const int kHKDFSeedLength = 32;
+const char kAlgorithm[] = "x25519-xsalsa20-poly1305";
+const size_t kVacCipherTextLength = 32;
+const size_t kVacMessageMaxLength = 30;
+const size_t kVacMessageMinLength = 15;
+const size_t kVacCryptoBoxPaddedBytes =
+    crypto_box_ZEROBYTES + kVacCipherTextLength;
 
 const uint8_t kHKDFSalt[] = {
   126, 244,  99, 158,  51,  68, 253,  80,
@@ -89,6 +100,15 @@ bool GenerateKeyPair(
   }
 
   return true;
+}
+
+std::vector<uint8_t> Base64ToUint8List(
+    const std::string& value_base64) {
+  std::string value_string;
+  base::Base64Decode(value_base64, &value_string);
+  std::vector<uint8_t> value(value_string.begin(), value_string.end());
+
+  return value;
 }
 
 }  // namespace
@@ -169,6 +189,7 @@ std::vector<uint8_t> Sha256Hash(
   return sha256;
 }
 
+// TODO(Moritz Haller): move to security/confirmation_security_util.cc
 bool Verify(
     const ConfirmationInfo& confirmation) {
   std::string credential;
@@ -206,6 +227,114 @@ bool Verify(
   }
 
   return verification_key.verify(verification_signature, payload);
+}
+
+std::vector<uint8_t> Encrypt(
+    const std::vector<uint8_t>& message,
+    const std::vector<uint8_t>& nonce,
+    const std::vector<uint8_t>& public_key,
+    const std::vector<uint8_t>& ephemeral_sk) {
+  // API requires 32 leading zero-padding bytes
+  std::vector<uint8_t> padded_message = message;
+  padded_message.insert(padded_message.begin(), crypto_box_ZEROBYTES, 0);
+  DCHECK_EQ(kVacCryptoBoxPaddedBytes, padded_message.size());
+
+  std::vector<uint8_t> ciphertext(kVacCryptoBoxPaddedBytes);
+  crypto_box(&ciphertext.front(), &padded_message.front(),
+      kVacCryptoBoxPaddedBytes, &nonce.front(), &public_key.front(),
+          &ephemeral_sk.front());
+
+  return ciphertext;
+}
+
+std::string Decrypt(
+    const std::vector<uint8_t>& ciphertext,
+    const std::vector<uint8_t>& nonce,
+    const std::vector<uint8_t>& ephemeral_pk,
+    const std::vector<uint8_t>& secret_key) {
+  std::vector<uint8_t> plaintext(crypto_box_ZEROBYTES + kVacCipherTextLength);
+  crypto_box_open(&plaintext.front(), &ciphertext.front(), ciphertext.size(),
+      &nonce.front(), &ephemeral_pk.front(), &secret_key.front());
+
+  std::vector<uint8_t> plaintext_slice(plaintext.begin() +
+      crypto_box_ZEROBYTES, plaintext.end());
+
+  return (const char*)&plaintext_slice.front();
+}
+
+ConversionIdInfo EncryptAndEncodeConversionId(
+    const std::string& message,
+    const std::string& advertiser_pk_base64) {
+  ConversionIdInfo envelope;
+
+  if (message.length() < kVacMessageMinLength ||
+      message.length() > kVacMessageMaxLength) {
+    return envelope;
+  }
+
+  if (!IsLatinAlphaNumeric(message)) {
+    return envelope;
+  }
+
+  // Protocol requires at least 2 trailing zero-padding bytes
+  std::vector<uint8_t> padded_message(message.begin(), message.end());
+  padded_message.insert(padded_message.end(),
+      kVacCipherTextLength - padded_message.size(), 0);
+  DCHECK_EQ(kVacCipherTextLength, padded_message.size());
+
+  std::vector<uint8_t> advertiser_pk = Base64ToUint8List(advertiser_pk_base64);
+  if (advertiser_pk.size() != crypto_box_PUBLICKEYBYTES) {
+    return envelope;
+  }
+
+  std::vector<uint8_t> ephemeral_sk(crypto_box_SECRETKEYBYTES);
+  std::vector<uint8_t> ephemeral_pk(crypto_box_PUBLICKEYBYTES);
+  crypto_box_keypair(&ephemeral_pk.front(), &ephemeral_sk.front());
+
+  std::vector<uint8_t> nonce(crypto_box_NONCEBYTES);
+  base::RandBytes(&nonce.front(), nonce.size());
+
+  std::vector<uint8_t> ciphertext = Encrypt(padded_message, nonce,
+      advertiser_pk, ephemeral_sk);
+
+  std::cout << "*** ciphertext.size: " << ciphertext.size();
+
+  // The receiving TweetNaCl.js client does not require padding
+  std::vector<uint8_t> ciphertext_slice(ciphertext.begin() +
+      crypto_box_BOXZEROBYTES, ciphertext.end());
+
+  std::cout << "*** ciphertext_slice.size: " << ciphertext_slice.size();
+
+  envelope.algorithm = kAlgorithm;
+  envelope.ciphertext = base::Base64Encode(ciphertext_slice);
+  envelope.ephemeral_pk = base::Base64Encode(ephemeral_pk);
+  envelope.nonce = base::Base64Encode(nonce);
+
+  return envelope;
+}
+
+std::string DecodeAndDecryptConversionId(
+    const ConversionIdInfo envelope,
+    const std::string& advertiser_sk_base64) {
+  std::string message;
+  if (envelope.ciphertext.empty() || envelope.nonce.empty() ||
+      envelope.ephemeral_pk.empty()) {
+    return message;
+  }
+
+  std::vector<uint8_t> advertiser_sk = Base64ToUint8List(advertiser_sk_base64);
+  std::vector<uint8_t> nonce = Base64ToUint8List(envelope.nonce);
+  std::vector<uint8_t> ciphertext = Base64ToUint8List(envelope.ciphertext);
+  std::vector<uint8_t> ephemeral_pk = Base64ToUint8List(envelope.ephemeral_pk);
+
+  // API requires 16 leading zero-padding bytes
+  ciphertext.insert(ciphertext.begin(), crypto_box_BOXZEROBYTES, 0);
+  std::cout << "*** ciphertext.size: " << ciphertext.size() << "\n";
+  std::cout << "*** ciphertext: " << envelope.ciphertext << "\n";
+  std::cout << "*** nonce: " << envelope.nonce << "\n";
+  std::cout << "*** ephemeral_pk: " << envelope.ephemeral_pk << "\n";
+
+  return Decrypt(ciphertext, nonce, ephemeral_pk, advertiser_sk);
 }
 
 }  // namespace security

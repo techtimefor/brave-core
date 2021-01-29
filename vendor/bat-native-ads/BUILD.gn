@@ -484,6 +484,8 @@ source_set("ads") {
     "src/bat/ads/internal/search_engine/search_providers.h",
     "src/bat/ads/internal/security/security_util.cc",
     "src/bat/ads/internal/security/security_util.h",
+    "src/bat/ads/internal/security/conversion_id_info.cc",
+    "src/bat/ads/internal/security/conversion_id_info.h",
     "src/bat/ads/internal/server/ads_serve_server_util.cc",
     "src/bat/ads/internal/server/ads_serve_server_util.h",
     "src/bat/ads/internal/server/ads_server_util.cc",

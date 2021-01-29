@@ -92,10 +92,15 @@ class AdsService : public KeyedService {
   virtual void ChangeLocale(
       const std::string& locale) = 0;
 
-  virtual void OnPageLoaded(
+  virtual void OnContentLoaded(
       const SessionID& tab_id,
       const std::vector<GURL>& redirect_chain,
       const std::string& content) = 0;
+
+  virtual void OnHtmlLoaded(
+      const SessionID& tab_id,
+      const std::vector<GURL>& redirect_chain,
+      const std::string& html) = 0;
 
   virtual void OnMediaStart(
       const SessionID& tab_id) = 0;

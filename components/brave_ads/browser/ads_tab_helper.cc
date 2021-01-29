@@ -8,6 +8,8 @@
 #include <memory>
 #include <utility>
 
+#include <iostream>
+
 #include "brave/components/brave_ads/browser/ads_service.h"
 #include "brave/components/brave_ads/browser/ads_service_factory.h"
 #include "chrome/browser/profiles/profile.h"
@@ -79,11 +81,16 @@ void AdsTabHelper::RunIsolatedJavaScript(
 
   dom_distiller::RunIsolatedJavaScript(render_frame_host,
       "document.body.innerText",
-          base::BindOnce(&AdsTabHelper::OnJavaScriptResult,
+          base::BindOnce(&AdsTabHelper::OnJavaScriptContentResult,
+              weak_factory_.GetWeakPtr()));
+
+  dom_distiller::RunIsolatedJavaScript(render_frame_host,
+      "document.documentElement.innerHTML",
+          base::BindOnce(&AdsTabHelper::OnJavaScriptHtmlResult,
               weak_factory_.GetWeakPtr()));
 }
 
-void AdsTabHelper::OnJavaScriptResult(
+void AdsTabHelper::OnJavaScriptContentResult(
     base::Value value) {
   DCHECK(ads_service_ && ads_service_->IsEnabled());
 
@@ -91,7 +98,19 @@ void AdsTabHelper::OnJavaScriptResult(
   std::string content;
   value.GetAsString(&content);
 
-  ads_service_->OnPageLoaded(tab_id_, redirect_chain_, content);
+  // TODO(Moritz Haller): Rename to `OnTextLoaded`
+  ads_service_->OnContentLoaded(tab_id_, redirect_chain_, content);
+}
+
+void AdsTabHelper::OnJavaScriptHtmlResult(
+    base::Value value) {
+  DCHECK(ads_service_ && ads_service_->IsEnabled());
+
+  DCHECK(value.is_string());
+  std::string html;
+  value.GetAsString(&html);
+
+  ads_service_->OnHtmlLoaded(tab_id_, redirect_chain_, html);
 }
 
 void AdsTabHelper::DidFinishNavigation(

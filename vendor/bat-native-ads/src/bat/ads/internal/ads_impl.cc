@@ -132,7 +132,31 @@ void AdsImpl::OnAdsSubdivisionTargetingCodeHasChanged() {
   subdivision_targeting_->MaybeFetchForCurrentLocale();
 }
 
-void AdsImpl::OnPageLoaded(
+void AdsImpl::OnHtmlLoaded(
+    const int32_t tab_id,
+    const std::vector<std::string>& redirect_chain,
+    const std::string& html) {
+  // TODO(Moritz Haller): Handle empty html?
+  DCHECK(!redirect_chain.empty());
+
+  if (!IsInitialized()) {
+    return;
+  }
+
+  // TODO(Moritz Haller): duplicated
+  const std::string original_url = redirect_chain.front();
+  const std::string url = redirect_chain.back();
+
+  if (!DoesUrlHaveSchemeHTTPOrHTTPS(url)) {
+    BLOG(1, "Visited URL is not supported");
+    return;
+  }
+
+  // TODO(Moritz Haller): ok to move here?
+  conversions_->MaybeConvert(redirect_chain, html);
+}
+
+void AdsImpl::OnContentLoaded(
     const int32_t tab_id,
     const std::vector<std::string>& redirect_chain,
     const std::string& content) {
@@ -151,8 +175,6 @@ void AdsImpl::OnPageLoaded(
   }
 
   ad_transfer_->MaybeTransferAd(tab_id, original_url);
-
-  conversions_->MaybeConvert(redirect_chain);
 
   const base::Optional<TabInfo> last_visible_tab =
       TabManager::Get()->GetLastVisible();

@@ -6,11 +6,16 @@
 #include "bat/ads/internal/security/security_util.h"
 
 #include "base/base64.h"
+// TODO(Moritz Haller): Or access via security::?
+#include "bat/ads/internal/security/conversion_id_info.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 // npm run test -- brave_unit_tests --filter=BatAds*
 
 namespace ads {
+namespace security {
+
+const char kAlgorithm[] = "x25519-xsalsa20-poly1305";
 
 TEST(BatAdsSecurityUtilsTest,
     Sign) {
@@ -179,4 +184,117 @@ TEST(BatAdsSecurityUtilsTest,
   EXPECT_TRUE(sha256.empty());
 }
 
+TEST(BatAdsSecurityUtilsTest,
+    ConversionEnvelopeAlgorithm) {
+  // Arrange
+  const std::string advertiser_pk_base64 =
+      "ofIveUY/bM7qlL9eIkAv/xbjDItFs1xRTTYKRZZsPHI=";
+  const std::string advertiser_sk_base64 =
+      "Ete7+aKfrX25gt0eN4kBV1LqeF9YmB1go8OqnGXUGG4=";
+  const std::string message = "smartbrownfoxes16";
+
+  // Act
+  ConversionIdInfo conversion_id_info = EncryptAndEncodeConversionId(message,
+      advertiser_pk_base64);
+
+  // Assert
+  EXPECT_EQ(conversion_id_info.algorithm, kAlgorithm);
+}
+
+TEST(BatAdsSecurityUtilsTest,
+    ConversionEnvelopeWithShortMessage) {
+  // Arrange
+  const std::string advertiser_pk_base64 =
+      "ofIveUY/bM7qlL9eIkAv/xbjDItFs1xRTTYKRZZsPHI=";
+  const std::string advertiser_sk_base64 =
+      "Ete7+aKfrX25gt0eN4kBV1LqeF9YmB1go8OqnGXUGG4=";
+  const std::string message = "shortmessage";
+
+  // Act
+  ConversionIdInfo conversion_id_info = EncryptAndEncodeConversionId(message,
+      advertiser_pk_base64);
+  std::string result = DecodeAndDecryptConversionId(conversion_id_info,
+      advertiser_sk_base64);
+
+  // Assert
+  EXPECT_TRUE(result.empty());
+}
+
+TEST(BatAdsSecurityUtilsTest,
+    ConversionEnvelopeWithLongMessage) {
+  // Arrange
+  const std::string advertiser_pk_base64 =
+      "ofIveUY/bM7qlL9eIkAv/xbjDItFs1xRTTYKRZZsPHI=";
+  const std::string advertiser_sk_base64 =
+      "Ete7+aKfrX25gt0eN4kBV1LqeF9YmB1go8OqnGXUGG4=";
+  const std::string message = "thismessageistoolongthismessageistoolong";
+
+  // Act
+  ConversionIdInfo conversion_id_info = EncryptAndEncodeConversionId(message,
+      advertiser_pk_base64);
+  std::string result = DecodeAndDecryptConversionId(conversion_id_info,
+      advertiser_sk_base64);
+
+  // Assert
+  EXPECT_TRUE(result.empty());
+}
+
+TEST(BatAdsSecurityUtilsTest,
+    ConversionEnvelopeWithInvalidMessage) {
+  // Arrange
+  const std::string advertiser_pk_base64 =
+      "ofIveUY/bM7qlL9eIkAv/xbjDItFs1xRTTYKRZZsPHI=";
+  const std::string advertiser_sk_base64 =
+      "Ete7+aKfrX25gt0eN4kBV1LqeF9YmB1go8OqnGXUGG4=";
+  const std::string message = "smart brown foxes 16";
+
+  // Act
+  ConversionIdInfo conversion_id_info = EncryptAndEncodeConversionId(message,
+      advertiser_pk_base64);
+  std::string result = DecodeAndDecryptConversionId(conversion_id_info,
+      advertiser_sk_base64);
+
+  // Assert
+  EXPECT_TRUE(result.empty());
+}
+
+TEST(BatAdsSecurityUtilsTest,
+    ConversionEnvelopeWithInvalidPublicKey) {
+  // Arrange
+  const std::string message = "smartbrownfoxes42";
+  const std::string advertiser_pk_base64 =
+      "ofIveUY/bM7qlL9eIkAv/xbjDItFs1xRTTYKRZZsPHI@";
+  const std::string advertiser_sk_base64 =
+      "Ete7+aKfrX25gt0eN4kBV1LqeF9YmB1go8OqnGXUGG4=";
+
+  // Act
+  ConversionIdInfo envelope = EncryptAndEncodeConversionId(message,
+      advertiser_pk_base64);
+  std::string result = DecodeAndDecryptConversionId(envelope,
+      advertiser_sk_base64);
+
+  // Assert
+  EXPECT_TRUE(result.empty());
+}
+
+TEST(BatAdsSecurityUtilsTest,
+    ConversionEnvelope) {
+  // Arrange
+  const std::string message = "smartbrownfoxes42";
+  const std::string advertiser_pk_base64 =
+      "ofIveUY/bM7qlL9eIkAv/xbjDItFs1xRTTYKRZZsPHI=";
+  const std::string advertiser_sk_base64 =
+      "Ete7+aKfrX25gt0eN4kBV1LqeF9YmB1go8OqnGXUGG4=";
+
+  // Act
+  ConversionIdInfo envelope = EncryptAndEncodeConversionId(message,
+      advertiser_pk_base64);
+  std::string result = DecodeAndDecryptConversionId(envelope,
+      advertiser_sk_base64);
+
+  // Assert
+  EXPECT_EQ(message, result);
+}
+
+}  // namespace security
 }  // namespace ads
