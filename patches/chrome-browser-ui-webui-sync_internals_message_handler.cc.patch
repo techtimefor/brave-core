@@ -1,0 +1,50 @@
+diff --git a/chrome/browser/ui/webui/sync_internals_message_handler.cc b/chrome/browser/ui/webui/sync_internals_message_handler.cc
+index 214fa4ce2a982fcd829369b9e7704e0af067dbf7..84238753183137ffeece5e523b7f69ed21b3dd44 100644
+--- a/chrome/browser/ui/webui/sync_internals_message_handler.cc
++++ b/chrome/browser/ui/webui/sync_internals_message_handler.cc
+@@ -30,7 +30,8 @@
+ #include "components/sync_user_events/user_event_service.h"
+ #include "content/public/browser/browser_thread.h"
+ #include "content/public/browser/web_ui.h"
+-
++    #include "brave/components/sync/driver/brave_sync_profile_sync_service.h"
++    #include "components/sync/driver/profile_sync_service.h"
+ using base::DictionaryValue;
+ using base::ListValue;
+ using base::Value;
+@@ -308,11 +309,33 @@ void SyncInternalsMessageHandler::HandleRequestStopClearData(
+     const base::ListValue* args) {
+   DCHECK_EQ(0U, args->GetSize());
+ 
+-  SyncService* service = GetSyncService();
++  // SyncService* service = GetSyncService();
++  // if (!service)
++  //   return;
++  //
++  // service->StopAndClear();
++
++  syncer::BraveProfileSyncService* service = static_cast<syncer::BraveProfileSyncService*>(GetSyncService());
+   if (!service)
+     return;
+ 
+-  service->StopAndClear();
++  syncer::SyncUserSettings* sync_user_settings = service->GetUserSettings();
++  const syncer::UserSelectableTypeSet selected_types =
++      sync_user_settings->GetSelectedTypes();
++  const bool sync_everything = sync_user_settings->IsSyncEverythingEnabled();
++
++  // Disable all types
++  service->GetUserSettings()->SetSelectedTypes(false,
++                                               syncer::UserSelectableTypeSet());
++  // Stop sync
++  service->GetUserSettings()->SetSyncRequested(false);
++
++  // Start sync
++  service->GetUserSettings()->SetSyncRequested(true);
++
++  // Enable types
++  service->GetUserSettings()->SetSelectedTypes(sync_everything,
++                                               selected_types);
+ }
+ 
+ void SyncInternalsMessageHandler::HandleTriggerRefresh(
